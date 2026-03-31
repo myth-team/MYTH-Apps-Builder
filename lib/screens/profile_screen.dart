@@ -95,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Edit Profile'),
+                  backgroundColor: AppColors.primary,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -182,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    widget.isDarkMode ? 'Currently enabled' : 'Currently disabled',
+                    widget.isDarkMode ? 'Dark theme enabled' : 'Light theme enabled',
                     style: TextStyle(
                       color: _textSecondary,
                       fontSize: 12,
@@ -194,18 +195,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
             GestureDetector(
               onTap: widget.onThemeToggle,
               child: Container(
+                width: 60,
+                height: 34,
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: widget.isDarkMode ? AppColors.primary : _cardColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: AnimatedContainer(
+                child: AnimatedAlign(
                   duration: Duration(milliseconds: 200),
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Icon(
-                    widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                    color: widget.isDarkMode ? Colors.white : _textPrimary,
-                    size: 18,
+                  alignment: widget.isDarkMode ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                      color: widget.isDarkMode ? AppColors.primary : Colors.amber,
+                      size: 14,
+                    ),
                   ),
                 ),
               ),
