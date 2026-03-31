@@ -36,7 +36,7 @@ class _CartScreenState extends State<CartScreen> {
 
   double get subtotal => cartItems.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
   double get discount => cartItems.fold(0, (sum, item) => sum + ((item['originalPrice'] - item['price']) * item['quantity']));
-  double get shipping = subtotal > 100 ? 0 : 9.99;
+  double get shipping => subtotal > 100 ? 0 : 9.99;
   double get total => subtotal + shipping;
 
   @override
