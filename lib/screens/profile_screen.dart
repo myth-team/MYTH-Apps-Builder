@@ -2,20 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:shopswift_prototype_app/utils/colors.dart'; 
 
 class ProfileScreen extends StatefulWidget {
+  final bool isDarkMode;
+  final VoidCallback onThemeToggle;
+
+  ProfileScreen({required this.isDarkMode, required this.onThemeToggle});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Color get _bgColor => widget.isDarkMode ? AppColors.darkBackground : AppColors.background;
+  Color get _surfaceColor => widget.isDarkMode ? AppColors.darkSurface : AppColors.surface;
+  Color get _cardColor => widget.isDarkMode ? AppColors.darkCardBackground : AppColors.background;
+  Color get _textPrimary => widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary;
+  Color get _textSecondary => widget.isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary;
+  Color get _dividerColor => widget.isDarkMode ? AppColors.darkDivider : AppColors.divider;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: _bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               _buildHeader(),
+              _buildThemeToggle(),
               _buildStats(),
               _buildMenuSection(),
             ],
@@ -63,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(
             'John Doe',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -72,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(
             'john.doe@email.com',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: _textSecondary,
               fontSize: 14,
             ),
           ),
@@ -92,11 +105,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: _surfaceColor,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
                     blurRadius: 10,
                     offset: Offset(0, 4),
                   ),
@@ -124,17 +137,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStats() {
+  Widget _buildThemeToggle() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _surfaceColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.15 : 0.04),
+              blurRadius: 12,
+              offset: Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                color: AppColors.primary,
+                size: 24,
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Dark Mode',
+                    style: TextStyle(
+                      color: _textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    widget.isDarkMode ? 'Currently enabled' : 'Currently disabled',
+                    style: TextStyle(
+                      color: _textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: widget.onThemeToggle,
+              child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: widget.isDarkMode ? AppColors.primary : _cardColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Icon(
+                    widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: widget.isDarkMode ? Colors.white : _textPrimary,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStats() {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Container(
         padding: EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.15 : 0.04),
               blurRadius: 12,
               offset: Offset(0, 6),
             ),
@@ -173,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           value,
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: _textPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -182,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.textSecondary,
+            color: _textSecondary,
             fontSize: 12,
           ),
         ),
@@ -194,7 +286,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       width: 1,
       height: 60,
-      color: AppColors.divider,
+      color: _dividerColor,
     );
   }
 
@@ -207,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(
             'Settings',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
@@ -232,11 +324,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: _surfaceColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withOpacity(widget.isDarkMode ? 0.15 : 0.03),
             blurRadius: 8,
             offset: Offset(0, 4),
           ),
@@ -264,7 +356,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: _textPrimary,
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
                   ),
@@ -273,7 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: _textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -282,7 +374,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Icon(
             Icons.chevron_right,
-            color: AppColors.textLight,
+            color: _textSecondary,
           ),
         ],
       ),
