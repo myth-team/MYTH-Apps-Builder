@@ -9,7 +9,20 @@ void main() {
   runApp(ShopSwiftApp());
 }
 
-class ShopSwiftApp extends StatelessWidget {
+class ShopSwiftApp extends StatefulWidget {
+  @override
+  _ShopSwiftAppState createState() => _ShopSwiftAppState();
+}
+
+class _ShopSwiftAppState extends State<ShopSwiftApp> {
+  bool _isDarkMode = false;
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(padding: const EdgeInsets.only(top: 44.0, bottom: 34.0)), child: child!), 
@@ -17,7 +30,7 @@ class ShopSwiftApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
+        scaffoldBackgroundColor: _isDarkMode ? AppColors.darkBackground : AppColors.background,
         colorScheme: ColorScheme.light(
           primary: AppColors.primary,
           secondary: AppColors.secondary,
@@ -25,7 +38,18 @@ class ShopSwiftApp extends StatelessWidget {
         ),
         fontFamily: 'Roboto',
       ),
-      home: HomeScreen(),
+      darkTheme: ThemeData(
+        primaryColor: AppColors.primary,
+        scaffoldBackgroundColor: AppColors.darkBackground,
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.primary,
+          secondary: AppColors.secondary,
+          surface: AppColors.darkSurface,
+        ),
+        fontFamily: 'Roboto',
+      ),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      home: HomeScreen(onThemeToggle: _toggleTheme, isDarkMode: _isDarkMode),
     );
   }
 }
