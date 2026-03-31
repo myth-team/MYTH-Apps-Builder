@@ -39,6 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Color get _textSecondary => widget.isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary;
   Color get _dividerColor => widget.isDarkMode ? AppColors.darkDivider : AppColors.divider;
 
+  void _onNavItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Widget _getBody() {
     switch (_selectedIndex) {
       case 0:
@@ -110,6 +116,30 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               GestureDetector(
+                onTap: () {
+                  _onNavItemTapped(3);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: _surfaceColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.settings_outlined,
+                    color: _textPrimary,
+                  ),
+                ),
+              ),
+              SizedBox(width: 12),
+              GestureDetector(
                 onTap: widget.onThemeToggle,
                 child: Container(
                   padding: EdgeInsets.all(10),
@@ -128,25 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
                     color: _textPrimary,
                   ),
-                ),
-              ),
-              SizedBox(width: 12),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: _surfaceColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.notifications_outlined,
-                  color: _textPrimary,
                 ),
               ),
               SizedBox(width: 12),
@@ -186,44 +197,49 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSearchBar() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: _surfaceColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.search, color: _textSecondary),
-            SizedBox(width: 12),
-            Text(
-              'Search products...',
-              style: TextStyle(
-                color: _textSecondary,
-                fontSize: 15,
+      child: GestureDetector(
+        onTap: () {
+          _onNavItemTapped(1);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: _surfaceColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
+                blurRadius: 10,
+                offset: Offset(0, 4),
               ),
-            ),
-            Spacer(),
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.search, color: _textSecondary),
+              SizedBox(width: 12),
+              Text(
+                'Search products...',
+                style: TextStyle(
+                  color: _textSecondary,
+                  fontSize: 15,
+                ),
               ),
-              child: Icon(
-                Icons.tune,
-                color: AppColors.primary,
-                size: 20,
+              Spacer(),
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.tune,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -235,13 +251,31 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(20, 24, 20, 12),
-          child: Text(
-            'Categories',
-            style: TextStyle(
-              color: _textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Categories',
+                style: TextStyle(
+                  color: _textPrimary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _onNavItemTapped(1);
+                },
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
@@ -481,12 +515,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                'See All',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+              GestureDetector(
+                onTap: () {
+                  _onNavItemTapped(1);
+                },
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
@@ -661,20 +700,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
+            color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.1),
             blurRadius: 20,
             offset: Offset(0, -5),
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home_rounded, 'Home', 0),
-          _buildNavItem(Icons.explore_outlined, 'Explore', 1),
-          _buildNavItem(Icons.shopping_cart_outlined, 'Cart', 2),
-          _buildNavItem(Icons.person_outline, 'Profile', 3),
-        ],
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home_rounded, 'Home', 0),
+            _buildNavItem(Icons.explore_outlined, 'Explore', 1),
+            _buildNavItem(Icons.shopping_cart_outlined, 'Cart', 2),
+            _buildNavItem(Icons.person_outline, 'Profile', 3),
+          ],
+        ),
       ),
     );
   }
@@ -682,36 +723,33 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNavItem(IconData icon, String label, int index) {
     bool isSelected = _selectedIndex == index;
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
+      onTap: () => _onNavItemTapped(index),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
               icon,
               color: isSelected ? AppColors.primary : _textSecondary,
-              size: 24,
+              size: 26,
             ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? AppColors.primary : _textSecondary,
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppColors.primary : _textSecondary,
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
