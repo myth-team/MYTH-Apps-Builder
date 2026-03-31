@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shopswift_prototype_app/utils/colors.dart'; 
 
 class CartScreen extends StatefulWidget {
+  final bool isDarkMode;
+
+  CartScreen({required this.isDarkMode});
+
   @override
   _CartScreenState createState() => _CartScreenState();
 }
@@ -34,6 +38,13 @@ class _CartScreenState extends State<CartScreen> {
     },
   ];
 
+  Color get _bgColor => widget.isDarkMode ? AppColors.darkBackground : AppColors.background;
+  Color get _surfaceColor => widget.isDarkMode ? AppColors.darkSurface : AppColors.surface;
+  Color get _cardColor => widget.isDarkMode ? AppColors.darkCardBackground : AppColors.background;
+  Color get _textPrimary => widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary;
+  Color get _textSecondary => widget.isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary;
+  Color get _dividerColor => widget.isDarkMode ? AppColors.darkDivider : AppColors.divider;
+
   double get subtotal => cartItems.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
   double get discount => cartItems.fold(0, (sum, item) => sum + ((item['originalPrice'] - item['price']) * item['quantity']));
   double get shipping => subtotal > 100 ? 0 : 9.99;
@@ -42,31 +53,31 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: _bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: _bgColor,
         elevation: 0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Container(
             margin: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: _surfaceColor,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
                   blurRadius: 10,
                 ),
               ],
             ),
-            child: Icon(Icons.arrow_back, color: AppColors.textPrimary),
+            child: Icon(Icons.arrow_back, color: _textPrimary),
           ),
         ),
         title: Text(
           'My Cart',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: _textPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -115,11 +126,11 @@ class _CartScreenState extends State<CartScreen> {
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: _surfaceColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.04),
             blurRadius: 12,
             offset: Offset(0, 6),
           ),
@@ -132,7 +143,7 @@ class _CartScreenState extends State<CartScreen> {
             height: 90,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              color: AppColors.background,
+              color: _cardColor,
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(14),
@@ -154,7 +165,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Text(
                         item['name'],
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: _textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
@@ -187,7 +198,7 @@ class _CartScreenState extends State<CartScreen> {
                 Text(
                   'Size: ${item['size']}',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: _textSecondary,
                     fontSize: 13,
                   ),
                 ),
@@ -205,7 +216,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: AppColors.background,
+                        color: _cardColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -225,7 +236,7 @@ class _CartScreenState extends State<CartScreen> {
                             child: Text(
                               '${item['quantity']}',
                               style: TextStyle(
-                                color: AppColors.textPrimary,
+                                color: _textPrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
@@ -265,7 +276,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Icon(
           icon,
           size: 16,
-          color: isPrimary ? Colors.white : AppColors.textSecondary,
+          color: isPrimary ? Colors.white : _textSecondary,
         ),
       ),
     );
@@ -275,14 +286,14 @@ class _CartScreenState extends State<CartScreen> {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: _surfaceColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.08),
             blurRadius: 20,
             offset: Offset(0, -5),
           ),
@@ -295,7 +306,7 @@ class _CartScreenState extends State<CartScreen> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.divider,
+                color: _dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -315,13 +326,13 @@ class _CartScreenState extends State<CartScreen> {
                 child: Text(
                   'Free shipping on orders over \$100',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: _textSecondary,
                     fontSize: 11,
                   ),
                 ),
               ),
             SizedBox(height: 14),
-            Divider(color: AppColors.divider),
+            Divider(color: _dividerColor),
             SizedBox(height: 14),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,7 +340,7 @@ class _CartScreenState extends State<CartScreen> {
                 Text(
                   'Total',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: _textPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),
@@ -406,7 +417,7 @@ class _CartScreenState extends State<CartScreen> {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.textSecondary,
+            color: _textSecondary,
             fontSize: 14,
           ),
         ),
@@ -416,8 +427,8 @@ class _CartScreenState extends State<CartScreen> {
             color: isDiscount
                 ? AppColors.success
                 : isShipping
-                    ? (shipping == 0 ? AppColors.success : AppColors.textPrimary)
-                    : AppColors.textPrimary,
+                    ? (shipping == 0 ? AppColors.success : _textPrimary)
+                    : _textPrimary,
             fontWeight: FontWeight.w600,
             fontSize: 14,
           ),
