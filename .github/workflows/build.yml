@@ -1,0 +1,191 @@
+name: Flutter Build & Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build target (web or apk)'
+        required: true
+        default: 'web'
+      project_name:
+        description: 'Flutter project name (snake_case)'
+        required: false
+        default: 'app'
+      package_id:
+        description: 'Unique package identifier for Android (e.g. project_abc123)'
+        required: false
+        default: 'app'
+
+# Sequential deployment to gh-pages prevents Git lock errors (cannot lock ref)
+concurrency:
+  group: pages-deploy-${{ github.ref_name }} # Narrower group per-branch for parallel builds
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Cache Gradle
+        if: github.event.inputs.build_type == 'apk' || github.event_name == 'push'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.4"
+          channel: "stable"
+          cache: true
+
+      - name: Initialize Project
+        run: |
+          TARGET="${{ github.event.inputs.build_type }}"
+          PROJECT_NAME="${{ github.event.inputs.project_name }}"
+          PACKAGE_ID="${{ github.event.inputs.package_id }}"
+          if [ -z "$TARGET" ]; then TARGET="web"; fi
+          if [ -z "$PROJECT_NAME" ]; then PROJECT_NAME="app"; fi
+          if [ -z "$PACKAGE_ID" ]; then PACKAGE_ID="app"; fi
+          mkdir -p .backup
+          cp -r lib .backup/ || true
+          cp pubspec.yaml .backup/ || true
+          
+          # Preview (web): scaffold web only — no Android project or APK work on chat/dashboard builds.
+          # Download page dispatches build_type=apk → android only + flutter build apk.
+          if [ "$TARGET" == "apk" ]; then
+            flutter create . --platforms=android --project-name="$PROJECT_NAME" --org=com.myth --overwrite
+          else
+            flutter create . --platforms=web --project-name=app --overwrite
+          fi
+          
+          cp -r .backup/lib . || true
+          cp .backup/pubspec.yaml . || true
+          
+          mkdir -p assets images fonts
+          flutter pub get
+
+      - name: Gradle Kotlin JVM validation (APK)
+        if: github.event.inputs.build_type == 'apk'
+        run: |
+          if [ -f android/gradle.properties ]; then
+            grep -q '^kotlin.jvm.target.validation.mode=' android/gradle.properties || echo 'kotlin.jvm.target.validation.mode=warning' >> android/gradle.properties
+          fi
+
+      - name: Build Web (preview for GitHub Pages)
+        if: github.event.inputs.build_type == 'web'
+        run: |
+          REPO_NAME="${{ github.event.repository.name }}"
+          REPO_SLUG=$(echo "$REPO_NAME" | tr '[:upper:]' '[:lower:]')
+          flutter build web --release --base-href "/$REPO_SLUG/previews/${{ github.ref_name }}/"
+          echo "PHNjcmlwdD4KICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigibWVzc2FnZSIsIGUgPT4gewogICAgaWYgKGUuZGF0YSA9PT0gImNhcHR1cmUtc2NyZWVuc2hvdCIpIHsKICAgICAgKGFzeW5jICgpID0+IHsKICAgICAgICBjb25zdCBnZXRDYW52YXMgPSAoKSA9PiAKICAgICAgICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcigiZmx0LWdsYXNzLXBhbmUiKT8uc2hhZG93Um9vdD8ucXVlcnlTZWxlY3RvcigiY2FudmFzIikgfHwgCiAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtc2NlbmUtaG9zdCIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgICAKICAgICAgICBjb25zdCBjYW52YXMgPSBnZXRDYW52YXMoKTsKICAgICAgICBpZiAoY2FudmFzKSB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBjb25zdCBkYXRhVXJsID0gY2FudmFzLnRvRGF0YVVSTCgiaW1hZ2UvcG5nIik7CiAgICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1yZXN1bHQiLCBkYXRhVXJsIH0sICIqIik7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgd2luZG93LnBhcmVudC5wb3N0TWVzc2FnZSh7IHR5cGU6ICJzY3JlZW5zaG90LWVycm9yIiwgZXJyb3I6IGVyci5tZXNzYWdlIH0sICIqIik7CiAgICAgICAgICB9CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1lcnJvciIsIGVycm9yOiAiQ2FudmFzIG5vdCBmb3VuZCIgfSwgIioiKTsKICAgICAgICB9CiAgICAgIH0pKCk7CiAgICB9CiAgfSk7CgogIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJsb2FkIiwgKCkgPT4gewogICAgbGV0IGF0dGVtcHRzID0gMDsKICAgIGNvbnN0IHRyeUNhcHR1cmUgPSAoKSA9PiB7CiAgICAgIGNvbnN0IGNhbnZhcyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgICAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtZ2xhc3MtcGFuZSIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgaWYgKGNhbnZhcykgewogICAgICAgIHNldFRpbWVvdXQoKCkgPT4gewogICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgY29uc3QgZGF0YVVybCA9IGNhbnZhcy50b0RhdGFVUkwoImltYWdlL3BuZyIpOwogICAgICAgICAgICB3aW5kb3cucGFyZW50LnBvc3RNZXNzYWdlKHsgdHlwZTogInNjcmVlbnNob3QtcmVzdWx0IiwgZGF0YVVybCB9LCAiKiIpOwogICAgICAgICAgfSBjYXRjaCAoZSkge30KICAgICAgICB9LCAyMDAwKTsKICAgICAgfSBlbHNlIGlmIChhdHRlbXB0cyA8IDE1KSB7CiAgICAgICAgYXR0ZW1wdHMrKzsKICAgICAgICBzZXRUaW1lb3V0KHRyeUNhcHR1cmUsIDEwMDApOwogICAgICB9CiAgICB9OwogICAgc2V0VGltZW91dCh0cnlDYXB0dXJlLCA1MDAwKTsKICB9KTsKPC9zY3JpcHQ+" | base64 -d > capture_script.html
+          node -e "const fs = require('fs'); const path = 'build/web/index.html'; let html = fs.readFileSync(path, 'utf8'); const script = fs.readFileSync('capture_script.html', 'utf8'); html = html.replace('</body>', script + '</body>'); fs.writeFileSync(path, html);"
+          # GitHub Pages: avoid 404 on deep links / refresh (Flutter web router)
+          cp build/web/index.html build/web/404.html
+
+      - name: Stage site for Pages deploy
+        if: github.event.inputs.build_type == 'web'
+        run: |
+          rm -rf myth-pages-bundle
+          mkdir -p myth-pages-bundle
+          cp -a build/web/. myth-pages-bundle/
+          touch myth-pages-bundle/.nojekyll
+          rm -f myth-pages-bundle/.gitignore
+
+      - name: Deploy Preview 🚀
+        if: success() && github.event.inputs.build_type == 'web'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: myth-pages-bundle
+          branch: gh-pages
+          target-folder: previews/${{ github.ref_name }}
+          clean: false
+          force: false
+          
+      # Root .nojekyll disables Jekyll for the whole site; without it Flutter assets under previews/ can break or 404.
+      - name: Ensure gh-pages root (index + .nojekyll)
+        if: success() && github.event.inputs.build_type == 'web'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git clone --depth 1 --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git gh-pages-root
+          cd gh-pages-root
+          touch .nojekyll
+          if [ ! -f "index.html" ]; then
+            echo "<!DOCTYPE html><html><body>MYTH Build System — previews live under <code>previews/</code></body></html>" > index.html
+          fi
+          git add -A
+          if ! git diff --staged --quiet; then
+            git commit -m "Pages root: .nojekyll + index (MYTH)"
+            git push origin gh-pages
+          fi
+
+      # curl + $BODY in YAML is easy to break; github-script uses the job token and logs errors clearly.
+      # If build_type stays "workflow", pushes to gh-pages are never served at *.github.io → looks like deploy failed.
+      - name: Point GitHub Pages at gh-pages (legacy)
+        if: success() && github.event.inputs.build_type == 'web'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const payload = {
+              build_type: 'legacy',
+              source: { branch: 'gh-pages', path: '/' }
+            };
+            try {
+              await github.request('PUT /repos/{owner}/{repo}/pages', {
+                owner, repo, ...payload
+              });
+              core.info('GitHub Pages: legacy + gh-pages (PUT 204)');
+            } catch (e) {
+              const st = e.status || e.response?.status;
+              if (st === 404) {
+                try {
+                  await github.request('POST /repos/{owner}/{repo}/pages', {
+                    owner, repo, ...payload
+                  });
+                  core.info('GitHub Pages: legacy + gh-pages (POST 201)');
+                } catch (e2) {
+                  core.warning('Pages POST failed: ' + (e2.message || String(e2)));
+                  core.warning('Open Settings → Pages → Deploy from a branch → gh-pages, folder / (root).');
+                }
+              } else {
+                core.warning('Pages PUT failed: ' + (e.message || String(e)) + ' (HTTP ' + st + ')');
+                core.warning('Open Settings → Pages → Deploy from a branch → gh-pages, folder / (root).');
+              }
+            }
+
+      - name: Build APK
+        id: build_apk
+        if: github.event.inputs.build_type == 'apk'
+        run: flutter build apk --release
+
+      - name: Upload Artifacts
+        if: success() && github.event.inputs.build_type == 'apk' && steps.build_apk.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          if-no-files-found: ignore
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
