@@ -4,8 +4,9 @@ import 'package:shopswift_prototype_app/screens/cart_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Map<String, dynamic> product;
+  final bool isDarkMode;
 
-  ProductDetailScreen({required this.product});
+  ProductDetailScreen({required this.product, required this.isDarkMode});
 
   @override
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
@@ -26,10 +27,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Color(0xFFFFB800),
   ];
 
+  Color get _bgColor => widget.isDarkMode ? AppColors.darkBackground : AppColors.background;
+  Color get _surfaceColor => widget.isDarkMode ? AppColors.darkSurface : AppColors.surface;
+  Color get _cardColor => widget.isDarkMode ? AppColors.darkCardBackground : AppColors.background;
+  Color get _textPrimary => widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary;
+  Color get _textSecondary => widget.isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary;
+  Color get _dividerColor => widget.isDarkMode ? AppColors.darkDivider : AppColors.divider;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: _bgColor,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -64,11 +72,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: _surfaceColor,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withOpacity(widget.isDarkMode ? 0.3 : 0.1),
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),
@@ -76,7 +84,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 child: Icon(
                   Icons.arrow_back,
-                  color: AppColors.textPrimary,
+                  color: _textPrimary,
                 ),
               ),
             ),
@@ -89,11 +97,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: _surfaceColor,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withOpacity(widget.isDarkMode ? 0.3 : 0.1),
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),
@@ -101,7 +109,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 child: Icon(
                   _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: _isFavorite ? AppColors.secondary : AppColors.textPrimary,
+                  color: _isFavorite ? AppColors.secondary : _textPrimary,
                 ),
               ),
             ),
@@ -116,7 +124,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       height: 350,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: _cardColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(32),
           bottomRight: Radius.circular(32),
@@ -181,7 +189,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Text(
                   widget.product['name'],
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: _textPrimary,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -200,7 +208,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Text(
                       '${widget.product['rating']}',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: _textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -228,7 +236,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Text(
                   '\$${widget.product['originalPrice']}',
                   style: TextStyle(
-                    color: AppColors.textLight,
+                    color: _textSecondary,
                     fontSize: 18,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -259,7 +267,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             'Select Size',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -282,10 +290,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     width: 48,
                     margin: EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : AppColors.surface,
+                      color: isSelected ? AppColors.primary : _surfaceColor,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected ? AppColors.primary : AppColors.divider,
+                        color: isSelected ? AppColors.primary : _dividerColor,
                         width: 2,
                       ),
                     ),
@@ -293,7 +301,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Text(
                         sizes[index],
                         style: TextStyle(
-                          color: isSelected ? Colors.white : AppColors.textSecondary,
+                          color: isSelected ? Colors.white : _textSecondary,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -318,7 +326,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             'Select Color',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -383,7 +391,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             'Description',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -392,7 +400,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             'Experience premium quality with this ${widget.product['name']}. Designed for comfort and style, perfect for everyday use. Features high-quality materials and modern design that fits any occasion.',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: _textSecondary,
               fontSize: 14,
               height: 1.6,
             ),
@@ -417,7 +425,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -427,7 +435,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Text(
               text,
               style: TextStyle(
-                color: AppColors.textSecondary,
+                color: _textSecondary,
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
               ),
@@ -446,14 +454,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.3 : 0.08),
               blurRadius: 20,
               offset: Offset(0, -5),
             ),
@@ -464,7 +472,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.background,
+                  color: _cardColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -477,14 +485,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           });
                         }
                       },
-                      icon: Icon(Icons.remove, color: AppColors.textPrimary),
+                      icon: Icon(Icons.remove, color: _textPrimary),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         '$_quantity',
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: _textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
@@ -507,7 +515,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CartScreen()),
+                      MaterialPageRoute(builder: (context) => CartScreen(isDarkMode: widget.isDarkMode)),
                     );
                   },
                   child: Container(
