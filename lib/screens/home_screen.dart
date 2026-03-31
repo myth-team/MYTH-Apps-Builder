@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:shopswift_prototype_app/utils/colors.dart'; 
 import 'package:shopswift_prototype_app/screens/product_detail_screen.dart'; 
 import 'package:shopswift_prototype_app/screens/cart_screen.dart'; 
+import 'package:shopswift_prototype_app/screens/profile_screen.dart'; 
+import 'package:shopswift_prototype_app/screens/explore_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
+  final VoidCallback onThemeToggle;
+  final bool isDarkMode;
+
+  HomeScreen({required this.onThemeToggle, required this.isDarkMode});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -26,25 +33,50 @@ class _HomeScreenState extends State<HomeScreen> {
     {'name': 'Leather Wallet', 'price': 49.99, 'originalPrice': 79.99, 'image': 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400', 'rating': 4.7, 'discount': 38},
   ];
 
+  Color get _bgColor => widget.isDarkMode ? AppColors.darkBackground : AppColors.background;
+  Color get _surfaceColor => widget.isDarkMode ? AppColors.darkSurface : AppColors.surface;
+  Color get _textPrimary => widget.isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary;
+  Color get _textSecondary => widget.isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary;
+  Color get _dividerColor => widget.isDarkMode ? AppColors.darkDivider : AppColors.divider;
+
+  Widget _getBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return _buildHomeContent();
+      case 1:
+        return ExploreScreen(isDarkMode: widget.isDarkMode);
+      case 2:
+        return CartScreen(isDarkMode: widget.isDarkMode);
+      case 3:
+        return ProfileScreen(isDarkMode: widget.isDarkMode, onThemeToggle: widget.onThemeToggle);
+      default:
+        return _buildHomeContent();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              _buildSearchBar(),
-              _buildCategories(),
-              _buildFeaturedSection(),
-              _buildProductsSection(),
-            ],
-          ),
+      backgroundColor: _bgColor,
+      body: _getBody(),
+      bottomNavigationBar: _buildBottomNav(),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            _buildSearchBar(),
+            _buildCategories(),
+            _buildFeaturedSection(),
+            _buildProductsSection(),
+          ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
@@ -60,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Welcome Back! 👋',
                 style: TextStyle(
-                  color: AppColors.textSecondary,
+                  color: _textSecondary,
                   fontSize: 14,
                 ),
               ),
@@ -68,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'ShopSwift',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: _textPrimary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -77,14 +109,36 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Row(
             children: [
+              GestureDetector(
+                onTap: widget.onThemeToggle,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: _surfaceColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                    color: _textPrimary,
+                  ),
+                ),
+              ),
+              SizedBox(width: 12),
               Container(
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: _surfaceColor,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),
@@ -92,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Icon(
                   Icons.notifications_outlined,
-                  color: AppColors.textPrimary,
+                  color: _textPrimary,
                 ),
               ),
               SizedBox(width: 12),
@@ -100,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CartScreen()),
+                    MaterialPageRoute(builder: (context) => CartScreen(isDarkMode: widget.isDarkMode)),
                   );
                 },
                 child: Container(
@@ -135,11 +189,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
               blurRadius: 10,
               offset: Offset(0, 4),
             ),
@@ -147,12 +201,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Row(
           children: [
-            Icon(Icons.search, color: AppColors.textSecondary),
+            Icon(Icons.search, color: _textSecondary),
             SizedBox(width: 12),
             Text(
               'Search products...',
               style: TextStyle(
-                color: AppColors.textSecondary,
+                color: _textSecondary,
                 fontSize: 15,
               ),
             ),
@@ -184,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             'Categories',
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: _textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -208,11 +262,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 4),
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : AppColors.surface,
+                    color: isSelected ? AppColors.primary : _surfaceColor,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: isSelected ? AppColors.primary.withOpacity(0.2) : Colors.black.withOpacity(0.03),
+                        color: isSelected ? AppColors.primary.withOpacity(0.2) : Colors.black.withOpacity(widget.isDarkMode ? 0.1 : 0.03),
                         blurRadius: 8,
                         offset: Offset(0, 4),
                       ),
@@ -221,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     categories[index],
                     style: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      color: isSelected ? Colors.white : _textSecondary,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                       fontSize: 14,
                     ),
@@ -247,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Flash Sale 🔥',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: _textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -297,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(product: product),
+            builder: (context) => ProductDetailScreen(product: product, isDarkMode: widget.isDarkMode),
           ),
         );
       },
@@ -306,11 +360,11 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.symmetric(horizontal: 4),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
               blurRadius: 15,
               offset: Offset(0, 8),
             ),
@@ -325,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 110,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
-                    color: AppColors.background,
+                    color: widget.isDarkMode ? AppColors.darkCardBackground : AppColors.background,
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(14),
@@ -361,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               product['name'],
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: _textPrimary,
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
@@ -376,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   '${product['rating']}',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: _textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -397,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   '\$${product['originalPrice']}',
                   style: TextStyle(
-                    color: AppColors.textLight,
+                    color: _textSecondary,
                     fontSize: 12,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -422,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Popular Products',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: _textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -466,18 +520,18 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(product: product),
+            builder: (context) => ProductDetailScreen(product: product, isDarkMode: widget.isDarkMode),
           ),
         );
       },
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: _surfaceColor,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.04),
               blurRadius: 12,
               offset: Offset(0, 6),
             ),
@@ -492,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: AppColors.background,
+                    color: widget.isDarkMode ? AppColors.darkCardBackground : AppColors.background,
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
@@ -509,7 +563,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: _surfaceColor,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -531,7 +585,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               product['name'],
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: _textPrimary,
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),
@@ -546,7 +600,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   '${product['rating']}',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: _textSecondary,
                     fontSize: 11,
                   ),
                 ),
@@ -583,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   '\$${product['originalPrice']}',
                   style: TextStyle(
-                    color: AppColors.textLight,
+                    color: _textSecondary,
                     fontSize: 11,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -600,14 +654,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: _surfaceColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(widget.isDarkMode ? 0.2 : 0.05),
             blurRadius: 20,
             offset: Offset(0, -5),
           ),
@@ -644,7 +698,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Icon(
               icon,
-              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              color: isSelected ? AppColors.primary : _textSecondary,
               size: 24,
             ),
           ),
@@ -652,7 +706,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              color: isSelected ? AppColors.primary : _textSecondary,
               fontSize: 11,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             ),
