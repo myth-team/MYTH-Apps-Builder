@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'Shahab',
+                'Shahab Hassan',
                 style: GoogleFonts.poppins(
                   fontSize: 32,
                   color: AppColors.primaryColor,
