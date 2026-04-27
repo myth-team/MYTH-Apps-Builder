@@ -15,5 +15,5 @@ class AppColors {
   static Color textSecondary = Color(0xFF64748B);
   static Color textLight = Color(0xFF94A3B8);
   static Color border = Color(0xFFE2E8F0);
-  static Color shadow = Color(0x1A000000);
+  static Color shadow = Color(0x29000000);
 }
