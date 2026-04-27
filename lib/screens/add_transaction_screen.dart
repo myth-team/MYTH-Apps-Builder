@@ -170,65 +170,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 16,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Amount',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          SizedBox(height: 12),
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: _isIncome
-                      ? AppColors.success.withValues(alpha: 0.1)
-                      : AppColors.error.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  Icons.attach_money,
-                  color: _isIncome ? AppColors.success : AppColors.error,
-                  size: 28,
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '0.00',
-                    hintStyle: TextStyle(
-                      color: AppColors.textLight,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                ),
+        color                ),
               ),
             ],
           ),
@@ -320,10 +262,57 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               color: AppColors.textSecondary,
             ),
           ),
+          SizedBox(height: 12),
+          TextField(
+            controller: _subtitleController,
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: _type == 'sale' ? 'e.g., John Doe' : 'e.g., Monthly utility bill',
+              hintStyle: TextStyle(color: AppColors.textLight),
+              prefixIcon: Icon(
+                _type == 'sale' ? Icons.person_outline : Icons.description_outlined,
+                color: AppColors.textLight,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.border),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.border),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: _isIncome ? AppColors.success : AppColors.error),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return GestureDetector(
+      onTap: _submitTransaction,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: _isIncome
+                ? [AppColors.success, AppColors.success.withValues(alpha: 0.8)]
+                : [AppColors.error, AppColors.error.withValues(alpha: 0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: (_isIncome ? AppColors.success : AppColors.error).withOpacity(0.4),
+              color: (_isIncome ? AppColors.success : AppColors.error).withValues(alpha: 0.4),
               blurRadius: 16,
               offset: Offset(0, 6),
             ),
