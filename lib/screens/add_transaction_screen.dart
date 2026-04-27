@@ -313,12 +313,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _type == 'sale' ? 'Customer Name' : 'Description (Optional)',\Gradient(
-            colors: _isIncome
-                ? [AppColors.success, AppColors.success.withValues(alpha: 0.8)]
-                : [AppColors.error, AppColors.error.withValues(alpha: 0.8)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            _type == 'sale' ? 'Customer Name' : 'Description (Optional)',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
           ),
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
