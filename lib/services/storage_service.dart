@@ -31,6 +31,38 @@ class StorageService {
     await _updateStats();
   }
 
+  Future<void> updateTransaction({
+    required String id,
+    required String title,
+    required String subtitle,
+    required double amount,
+    required bool isIncome,
+    required String type,
+  }) async {
+    final transactions = await getTransactions();
+    final index = transactions.indexWhere((t) => t.id == id);
+    if (index != -1) {
+      transactions[index] = TransactionModel(
+        id: id,
+        title: title,
+        subtitle: subtitle,
+        amount: amount,
+        isIncome: isIncome,
+        type: type,
+        createdAt: transactions[index].createdAt,
+      );
+      await saveTransactions(transactions);
+      await _updateStats();
+    }
+  }
+
+  Future<void> deleteTransaction(String id) async {
+    final transactions = await getTransactions();
+    transactions.removeWhere((t) => t.id == id);
+    await saveTransactions(transactions);
+    await _updateStats();
+  }
+
   Future<List<ProductModel>> getProducts() async {
     final prefs = await _prefs;
     final String? data = prefs.getString(_productsKey);
@@ -127,72 +159,6 @@ class StorageService {
     final bool hasData = prefs.getBool('hasInitializedData') ?? false;
     
     if (!hasData) {
-      final now = DateTime.now();
-      
-      List<TransactionModel> sampleTransactions = [
-        TransactionModel(
-          id: '1',
-          title: 'Sale - Electronics',
-          subtitle: 'Customer: John Smith',
-          amount: 850.00,
-          isIncome: true,
-          type: 'sale',
-          createdAt: now.subtract(Duration(hours: 2)),
-        ),
-        TransactionModel(
-          id: '2',
-          title: 'Stock Purchase',
-          subtitle: 'Supplier: Tech Supplies Co',
-          amount: 2200.00,
-          isIncome: false,
-          type: 'expense',
-          createdAt: now.subtract(Duration(hours: 4)),
-        ),
-        TransactionModel(
-          id: '3',
-          title: 'Sale - Accessories',
-          subtitle: 'Customer: Sarah Johnson',
-          amount: 145.00,
-          isIncome: true,
-          type: 'sale',
-          createdAt: now.subtract(Duration(hours: 6)),
-        ),
-        TransactionModel(
-          id: '4',
-          title: 'Discount Given',
-          subtitle: 'Sale ID: #1245',
-          amount: 50.00,
-          isIncome: false,
-          type: 'discount',
-          createdAt: now.subtract(Duration(days: 1)),
-        ),
-        TransactionModel(
-          id: '5',
-          title: 'Sale - Clothing',
-          subtitle: 'Customer: Mike Brown',
-          amount: 320.00,
-          isIncome: true,
-          type: 'sale',
-          createdAt: now.subtract(Duration(days: 1)),
-        ),
-      ];
-
-      List<ProductModel> sampleProducts = [
-        ProductModel(id: '1', name: 'Smartphone X', price: 699.99, stock: 45, createdAt: now),
-        ProductModel(id: '2', name: 'Laptop Pro', price: 1299.99, stock: 23, createdAt: now),
-        ProductModel(id: '3', name: 'Wireless Earbuds', price: 149.99, stock: 120, createdAt: now),
-      ];
-
-      List<CustomerModel> sampleCustomers = [
-        CustomerModel(id: '1', name: 'John Smith', totalPurchases: 2450.00, createdAt: now),
-        CustomerModel(id: '2', name: 'Sarah Johnson', totalPurchases: 890.00, createdAt: now),
-        CustomerModel(id: '3', name: 'Mike Brown', totalPurchases: 1560.00, createdAt: now),
-      ];
-
-      await saveTransactions(sampleTransactions);
-      await saveProducts(sampleProducts);
-      await saveCustomers(sampleCustomers);
-      await _updateStats();
       await prefs.setBool('hasInitializedData', true);
     }
   }
