@@ -8,12 +8,15 @@ class AppProvider with ChangeNotifier {
   List<TransactionModel> _transactions = [];
   List<ProductModel> _products = [];
   List<CustomerModel> _customers = [];
+  List<LoanModel> _loans = [];
   Map<String, dynamic> _stats = {};
   bool _isLoading = true;
 
   List<TransactionModel> get transactions => _transactions;
   List<ProductModel> get products => _products;
   List<CustomerModel> get customers => _customers;
+  List<LoanModel> get loans => _loans;
+  List<LoanModel> get pendingLoans => _loans.where((l) => !l.isPaid).toList();
   Map<String, dynamic> get stats => _stats;
   bool get isLoading => _isLoading;
 
@@ -24,6 +27,10 @@ class AppProvider with ChangeNotifier {
   int get totalProducts => _stats['totalProducts'] ?? 0;
   int get totalCustomers => _stats['totalCustomers'] ?? 0;
   int get totalReturns => _stats['totalReturns'] ?? 0;
+  int get totalLoans => _stats['totalLoans'] ?? 0;
+  int get pendingLoansCount => _stats['pendingLoans'] ?? 0;
+  double get totalLoanAmount => _stats['totalLoanAmount'] ?? 0.0;
+  double get pendingLoanAmount => _stats['pendingLoanAmount'] ?? 0.0;
 
   Future<void> initialize() async {
     await _storageService.initializeSampleData();
@@ -37,6 +44,7 @@ class AppProvider with ChangeNotifier {
     _transactions = await _storageService.getTransactions();
     _products = await _storageService.getProducts();
     _customers = await _storageService.getCustomers();
+    _loans = await _storageService.getLoans();
     _stats = await _storageService.getStats();
     
     _isLoading = false;
@@ -114,6 +122,76 @@ class AppProvider with ChangeNotifier {
       createdAt: DateTime.now(),
     );
     await _storageService.addCustomer(customer);
+    await loadData();
+  }
+
+  Future<void> addLoan({
+    required String customerName,
+    required double amount,
+    String? description,
+  }) async {
+    final loan = LoanModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      customerName: customerName,
+      amount: amount,
+      remainingAmount: amount,
+      isPaid: false,
+      description: description,
+      createdAt: DateTime.now(),
+    );
+    await _storageService.addLoan(loan);
+    await loadData();
+  }
+
+  Future<void> updateLoan({
+    required String id,
+    required String customerName,
+    required double amount,
+    required double remainingAmount,
+    required bool isPaid,
+    String? description,
+    DateTime? paidAt,
+  }) async {
+    final loan = LoanModel(
+      id: id,
+      customerName: customerName,
+      amount: amount,
+      remainingAmount: remainingAmount,
+      isPaid: isPaid,
+      description: description,
+      createdAt: _loans.firstWhere((l) => l.id == id).createdAt,
+      paidAt: paidAt,
+    );
+    await _storageService.updateLoan(loan);
+    await loadData();
+  }
+
+  Future<void> markLoanAsPaid(String id) async {
+    final loan = _loans.firstWhere((l) => l.id == id);
+    final updatedLoan = loan.copyWith(
+      isPaid: true,
+      remainingAmount: 0,
+      paidAt: DateTime.now(),
+    );
+    await _storageService.updateLoan(updatedLoan);
+    await loadData();
+  }
+
+  Future<void> makePartialPayment(String id, double paymentAmount) async {
+    final loan = _loans.firstWhere((l) => l.id == id);
+    final newRemaining = loan.remainingAmount - paymentAmount;
+    final isFullyPaid = newRemaining <= 0;
+    final updatedLoan = loan.copyWith(
+      remainingAmount: isFullyPaid ? 0 : newRemaining,
+      isPaid: isFullyPaid,
+      paidAt: isFullyPaid ? DateTime.now() : null,
+    );
+    await _storageService.updateLoan(updatedLoan);
+    await loadData();
+  }
+
+  Future<void> deleteLoan(String id) async {
+    await _storageService.deleteLoan(id);
     await loadData();
   }
 }
