@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildWelcomeCard(AppProvider provider) {
-    final currencyFormat = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+    final currencyFormat = NumberFormat.currency(symbol: 'Rs. ', decimalDigits: 0);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(24),
