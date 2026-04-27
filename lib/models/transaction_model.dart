@@ -109,3 +109,73 @@ class CustomerModel {
     );
   }
 }
+
+class LoanModel {
+  final String id;
+  final String customerName;
+  final double amount;
+  final double remainingAmount;
+  final bool isPaid;
+  final String? description;
+  final DateTime createdAt;
+  final DateTime? paidAt;
+
+  LoanModel({
+    required this.id,
+    required this.customerName,
+    required this.amount,
+    required this.remainingAmount,
+    required this.isPaid,
+    this.description,
+    required this.createdAt,
+    this.paidAt,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'customerName': customerName,
+      'amount': amount,
+      'remainingAmount': remainingAmount,
+      'isPaid': isPaid,
+      'description': description,
+      'createdAt': createdAt.toIso8601String(),
+      'paidAt': paidAt?.toIso8601String(),
+    };
+  }
+
+  factory LoanModel.fromJson(Map<String, dynamic> json) {
+    return LoanModel(
+      id: json['id'],
+      customerName: json['customerName'],
+      amount: json['amount'].toDouble(),
+      remainingAmount: json['remainingAmount'].toDouble(),
+      isPaid: json['isPaid'],
+      description: json['description'],
+      createdAt: DateTime.parse(json['createdAt']),
+      paidAt: json['paidAt'] != null ? DateTime.parse(json['paidAt']) : null,
+    );
+  }
+
+  LoanModel copyWith({
+    String? id,
+    String? customerName,
+    double? amount,
+    double? remainingAmount,
+    bool? isPaid,
+    String? description,
+    DateTime? createdAt,
+    DateTime? paidAt,
+  }) {
+    return LoanModel(
+      id: id ?? this.id,
+      customerName: customerName ?? this.customerName,
+      amount: amount ?? this.amount,
+      remainingAmount: remainingAmount ?? this.remainingAmount,
+      isPaid: isPaid ?? this.isPaid,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      paidAt: paidAt ?? this.paidAt,
+    );
+  }
+}
