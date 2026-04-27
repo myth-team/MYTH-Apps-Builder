@@ -6,6 +6,7 @@ class StorageService {
   static const String _transactionsKey = 'transactions';
   static const String _productsKey = 'products';
   static const String _customersKey = 'customers';
+  static const String _loansKey = 'loans';
   static const String _statsKey = 'stats';
 
   Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
@@ -105,6 +106,44 @@ class StorageService {
     await _updateStats();
   }
 
+  Future<List<LoanModel>> getLoans() async {
+    final prefs = await _prefs;
+    final String? data = prefs.getString(_loansKey);
+    if (data == null) return [];
+    final List<dynamic> jsonList = json.decode(data);
+    return jsonList.map((e) => LoanModel.fromJson(e)).toList();
+  }
+
+  Future<void> saveLoans(List<LoanModel> loans) async {
+    final prefs = await _prefs;
+    final String data = json.encode(loans.map((e) => e.toJson()).toList());
+    await prefs.setString(_loansKey, data);
+  }
+
+  Future<void> addLoan(LoanModel loan) async {
+    final loans = await getLoans();
+    loans.insert(0, loan);
+    await saveLoans(loans);
+    await _updateStats();
+  }
+
+  Future<void> updateLoan(LoanModel loan) async {
+    final loans = await getLoans();
+    final index = loans.indexWhere((l) => l.id == loan.id);
+    if (index != -1) {
+      loans[index] = loan;
+      await saveLoans(loans);
+      await _updateStats();
+    }
+  }
+
+  Future<void> deleteLoan(String id) async {
+    final loans = await getLoans();
+    loans.removeWhere((l) => l.id == id);
+    await saveLoans(loans);
+    await _updateStats();
+  }
+
   Future<Map<String, dynamic>> getStats() async {
     final prefs = await _prefs;
     final String? data = prefs.getString(_statsKey);
@@ -116,6 +155,10 @@ class StorageService {
         'totalReturns': 0,
         'totalIncome': 0.0,
         'totalExpenses': 0.0,
+        'totalLoans': 0,
+        'pendingLoans': 0,
+        'totalLoanAmount': 0.0,
+        'pendingLoanAmount': 0.0,
       };
     }
     return json.decode(data);
@@ -125,11 +168,15 @@ class StorageService {
     final transactions = await getTransactions();
     final products = await getProducts();
     final customers = await getCustomers();
+    final loans = await getLoans();
 
     double totalIncome = 0;
     double totalExpenses = 0;
     int totalSales = 0;
     int totalReturns = 0;
+    int pendingLoans = 0;
+    double totalLoanAmount = 0;
+    double pendingLoanAmount = 0;
 
     for (var t in transactions) {
       if (t.isIncome) {
@@ -141,6 +188,14 @@ class StorageService {
       }
     }
 
+    for (var loan in loans) {
+      totalLoanAmount += loan.amount;
+      if (!loan.isPaid) {
+        pendingLoans++;
+        pendingLoanAmount += loan.remainingAmount;
+      }
+    }
+
     final stats = {
       'totalSales': totalSales,
       'totalProducts': products.length,
@@ -148,6 +203,10 @@ class StorageService {
       'totalReturns': totalReturns,
       'totalIncome': totalIncome,
       'totalExpenses': totalExpenses,
+      'totalLoans': loans.length,
+      'pendingLoans': pendingLoans,
+      'totalLoanAmount': totalLoanAmount,
+      'pendingLoanAmount': pendingLoanAmount,
     };
 
     final prefs = await _prefs;
