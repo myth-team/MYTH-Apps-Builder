@@ -335,7 +335,7 @@ class _LoansScreenState extends State<LoansScreen> with SingleTickerProviderStat
                       children: [
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () => _showPaymentDialog(dialogContext, loan),
+                            onPressed: () => _showPaymentDialog(context, loan),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.success,
                               padding: EdgeInsets.symmetric(vertical: 12),
@@ -356,7 +356,7 @@ class _LoansScreenState extends State<LoansScreen> with SingleTickerProviderStat
                         SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () => _markAsPaid(dialogContext, loan),
+                            onPressed: () => _markAsPaid(context, loan),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               padding: EdgeInsets.symmetric(vertical: 12),
