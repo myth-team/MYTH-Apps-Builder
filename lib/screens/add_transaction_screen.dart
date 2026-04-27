@@ -313,54 +313,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _type == 'sale' ? 'Customer Name' : 'Description (Optional)',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          SizedBox(height: 12),
-          TextField(
-            controller: _subtitleController,
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColors.textPrimary,
-            ),
-            decoration: InputDecoration(
-              hintText: _type == 'sale' ? 'e.g., John Smith' : 'e.g., Monthly subscription',
-              hintStyle: TextStyle(color: AppColors.textLight),
-              prefixIcon: Icon(
-                _type == 'sale' ? Icons.person_outline : Icons.notes_outlined,
-                color: AppColors.textLight,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: AppColors.border),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: AppColors.border),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: _isIncome ? AppColors.success : AppColors.error),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return GestureDetector(
-      onTap: _submitTransaction,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 18),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
+            _type == 'sale' ? 'Customer Name' : 'Description (Optional)',\Gradient(
             colors: _isIncome
                 ? [AppColors.success, AppColors.success.withValues(alpha: 0.8)]
                 : [AppColors.error, AppColors.error.withValues(alpha: 0.8)],
