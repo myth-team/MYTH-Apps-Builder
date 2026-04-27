@@ -1,37 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_ledger_app/utils/colors.dart'; 
+import 'package:shop_ledger_app/providers/app_provider.dart';
+import 'package:shop_ledger_app/screens/add_transaction_screen.dart'; 
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().initialize();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              SizedBox(height: 24),
-              _buildWelcomeCard(),
-              SizedBox(height: 24),
-              _buildStatsSection(),
-              SizedBox(height: 24),
-              _buildQuickActions(),
-              SizedBox(height: 24),
-              _buildRecentTransactions(),
-            ],
-          ),
-        ),
+      body: Consumer<AppProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: AppColors.primary),
+                  SizedBox(height: 16),
+                  Text(
+                    'Loading your data...',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            );
+          }
+          return SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () => provider.loadData(),
+              color: AppColors.primary,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(provider),
+                    SizedBox(height: 24),
+                    _buildWelcomeCard(provider),
+                    SizedBox(height: 24),
+                    _buildStatsSection(provider),
+                    SizedBox(height: 24),
+                    _buildQuickActions(),
+                    SizedBox(height: 24),
+                    _buildRecentTransactions(provider),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
       floatingActionButton: _buildFAB(),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(AppProvider provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -79,7 +120,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWelcomeCard() {
+  Widget _buildWelcomeCard(AppProvider provider) {
+    final currencyFormat = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(24),
@@ -123,13 +165,13 @@ class HomeScreen extends StatelessWidget {
                     Text(
                       'Total Balance',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 14,
                       ),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '\$12,450.00',
+                      currencyFormat.format(provider.totalBalance),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 32,
@@ -147,14 +189,14 @@ class HomeScreen extends StatelessWidget {
               _buildBalanceIndicator(
                 icon: Icons.trending_up,
                 label: 'Income',
-                value: '\$8,200',
+                value: currencyFormat.format(provider.totalIncome),
                 color: AppColors.success,
               ),
               SizedBox(width: 12),
               _buildBalanceIndicator(
                 icon: Icons.trending_down,
                 label: 'Expenses',
-                value: '\$3,150',
+                value: currencyFormat.format(provider.totalExpenses),
                 color: AppColors.secondary,
               ),
             ],
@@ -174,7 +216,7 @@ class HomeScreen extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -194,7 +236,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 12,
                   ),
                 ),
@@ -214,7 +256,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsSection() {
+  Widget _buildStatsSection(AppProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -232,8 +274,8 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 title: 'Total Sales',
-                value: '1,245',
-                change: '+12.5%',
+                value: '${provider.totalSales}',
+                change: '+${provider.totalSales > 0 ? (provider.totalSales * 5).toStringAsFixed(1) : 0}%',
                 isPositive: true,
                 icon: Icons.shopping_cart,
                 color: AppColors.success,
@@ -243,8 +285,8 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 title: 'Products',
-                value: '328',
-                change: '+8.2%',
+                value: '${provider.totalProducts}',
+                change: '+${provider.totalProducts > 0 ? (provider.totalProducts * 3).toStringAsFixed(1) : 0}%',
                 isPositive: true,
                 icon: Icons.inventory_2,
                 color: AppColors.primary,
@@ -258,8 +300,8 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 title: 'Customers',
-                value: '89',
-                change: '+5.1%',
+                value: '${provider.totalCustomers}',
+                change: '+${provider.totalCustomers > 0 ? (provider.totalCustomers * 4).toStringAsFixed(1) : 0}%',
                 isPositive: true,
                 icon: Icons.people,
                 color: AppColors.accent,
@@ -269,8 +311,8 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 title: 'Returns',
-                value: '12',
-                change: '-2.3%',
+                value: '${provider.totalReturns}',
+                change: provider.totalReturns > 0 ? '-${(provider.totalReturns * 2).toStringAsFixed(1)}%' : '0%',
                 isPositive: false,
                 icon: Icons.replay,
                 color: AppColors.secondary,
@@ -375,6 +417,7 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.add_circle_outline,
                 label: 'New Sale',
                 color: AppColors.success,
+                onTap: () => _showAddTransactionSheet(isIncome: true, type: 'sale'),
               ),
             ),
             SizedBox(width: 12),
@@ -383,6 +426,7 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.add_box_outlined,
                 label: 'Add Product',
                 color: AppColors.primary,
+                onTap: () => _showAddProductDialog(),
               ),
             ),
             SizedBox(width: 12),
@@ -391,14 +435,16 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.receipt_long_outlined,
                 label: 'Expenses',
                 color: AppColors.warning,
+                onTap: () => _showAddTransactionSheet(isIncome: false, type: 'expense'),
               ),
             ),
             SizedBox(width: 12),
             Expanded(
               child: _buildActionButton(
-                icon: Icons.analytics_outlined,
-                label: 'Reports',
+                icon: Icons.person_add_outlined,
+                label: 'Customers',
                 color: AppColors.accent,
+                onTap: () => _showAddCustomerDialog(),
               ),
             ),
           ],
@@ -411,9 +457,10 @@ class HomeScreen extends StatelessWidget {
     required IconData icon,
     required String label,
     required Color color,
+    required VoidCallback onTap,
   }) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -442,7 +489,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentTransactions() {
+  Widget _buildRecentTransactions(AppProvider provider) {
+    final currencyFormat = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+    final timeFormat = DateFormat('h:mm a');
+    final dateFormat = DateFormat('MMM d');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -471,50 +522,83 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         SizedBox(height: 12),
-        _buildTransactionItem(
-          icon: Icons.shopping_bag,
-          title: 'Sale - Electronics',
-          subtitle: 'Customer: John Smith',
-          amount: '+\$850.00',
-          time: '2 hours ago',
-          color: AppColors.success,
-        ),
-        SizedBox(height: 12),
-        _buildTransactionItem(
-          icon: Icons.inventory,
-          title: 'Stock Purchase',
-          subtitle: 'Supplier: Tech Supplies Co',
-          amount: '-\$2,200.00',
-          time: '4 hours ago',
-          color: AppColors.error,
-        ),
-        SizedBox(height: 12),
-        _buildTransactionItem(
-          icon: Icons.shopping_bag,
-          title: 'Sale - Accessories',
-          subtitle: 'Customer: Sarah Johnson',
-          amount: '+\$145.00',
-          time: '6 hours ago',
-          color: AppColors.success,
-        ),
-        SizedBox(height: 12),
-        _buildTransactionItem(
-          icon: Icons.local_offer,
-          title: 'Discount Given',
-          subtitle: 'Sale ID: #1245',
-          amount: '-\$50.00',
-          time: 'Yesterday',
-          color: AppColors.warning,
-        ),
-        SizedBox(height: 12),
-        _buildTransactionItem(
-          icon: Icons.shopping_bag,
-          title: 'Sale - Clothing',
-          subtitle: 'Customer: Mike Brown',
-          amount: '+\$320.00',
-          time: 'Yesterday',
-          color: AppColors.success,
-        ),
+        if (provider.transactions.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.receipt_long_outlined,
+                    size: 64,
+                    color: AppColors.textLight,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No transactions yet',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Tap the + button to add your first transaction',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          ...provider.transactions.take(5).map((transaction) {
+            IconData icon;
+            Color color;
+            switch (transaction.type) {
+              case 'sale':
+                icon = Icons.shopping_bag;
+                color = AppColors.success;
+                break;
+              case 'expense':
+                icon = Icons.inventory;
+                color = AppColors.error;
+                break;
+              case 'discount':
+                icon = Icons.local_offer;
+                color = AppColors.warning;
+                break;
+              default:
+                icon = Icons.attach_money;
+                color = AppColors.primary;
+            }
+
+            String timeAgo;
+            final diff = DateTime.now().difference(transaction.createdAt);
+            if (diff.inMinutes < 60) {
+              timeAgo = '${diff.inMinutes} min ago';
+            } else if (diff.inHours < 24) {
+              timeAgo = '${diff.inHours} hours ago';
+            } else if (diff.inDays < 7) {
+              timeAgo = '${diff.inDays} days ago';
+            } else {
+              timeAgo = dateFormat.format(transaction.createdAt);
+            }
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: _buildTransactionItem(
+                icon: icon,
+                title: transaction.title,
+                subtitle: transaction.subtitle,
+                amount: '${transaction.isIncome ? '+' : '-'}${currencyFormat.format(transaction.amount)}',
+                time: timeAgo,
+                color: color,
+              ),
+            );
+          }),
       ],
     );
   }
@@ -618,10 +702,178 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       child: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _showAddTransactionSheet(isIncome: true, type: 'sale'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Icon(Icons.add, color: Colors.white, size: 30),
+      ),
+    );
+  }
+
+  void _showAddTransactionSheet({required bool isIncome, required String type}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddTransactionScreen(
+          isIncome: isIncome,
+          type: type,
+        ),
+      ),
+    );
+  }
+
+  void _showAddProductDialog() {
+    final nameController = TextEditingController();
+    final priceController = TextEditingController();
+    final stockController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Add New Product',
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Product Name',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.inventory_2_outlined),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: priceController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Price',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: stockController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Stock Quantity',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.numbers),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              if (nameController.text.isNotEmpty &&
+                  priceController.text.isNotEmpty &&
+                  stockController.text.isNotEmpty) {
+                context.read<AppProvider>().addProduct(
+                  name: nameController.text,
+                  price: double.tryParse(priceController.text) ?? 0,
+                  stock: int.tryParse(stockController.text) ?? 0,
+                );
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Product added successfully!'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              }
+            },
+            child: Text('Add', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddCustomerDialog() {
+    final nameController = TextEditingController();
+    final purchasesController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Add New Customer',
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Customer Name',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.person_outline),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: purchasesController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Initial Purchases',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              if (nameController.text.isNotEmpty) {
+                context.read<AppProvider>().addCustomer(
+                  name: nameController.text,
+                  totalPurchases: double.tryParse(purchasesController.text) ?? 0,
+                );
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Customer added successfully!'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              }
+            },
+            child: Text('Add', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
