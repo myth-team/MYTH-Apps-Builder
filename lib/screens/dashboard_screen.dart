@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: IndexedStack(
           index: _currentIndex,
           children: [
-            _buildHomeContent(),
+            _HomeContent(transactions: _recentTransactions, onViewAll: () => setState(() => _currentIndex = 1)),
             const SalesScreen(),
             const AddSaleScreen(),
             const ReportsScreen(),
@@ -121,8 +121,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           : null,
     );
   }
+}
 
-  Widget _buildHomeContent() {
+class _HomeContent extends StatelessWidget {
+  final List<Map<String, dynamic>> transactions;
+  final VoidCallback onViewAll;
+
+  const _HomeContent({required this.transactions, required this.onViewAll});
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -238,20 +246,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildMiniStat(
-                        'Income',
-                        '\$8,230',
-                        Icons.arrow_downward_rounded,
-                        AppColors.income,
+                      child: _MiniStat(
+                        label: 'Income',
+                        value: '\$8,230',
+                        icon: Icons.arrow_downward_rounded,
+                        color: AppColors.income,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: _buildMiniStat(
-                        'Expense',
-                        '\$2,780',
-                        Icons.arrow_upward_rounded,
-                        AppColors.expense,
+                      child: _MiniStat(
+                        label: 'Expense',
+                        value: '\$2,780',
+                        icon: Icons.arrow_upward_rounded,
+                        color: AppColors.expense,
                       ),
                     ),
                   ],
@@ -320,7 +328,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () => setState(() => _currentIndex = 1),
+                onPressed: onViewAll,
                 child: Text(
                   'View All',
                   style: TextStyle(
@@ -335,10 +343,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _recentTransactions.length,
+            itemCount: transactions.length,
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final transaction = _recentTransactions[index];
+              final transaction = transactions[index];
               return TransactionTile(
                 title: transaction['title'],
                 subtitle: transaction['subtitle'],
@@ -353,8 +361,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
 
-  Widget _buildMiniStat(String label, String value, IconData icon, Color color) {
+class _MiniStat extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _MiniStat({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
