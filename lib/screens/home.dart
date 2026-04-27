@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:shop_ledger_app/utils/colors.dart'; 
 import 'package:shop_ledger_app/providers/app_provider.dart';
 import 'package:shop_ledger_app/screens/add_transaction_screen.dart'; 
+import 'package:shop_ledger_app/models/transaction_model.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: Offset(0, 8),
           ),
@@ -490,8 +491,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildRecentTransactions(AppProvider provider) {
-    final currencyFormat = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-    final timeFormat = DateFormat('h:mm a');
+    final currencyFormat = NumberFormat.currency(symbol: 'Rs. ', decimalDigits: 0);
     final dateFormat = DateFormat('MMM d');
 
     return Column(
@@ -589,13 +589,60 @@ class _HomeScreenState extends State<HomeScreen> {
 
             return Padding(
               padding: EdgeInsets.only(bottom: 12),
-              child: _buildTransactionItem(
-                icon: icon,
-                title: transaction.title,
-                subtitle: transaction.subtitle,
-                amount: '${transaction.isIncome ? '+' : '-'}${currencyFormat.format(transaction.amount)}',
-                time: timeAgo,
-                color: color,
+              child: Dismissible(
+                key: Key(transaction.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20),
+                  decoration: BoxDecoration(
+                    color: AppColors.error,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(Icons.delete, color: Colors.white),
+                ),
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      title: Text('Delete Transaction'),
+                      content: Text('Are you sure you want to delete this transaction?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text('Delete', style: TextStyle(color: AppColors.error)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onDismissed: (direction) {
+                  provider.deleteTransaction(transaction.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Transaction deleted'),
+                      backgroundColor: AppColors.textSecondary,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                },
+                child: GestureDetector(
+                  onTap: () => _showEditTransactionDialog(transaction),
+                  child: _buildTransactionItem(
+                    icon: icon,
+                    title: transaction.title,
+                    subtitle: transaction.subtitle,
+                    amount: '${transaction.isIncome ? '+' : '-'}${currencyFormat.format(transaction.amount)}',
+                    time: timeAgo,
+                    color: color,
+                  ),
+                ),
               ),
             );
           }),
@@ -717,6 +764,142 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context) => AddTransactionScreen(
           isIncome: isIncome,
           type: type,
+        ),
+      ),
+    );
+  }
+
+  void _showEditTransactionDialog(TransactionModel transaction) {
+    final titleController = TextEditingController(text: transaction.title);
+    final subtitleController = TextEditingController(text: transaction.subtitle);
+    final amountController = TextEditingController(text: transaction.amount.toString());
+    bool isIncome = transaction.isIncome;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            'Edit Transaction',
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => isIncome = true),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: isIncome ? AppColors.success : AppColors.border,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Income',
+                              style: TextStyle(
+                                color: isIncome ? Colors.white : AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => isIncome = false),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: !isIncome ? AppColors.error : AppColors.border,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Expense',
+                              style: TextStyle(
+                                color: !isIncome ? Colors.white : AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: amountController,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    prefixIcon: Icon(Icons.attach_money),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    prefixIcon: Icon(Icons.title),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: subtitleController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    prefixIcon: Icon(Icons.description),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: () {
+                if (titleController.text.isNotEmpty && amountController.text.isNotEmpty) {
+                  context.read<AppProvider>().updateTransaction(
+                    id: transaction.id,
+                    title: titleController.text,
+                    subtitle: subtitleController.text,
+                    amount: double.tryParse(amountController.text) ?? 0,
+                    isIncome: isIncome,
+                    type: transaction.type,
+                  );
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Transaction updated successfully!'),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                }
+              },
+              child: Text('Update', style: TextStyle(color: Colors.white)),
+            ),
+          ],
         ),
       ),
     );
