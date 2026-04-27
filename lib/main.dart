@@ -28,7 +28,6 @@ class ShopLedgerApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
-          fontFamily: 'Poppins',
           scaffoldBackgroundColor: AppColors.background,
           colorScheme: ColorScheme.light(
             primary: AppColors.primary,
