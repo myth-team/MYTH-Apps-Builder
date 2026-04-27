@@ -25,13 +25,10 @@ class AppProvider with ChangeNotifier {
   int get totalCustomers => _stats['totalCustomers'] ?? 0;
   int get totalReturns => _stats['totalReturns'] ?? 0;
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:shop_ledger_app/utils/colors.dart'; 
-import 'package:shop_ledger_app/providers/app_provider.dart';
-import 'package:shop_ledger_app/screens/add_transaction_screen.dart'; 
-import 'package:shop_ledger_app/models/transaction_model.dart'; 
+  Future<void> initialize() async {
+    await _storageService.initializeSampleData();
+    await loadData();
+  }
 
   Future<void> loadData() async {
     _transactions = await _storageService.getTransactions();
@@ -58,6 +55,30 @@ import 'package:shop_ledger_app/models/transaction_model.dart';
       createdAt: DateTime.now(),
     );
     await _storageService.addTransaction(transaction);
+    await loadData();
+  }
+
+  Future<void> updateTransaction({
+    required String id,
+    required String title,
+    required String subtitle,
+    required double amount,
+    required bool isIncome,
+    required String type,
+  }) async {
+    await _storageService.updateTransaction(
+      id: id,
+      title: title,
+      subtitle: subtitle,
+      amount: amount,
+      isIncome: isIncome,
+      type: type,
+    );
+    await loadData();
+  }
+
+  Future<void> deleteTransaction(String id) async {
+    await _storageService.deleteTransaction(id);
     await loadData();
   }
 
