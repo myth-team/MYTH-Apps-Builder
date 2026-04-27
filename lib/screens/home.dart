@@ -121,7 +121,47 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ';
+                      'Total Balance',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      '\$12,450.00',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              _buildBalanceIndicator(
+                icon: Icons.trending_up,
+                label: 'Income',
+                value: '\$8,200',
+                color: AppColors.success,
+              ),
+              SizedBox(width: 12),
+              _buildBalanceIndicator(
+                icon: Icons.trending_down,
+                label: 'Expenses',
+                value: '\$3,150',
+                color: AppColors.secondary,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBalanceIndicator({
