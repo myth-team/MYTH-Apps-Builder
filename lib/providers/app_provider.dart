@@ -31,10 +31,15 @@ class AppProvider with ChangeNotifier {
   }
 
   Future<void> loadData() async {
+    _isLoading = true;
+    notifyListeners();
+    
     _transactions = await _storageService.getTransactions();
     _products = await _storageService.getProducts();
     _customers = await _storageService.getCustomers();
     _stats = await _storageService.getStats();
+    
+    _isLoading = false;
     notifyListeners();
   }
 
