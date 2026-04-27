@@ -170,9 +170,70 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color                ),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadow,
+            blurRadius: 16,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Amount',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          SizedBox(height: 12),
+          TextField(
+            controller: _amountController,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: _isIncome ? AppColors.success : AppColors.error,
+            ),
+            decoration: InputDecoration(
+              hintText: '0.00',
+              hintStyle: TextStyle(
+                color: AppColors.textLight,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
               ),
-            ],
+              prefixText: 'Rs.  ',
+              prefixStyle: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+              prefixIcon: Container(
+                padding: EdgeInsets.all(12),
+                child: Icon(
+                  Icons.attach_money,
+                  color: _isIncome ? AppColors.success : AppColors.error,
+                  size: 28,
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.border),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: AppColors.border),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: _isIncome ? AppColors.success : AppColors.error, width: 2),
+              ),
+            ),
           ),
         ],
       ),
