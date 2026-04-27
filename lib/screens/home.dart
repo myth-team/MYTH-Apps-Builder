@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:shop_ledger_app/utils/colors.dart'; 
 import 'package:shop_ledger_app/providers/app_provider.dart';
 import 'package:shop_ledger_app/screens/add_transaction_screen.dart'; 
+import 'package:shop_ledger_app/screens/loans_screen.dart'; 
 import 'package:shop_ledger_app/models/transaction_model.dart'; 
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AppProvider>().initialize();
+      context.read<AppProvider>().loadData();
     });
   }
 
@@ -56,6 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildHeader(provider),
                     SizedBox(height: 24),
                     _buildWelcomeCard(provider),
+                    SizedBox(height: 24),
+                    _buildLoanSummaryCard(provider),
                     SizedBox(height: 24),
                     _buildStatsSection(provider),
                     SizedBox(height: 24),
@@ -257,6 +260,104 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildLoanSummaryCard(AppProvider provider) {
+    final currencyFormat = NumberFormat.currency(symbol: 'Rs. ', decimalDigits: 0);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoansScreen()),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.warning, AppColors.warning.withValues(alpha: 0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.warning.withValues(alpha: 0.3),
+              blurRadius: 16,
+              offset: Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                Icons.account_balance,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Pending Loans',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    currencyFormat.format(provider.pendingLoanAmount),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    '${provider.pendingLoansCount} loans',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  size: 16,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildStatsSection(AppProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,6 +548,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: AppColors.accent,
                 onTap: () => _showAddCustomerDialog(),
               ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionButton(
+                icon: Icons.account_balance_outlined,
+                label: 'Add Loan',
+                color: AppColors.error,
+                onTap: () => _showAddLoanDialog(),
+              ),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: _buildActionButton(
+                icon: Icons.payments_outlined,
+                label: 'View Loans',
+                color: AppColors.warning,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoansScreen()),
+                  );
+                },
+              ),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: SizedBox(),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: SizedBox(),
             ),
           ],
         ),
@@ -1055,6 +1191,98 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
             child: Text('Add', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddLoanDialog() {
+    final customerNameController = TextEditingController();
+    final amountController = TextEditingController();
+    final descriptionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Add New Loan',
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: customerNameController,
+                decoration: InputDecoration(
+                  labelText: 'Customer Name',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.person_outline),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: amountController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Loan Amount',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: descriptionController,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  labelText: 'Description (Optional)',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  prefixIcon: Icon(Icons.description_outlined),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              if (customerNameController.text.isNotEmpty && amountController.text.isNotEmpty) {
+                context.read<AppProvider>().addLoan(
+                  customerName: customerNameController.text,
+                  amount: double.tryParse(amountController.text) ?? 0,
+                  description: descriptionController.text.isEmpty ? null : descriptionController.text,
+                );
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Loan added successfully!'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Please fill in required fields'),
+                    backgroundColor: AppColors.error,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              }
+            },
+            child: Text('Add Loan', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
