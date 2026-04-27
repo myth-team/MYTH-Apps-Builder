@@ -25,16 +25,13 @@ class AppProvider with ChangeNotifier {
   int get totalCustomers => _stats['totalCustomers'] ?? 0;
   int get totalReturns => _stats['totalReturns'] ?? 0;
 
-  Future<void> initialize() async {
-    _isLoading = true;
-    notifyListeners();
-
-    await _storageService.initializeSampleData();
-    await loadData();
-
-    _isLoading = false;
-    notifyListeners();
-  }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'package:shop_ledger_app/utils/colors.dart'; 
+import 'package:shop_ledger_app/providers/app_provider.dart';
+import 'package:shop_ledger_app/screens/add_transaction_screen.dart'; 
+import 'package:shop_ledger_app/models/transaction_model.dart'; 
 
   Future<void> loadData() async {
     _transactions = await _storageService.getTransactions();
