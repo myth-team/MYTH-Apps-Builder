@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'date': 'Oct 3',
       'category': 'Transport',
       'icon': Icons.directions_bus,
-      'color': Colors.blue
+      'color': Color(0xFF27AE60)
     },
   ];
 
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _buildCategoryChip('Food', Colors.orange),
                         SizedBox(width: 8),
-                        _buildCategoryChip('Transport', Colors.blue),
+                        _buildCategoryChip('Transport', Color(0xFF27AE60)),
                       ],
                     )
                   ],
