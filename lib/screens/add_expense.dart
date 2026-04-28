@@ -213,7 +213,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       case 'Food':
         return Colors.orange;
       case 'Transport':
-        return Colors.blue;
+        return Color(0xFF27AE60);
       case 'Groceries':
         return Colors.green;
       case 'Entertainment':
