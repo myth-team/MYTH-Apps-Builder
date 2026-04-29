@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zee_luxury_jewels_app/utils/colors.dart'; 
+import 'package:zee_luxury_jewels_app/models/cart_item.dart'; 
 import 'package:zee_luxury_jewels_app/providers/cart_provider.dart';
 import 'package:zee_luxury_jewels_app/screens/main_screen.dart'; 
 
@@ -106,7 +107,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, dynamic cartItem, CartProvider cart) {
+  Widget _buildCartItem(BuildContext context, CartItem cartItem, CartProvider cart) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
