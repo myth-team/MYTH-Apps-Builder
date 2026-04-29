@@ -40,7 +40,72 @@ class MemeCard extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisSizen            ),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                        color: AppColors.primary,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: AppColors.surface,
+                      child: Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          color: AppColors.textSecondary,
+                          size: 60,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              if (title != null)
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColors.surface,
+                        AppColors.cardBackground,
+                      ],
+                    ),
+                  ),
+                  child: Text(
+                    title!,
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}            ),
           ],
         ),
         child: Row(
