@@ -65,7 +65,7 @@ class _CounterScreenState extends State<CounterScreen>
             children: [
               const SizedBox(height: 40),
               Text(
-                'Tap Counter',
+                'Tap Counte',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
