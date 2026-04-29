@@ -72,12 +72,27 @@ jobs:
             ${{ runner.os }}-web-build-${{ github.ref_name }}-
             ${{ runner.os }}-web-build-
 
+      # Seed once per runner OS + Flutter version (same key for ALL project-* branches) so cold runs reuse ~700MB SDK.
+      - name: Cache Flutter toolchain (cross-branch MYTH)
+        uses: actions/cache@v4
+        id: flutter_toolchain_cache
+        with:
+          path: ${{ runner.tool_cache }}/Flutter
+          key: flutter-myth-builder-${{ runner.os }}-3.27.4-stable-v1
+          restore-keys: |
+            flutter-myth-builder-${{ runner.os }}-3.27.4-
+            flutter-myth-builder-${{ runner.os }}-
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.27.4"
           channel: "stable"
           cache: true
-          cache-key: "flutter-${{ runner.os }}-3.27.4"
+          cache-key: "flutter-myth-builder-${{ runner.os }}-3.27.4-stable-v1"
+
+      # After first successful run upstream, subosito/flutter-action + cache above converge on fewer SDK downloads.
+
+      # Push triggers GitHub built-in Pages CDN deploy (extra short workflow) — normal for gh-pages hosting.
 
       - name: Initialize Project
         run: |
