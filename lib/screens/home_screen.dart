@@ -199,9 +199,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Widget _buildHeader() {
     return ShaderMask(
-      shaderCallback: (bounds) => const LinearGradient(
+      shaderCallback: (bounds) => LinearGradient(
         colors: [AppColors.primary, AppColors.secondary, AppColors.accent],
-      ).createShader(bounds),
+      ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
       child: const Text(
         'TIC TAC GLOW',
         style: TextStyle(
