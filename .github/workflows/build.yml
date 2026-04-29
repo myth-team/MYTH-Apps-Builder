@@ -144,7 +144,36 @@ jobs:
           # Disable Flutter PWA service worker for previews to avoid stale cached bundles after rebuilds.
           flutter build web --release --pwa-strategy=none --no-tree-shake-icons --base-href "/$REPO_NAME/previews/${{ github.ref_name }}/"
           echo "PHNjcmlwdD4KICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigibWVzc2FnZSIsIGUgPT4gewogICAgaWYgKGUuZGF0YSA9PT0gImNhcHR1cmUtc2NyZWVuc2hvdCIpIHsKICAgICAgKGFzeW5jICgpID0+IHsKICAgICAgICBjb25zdCBnZXRDYW52YXMgPSAoKSA9PiAKICAgICAgICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcigiZmx0LWdsYXNzLXBhbmUiKT8uc2hhZG93Um9vdD8ucXVlcnlTZWxlY3RvcigiY2FudmFzIikgfHwgCiAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtc2NlbmUtaG9zdCIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgICAKICAgICAgICBjb25zdCBjYW52YXMgPSBnZXRDYW52YXMoKTsKICAgICAgICBpZiAoY2FudmFzKSB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBjb25zdCBkYXRhVXJsID0gY2FudmFzLnRvRGF0YVVSTCgiaW1hZ2UvcG5nIik7CiAgICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1yZXN1bHQiLCBkYXRhVXJsIH0sICIqIik7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgd2luZG93LnBhcmVudC5wb3N0TWVzc2FnZSh7IHR5cGU6ICJzY3JlZW5zaG90LWVycm9yIiwgZXJyb3I6IGVyci5tZXNzYWdlIH0sICIqIik7CiAgICAgICAgICB9CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1lcnJvciIsIGVycm9yOiAiQ2FudmFzIG5vdCBmb3VuZCIgfSwgIioiKTsKICAgICAgICB9CiAgICAgIH0pKCk7CiAgICB9CiAgfSk7CgogIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJsb2FkIiwgKCkgPT4gewogICAgLy8gSGFyZC1yZXNldCBvbGQgUFdBL3NlcnZpY2Utd29ya2VyIGNhY2hlcyBmb3IgcHJldmlldyBob3N0LgogICAgLy8gVGhpcyBwcmV2ZW50cyBpZnJhbWUgZnJvbSByZW5kZXJpbmcgc3RhbGUgSlMvQ1NTIGZyb20gcHJldmlvdXMgYnVpbGRzLgogICAgKGFzeW5jICgpID0+IHsKICAgICAgdHJ5IHsKICAgICAgICBpZiAoInNlcnZpY2VXb3JrZXIiIGluIG5hdmlnYXRvcikgewogICAgICAgICAgY29uc3QgcmVncyA9IGF3YWl0IG5hdmlnYXRvci5zZXJ2aWNlV29ya2VyLmdldFJlZ2lzdHJhdGlvbnMoKTsKICAgICAgICAgIGF3YWl0IFByb21pc2UuYWxsKHJlZ3MubWFwKChyKSA9PiByLnVucmVnaXN0ZXIoKSkpOwogICAgICAgIH0KICAgICAgfSBjYXRjaCAoZSkge30KCiAgICAgIHRyeSB7CiAgICAgICAgaWYgKCJjYWNoZXMiIGluIHdpbmRvdykgewogICAgICAgICAgY29uc3Qga2V5cyA9IGF3YWl0IGNhY2hlcy5rZXlzKCk7CiAgICAgICAgICBhd2FpdCBQcm9taXNlLmFsbChrZXlzLm1hcCgoaykgPT4gY2FjaGVzLmRlbGV0ZShrKSkpOwogICAgICAgIH0KICAgICAgfSBjYXRjaCAoZSkge30KICAgIH0pKCk7CgogICAgbGV0IGF0dGVtcHRzID0gMDsKICAgIGNvbnN0IHRyeUNhcHR1cmUgPSAoKSA9PiB7CiAgICAgIGNvbnN0IGNhbnZhcyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgICAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtZ2xhc3MtcGFuZSIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgaWYgKGNhbnZhcykgewogICAgICAgIHNldFRpbWVvdXQoKCkgPT4gewogICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgY29uc3QgZGF0YVVybCA9IGNhbnZhcy50b0RhdGFVUkwoImltYWdlL3BuZyIpOwogICAgICAgICAgICB3aW5kb3cucGFyZW50LnBvc3RNZXNzYWdlKHsgdHlwZTogInNjcmVlbnNob3QtcmVzdWx0IiwgZGF0YVVybCB9LCAiKiIpOwogICAgICAgICAgfSBjYXRjaCAoZSkge30KICAgICAgICB9LCAyMDAwKTsKICAgICAgfSBlbHNlIGlmIChhdHRlbXB0cyA8IDE1KSB7CiAgICAgICAgYXR0ZW1wdHMrKzsKICAgICAgICBzZXRUaW1lb3V0KHRyeUNhcHR1cmUsIDEwMDApOwogICAgICB9CiAgICB9OwogICAgc2V0VGltZW91dCh0cnlDYXB0dXJlLCA1MDAwKTsKICB9KTsKPC9zY3JpcHQ+" | base64 -d > capture_script.html
-          node -e "const fs = require('fs'); const buildId = process.env.BUILD_ID || String(Date.now()); const indexPath = 'build/web/index.html'; const bootstrapPath = 'build/web/flutter_bootstrap.js'; let html = fs.readFileSync(indexPath, 'utf8'); const script = fs.readFileSync('capture_script.html', 'utf8'); html = html.replace('</body>', script + '</body>'); html = html.replace('<head>', '<head><meta name="myth-build-id" content="' + buildId + '"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">'); html = html.replace(/flutter_bootstrap\.js(\?[^"']*)?/g, 'flutter_bootstrap.js?v=' + encodeURIComponent(buildId)); fs.writeFileSync(indexPath, html); if (fs.existsSync(bootstrapPath)) { let bs = fs.readFileSync(bootstrapPath, 'utf8'); bs = bs.replace(/main\.dart\.js(\?[^"']*)?/g, 'main.dart.js?v=' + encodeURIComponent(buildId)); bs = bs.replace(/flutter\.js(\?[^"']*)?/g, 'flutter.js?v=' + encodeURIComponent(buildId)); bs = bs.replace(/AssetManifest\.bin\.json(\?[^"']*)?/g, 'AssetManifest.bin.json?v=' + encodeURIComponent(buildId)); bs = bs.replace(/FontManifest\.json(\?[^"']*)?/g, 'FontManifest.json?v=' + encodeURIComponent(buildId)); fs.writeFileSync(bootstrapPath, bs); }"
+          cat > patch_preview_cache.js <<'NODE'
+          const fs = require('fs');
+          const buildId = process.env.BUILD_ID || String(Date.now());
+          const indexPath = 'build/web/index.html';
+          const bootstrapPath = 'build/web/flutter_bootstrap.js';
+          const v = encodeURIComponent(buildId);
+
+          let html = fs.readFileSync(indexPath, 'utf8');
+          const script = fs.readFileSync('capture_script.html', 'utf8');
+          html = html.replace('</body>', script + '</body>');
+          html = html.replace(
+            '<head>',
+            '<head><meta name="myth-build-id" content="' +
+              buildId +
+              '"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">'
+          );
+          html = html.replace(/flutter_bootstrap.js(?[^"']*)?/g, 'flutter_bootstrap.js?v=' + v);
+          fs.writeFileSync(indexPath, html);
+
+          if (fs.existsSync(bootstrapPath)) {
+            let bs = fs.readFileSync(bootstrapPath, 'utf8');
+            bs = bs.replace(/main.dart.js(?[^"']*)?/g, 'main.dart.js?v=' + v);
+            bs = bs.replace(/flutter.js(?[^"']*)?/g, 'flutter.js?v=' + v);
+            bs = bs.replace(/AssetManifest.bin.json(?[^"']*)?/g, 'AssetManifest.bin.json?v=' + v);
+            bs = bs.replace(/FontManifest.json(?[^"']*)?/g, 'FontManifest.json?v=' + v);
+            fs.writeFileSync(bootstrapPath, bs);
+          }
+          NODE
+          node patch_preview_cache.js
+          rm -f patch_preview_cache.js
           # GitHub Pages: avoid 404 on deep links / refresh (Flutter web router)
           cp build/web/index.html build/web/404.html
 
