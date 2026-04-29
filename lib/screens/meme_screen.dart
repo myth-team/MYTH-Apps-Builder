@@ -166,7 +166,7 @@ class _MemeScreenState extends State<MemeScreen> with SingleTickerProviderStateM
                 ),
               ),
               Text(
-                'Tap for random laughs',
+                'Tap for random',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
