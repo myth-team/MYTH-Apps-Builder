@@ -308,7 +308,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 ),
                 child: rememberMe
                     ? const Icon(Icons.check, size: 14, color: Colors.white)
-                    : null,
+                    : const SizedBox.shrink(),
               ),
               const SizedBox(width: 12),
               Text(
