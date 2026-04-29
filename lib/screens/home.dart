@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 40),
                   Text(
-                    'TAP TO CHANGE',
+                    'TAP TO CHANGE color',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
