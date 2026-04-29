@@ -74,7 +74,7 @@ class _CounterScreenState extends State<CounterScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                'Tap the button to count b',
+                'Tap the button to b',
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColors.textSecondary,
