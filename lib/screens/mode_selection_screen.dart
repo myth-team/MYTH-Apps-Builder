@@ -32,7 +32,7 @@ class ModeSelectionScreen extends StatelessWidget {
                 ),
               )
                   .animate()
-                  .fadeIn(duration: 400.ms),
+                  .fadeIn(duration: 400),
               SizedBox(height: 8),
               Text(
                 'How do you want to duel?',
@@ -42,7 +42,7 @@ class ModeSelectionScreen extends StatelessWidget {
                 ),
               )
                   .animate()
-                  .fadeIn(delay: 100.ms, duration: 400.ms),
+                  .fadeIn(delay: 100, duration: 400),
               SizedBox(height: 48),
               _buildModeCard(
                 context,
@@ -56,7 +56,7 @@ class ModeSelectionScreen extends StatelessWidget {
                 ),
               )
                   .animate()
-                  .fadeIn(delay: 200.ms, duration: 500.ms)
+                  .fadeIn(delay: 200, duration: 500)
                   .slideX(begin: -0.2, end: 0),
               SizedBox(height: 20),
               _buildModeCard(
@@ -71,12 +71,12 @@ class ModeSelectionScreen extends StatelessWidget {
                 ),
               )
                   .animate()
-                  .fadeIn(delay: 350.ms, duration: 500.ms)
+                  .fadeIn(delay: 350, duration: 500)
                   .slideX(begin: 0.2, end: 0),
               Spacer(),
               _buildFeatureRow()
                   .animate()
-                  .fadeIn(delay: 500.ms, duration: 400.ms),
+                  .fadeIn(delay: 500, duration: 400),
               SizedBox(height: 32),
             ],
           ),
