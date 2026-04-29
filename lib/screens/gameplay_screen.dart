@@ -79,7 +79,6 @@ class _GameplayScreenState extends State<GameplayScreen> {
   }
 
   void _simulateRound() {
-    // Simulate gameplay and AI judging
     Future.delayed(Duration(seconds: 3), () {
       if (!mounted) return;
       
@@ -105,7 +104,6 @@ class _GameplayScreenState extends State<GameplayScreen> {
         }
       });
 
-      // Check for match end
       final winsNeeded = (widget.bestOf ~/ 2) + 1;
       if (scoreP1 >= winsNeeded || scoreP2 >= winsNeeded) {
         Future.delayed(Duration(seconds: 2), () {
@@ -271,7 +269,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
   }
 
   Widget _buildInstructionScreen() {
-    final game = games.firstWhere((g) => g['name'] == currentGame);
+    final game = games.firstWhere((g) => g['name'] == currentGame, orElse: () => games[0]);
     
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24),
@@ -282,17 +280,17 @@ class _GameplayScreenState extends State<GameplayScreen> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: game['color'].withOpacity(0.2),
+              color: (game['color'] as Color).withOpacity(0.2),
               borderRadius: BorderRadius.circular(32),
               border: Border.all(
-                color: game['color'],
+                color: game['color'] as Color,
                 width: 3,
               ),
             ),
             child: Icon(
-              game['icon'],
+              game['icon'] as IconData,
               size: 60,
-              color: game['color'],
+              color: game['color'] as Color,
             ),
           )
               .animate()
@@ -312,7 +310,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
               .fadeIn(delay: 200.ms),
           SizedBox(height: 12),
           Text(
-            game['desc'],
+            game['desc'] as String,
             style: GoogleFonts.poppins(
               fontSize: 18,
               color: AppColors.textSecondary,
@@ -365,12 +363,12 @@ class _GameplayScreenState extends State<GameplayScreen> {
               height: 60,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [game['color'], game['color'].withOpacity(0.8)],
+                  colors: [game['color'] as Color, (game['color'] as Color).withOpacity(0.8)],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: game['color'].withOpacity(0.4),
+                    color: (game['color'] as Color).withOpacity(0.4),
                     blurRadius: 20,
                     spreadRadius: 2,
                   ),
@@ -397,25 +395,14 @@ class _GameplayScreenState extends State<GameplayScreen> {
   }
 
   Widget _buildActiveGameplay() {
-    final game = games.firstWhere((g) => g['name'] == currentGame);
-    
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (currentGame == 'Doodle Fight') ...[
-            _buildDoodleFightGameplay(),
-          ] else if (currentGame == 'Explain-Off') ...[
-            _buildExplainOffGameplay(),
-          ] else if (currentGame == 'Reaction Duel') ...[
-            _buildReactionDuelGameplay(),
-          ] else ...[
-            _buildSameBrainGameplay(),
-          ],
-        ],
-      ),
-    );
+    if (currentGame == 'Doodle Fight') {
+      return _buildDoodleFightGameplay();
+    } else if (currentGame == 'Explain-Off') {
+      return _buildExplainOffGameplay();
+    } else if (currentGame == 'Reaction Duel') {
+      return _buildReactionDuelGameplay();
+    }
+    return _buildSameBrainGameplay();
   }
 
   Widget _buildDoodleFightGameplay() {
@@ -619,138 +606,54 @@ class _GameplayScreenState extends State<GameplayScreen> {
         ),
       ),
       child: Center(
-        child: TweenAnimationBuilder(
-          tween: IntTween(begin: 30, end: 0),
-          duration: Duration(seconds: 30),
-          builder: (context, value, child) {
-            return Text(
-              '$value',
-              style: GoogleFonts.poppins(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: value < 10 ? AppColors.accent : AppColors.primary,
-              ),
-            );
-          },
-        ),
+        child: _CountdownTimer(),
       ),
     );
   }
+}
 
-  Widget _buildRoundResult() {
-    final isDraw = roundWinner == 'Draw';
-    final winnerColor = roundWinner == widget.player1Name 
-        ? AppColors.player1 
-        : roundWinner == widget.player2Name 
-            ? AppColors.player2 
-            : AppColors.textMuted;
+class _CountdownTimer extends StatefulWidget {
+  @override
+  State<_CountdownTimer> createState() => _CountdownTimerState();
+}
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: winnerColor.withOpacity(0.2),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: winnerColor,
-                width: 4,
-              ),
-            ),
-            child: Icon(
-              isDraw ? Icons.balance : Icons.emoji_events,
-              size: 48,
-              color: winnerColor,
-            ),
-          )
-              .animate()
-              .scale(duration: 400.ms)
-              .then()
-              .shake(duration: 300.ms),
-          SizedBox(height: 24),
-          Text(
-            isDraw ? 'It\'s a Draw!' : '$roundWinner Wins!',
-            style: GoogleFonts.poppins(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: winnerColor,
-            ),
-          )
-              .animate()
-              .fadeIn(delay: 200.ms),
-          SizedBox(height: 12),
-          if (!isDraw) ...[
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceLight,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'AI Analysis',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: AppColors.textMuted,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    aiReason,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            )
-                .animate()
-                .fadeIn(delay: 400.ms),
-          ],
-          SizedBox(height: 40),
-          GestureDetector(
-            onTap: _nextRound,
-            child: Container(
-              width: 240,
-              height: 60,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.gradientStart, AppColors.gradientEnd],
-                ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withOpacity(0.4),
-                    blurRadius: 20,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  'Next Round',
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          )
-              .animate()
-              .fadeIn(delay: 600.ms)
-              .slideY(begin: 0.3, end: 0),
-        ],
+class _CountdownTimerState extends State<_CountdownTimer> {
+  int _secondsLeft = 30;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    Future.doWhile(() async {
+      await Future.delayed(Duration(seconds: 1));
+      if (!mounted) return false;
+      if (_secondsLeft <= 0) return false;
+      setState(() => _secondsLeft--);
+      return _secondsLeft > 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$_secondsLeft',
+      style: GoogleFonts.poppins(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: _secondsLeft < 10 ? AppColors.accent : AppColors.primary,
       ),
     );
+  }
+}
+
+class IntTween extends Tween<int> {
+  IntTween({required int begin, required int end}) : super(begin: begin, end: end);
+
+  @override
+  int lerp(double t) {
+    return (begin! + (end! - begin!) * t).round();
   }
 }
