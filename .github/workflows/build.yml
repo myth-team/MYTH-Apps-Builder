@@ -92,11 +92,14 @@ jobs:
           mkdir -p assets images fonts
           flutter pub get
 
-      - name: Gradle Kotlin JVM validation (APK)
+      - name: Optimize Android Build (APK)
         if: github.event.inputs.build_type == 'apk'
         run: |
           if [ -f android/gradle.properties ]; then
             grep -q '^kotlin.jvm.target.validation.mode=' android/gradle.properties || echo 'kotlin.jvm.target.validation.mode=warning' >> android/gradle.properties
+            echo 'org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=1G -XX:+HeapDumpOnOutOfMemoryError' >> android/gradle.properties
+            echo 'org.gradle.parallel=true' >> android/gradle.properties
+            echo 'org.gradle.caching=true' >> android/gradle.properties
           fi
 
       - name: Build Web (preview for GitHub Pages)
@@ -185,7 +188,7 @@ jobs:
       - name: Build APK
         id: build_apk
         if: github.event.inputs.build_type == 'apk'
-        run: flutter build apk --release
+        run: flutter build apk --release --target-platform android-arm64
 
       - name: Upload Artifacts
         if: success() && github.event.inputs.build_type == 'apk' && steps.build_apk.outcome == 'success'
