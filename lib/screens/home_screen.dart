@@ -474,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '\\$${item.price.toStringAsFixed(0)}',
+                    '\$${item.price.toStringAsFixed(0)}',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -622,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '\\$${item.price.toStringAsFixed(0)}',
+                    '\$${item.price.toStringAsFixed(0)}',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
