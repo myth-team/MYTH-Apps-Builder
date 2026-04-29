@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_3_banking_forked_app/utils/colors.dart'; 
-import 'package:web_3_banking_forked_app/screens/home/home_screen.dart'; 
-import 'package:web_3_banking_forked_app/screens/invest/invest_screen.dart'; 
-import 'package:web_3_banking_forked_app/screens/card/card_screen.dart'; 
-import 'package:web_3_banking_forked_app/screens/settings/settings_screen.dart'; 
+import 'package:new_project_app/utils/colors.dart'; 
+import 'package:new_project_app/screens/home/home_screen.dart'; 
+import 'package:new_project_app/screens/invest/invest_screen.dart'; 
+import 'package:new_project_app/screens/card/card_screen.dart'; 
+import 'package:new_project_app/screens/settings/settings_screen.dart'; 
 
 class MainNavigation extends StatefulWidget {
   @override
