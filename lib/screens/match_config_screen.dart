@@ -50,7 +50,7 @@ class _MatchConfigScreenState extends State<MatchConfigScreen> {
                 ),
               )
                   .animate()
-                  .fadeIn(duration: 400.ms),
+                  .fadeIn(duration: 400),
               SizedBox(height: 8),
               Text(
                 'Configure your duel',
@@ -60,22 +60,22 @@ class _MatchConfigScreenState extends State<MatchConfigScreen> {
                 ),
               )
                   .animate()
-                  .fadeIn(delay: 100.ms, duration: 400.ms),
+                  .fadeIn(delay: 100, duration: 400),
               SizedBox(height: 40),
               // Players preview
               _buildPlayersPreview()
                   .animate()
-                  .fadeIn(delay: 200.ms, duration: 500.ms),
+                  .fadeIn(delay: 200, duration: 500),
               SizedBox(height: 40),
               // Round selection
               _buildRoundSelection()
                   .animate()
-                  .fadeIn(delay: 300.ms, duration: 500.ms),
+                  .fadeIn(delay: 300, duration: 500),
               Spacer(),
               // Start button
               _buildStartButton(context)
                   .animate()
-                  .fadeIn(delay: 400.ms, duration: 500.ms)
+                  .fadeIn(delay: 400, duration: 500)
                   .slideY(begin: 0.3, end: 0),
               SizedBox(height: 32),
             ],
