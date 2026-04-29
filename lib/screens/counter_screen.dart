@@ -137,7 +137,7 @@ class _CounterScreenState extends State<CounterScreen>
                     icon: Icons.refresh,
                     color: AppColors.textSecondary,
                     onTap: _resetCounter,
-                    label: 'Reset',
+                    label: 'Restore',
                   ),
                   _buildActionButton(
                     icon: Icons.add,
