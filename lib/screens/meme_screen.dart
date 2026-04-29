@@ -166,7 +166,7 @@ class _MemeScreenState extends State<MemeScreen> with SingleTickerProviderStateM
                 ),
               ),
               Text(
-                'Tap Me',
+                'Ta',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
