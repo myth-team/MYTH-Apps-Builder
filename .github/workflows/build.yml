@@ -120,6 +120,7 @@ jobs:
             if [ "$INITIAL_COMMIT" != "$REMOTE_COMMIT" ]; then
               echo "New AI code detected! Pulling..."
               git reset --hard $REMOTE_COMMIT
+              flutter pub get
               break
             fi
             sleep 2
