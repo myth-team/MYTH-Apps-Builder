@@ -131,7 +131,7 @@ class _CounterScreenState extends State<CounterScreen>
                     icon: Icons.remove,
                     color: AppColors.error,
                     onTap: _decrementCounter,
-                    label: 'Decrease',
+                    label: 'MINUS',
                   ),
                   _buildActionButton(
                     icon: Icons.refresh,
@@ -143,7 +143,7 @@ class _CounterScreenState extends State<CounterScreen>
                     icon: Icons.add,
                     color: AppColors.success,
                     onTap: _incrementCounter,
-                    label: 'Increase',
+                    label: 'ADD',
                   ),
                 ],
               ),
