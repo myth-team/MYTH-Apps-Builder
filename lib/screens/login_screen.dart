@@ -94,7 +94,51 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   opacity: fadeAnimation,
                   child: SlideTransition(
                     position: slideAnimation,
-                    child: _buildLoginButton(), end: Alignment.bottomRight,
+                    child: _buildLoginButton(),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                FadeTransition(
+                  opacity: fadeAnimation,
+                  child: SlideTransition(
+                    position: slideAnimation,
+                    child: _buildDivider(),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                FadeTransition(
+                  opacity: fadeAnimation,
+                  child: SlideTransition(
+                    position: slideAnimation,
+                    child: _buildSocialButtons(),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                FadeTransition(
+                  opacity: fadeAnimation,
+                  child: SlideTransition(
+                    position: slideAnimation,
+                    child: _buildSignUpLink(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: [AppColors.primary, AppColors.accent],
             ),
             borderRadius: BorderRadius.circular(20),
