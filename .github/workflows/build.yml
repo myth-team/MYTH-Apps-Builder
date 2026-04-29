@@ -15,10 +15,6 @@ on:
         description: 'Unique package identifier for Android (e.g. project_abc123)'
         required: false
         default: 'app'
-      is_warmup:
-        description: 'If true, waits up to 60s for a new commit before compiling'
-        required: false
-        default: 'false'
 
 # Sequential deployment to gh-pages prevents Git lock errors (cannot lock ref)
 concurrency:
@@ -108,12 +104,6 @@ jobs:
           
           mkdir -p assets images fonts
           flutter pub get
-
-      - name: Warm-up only (prime cache and exit early)
-        if: github.event.inputs.is_warmup == 'true'
-        run: |
-          echo "Warmup mode active. SDK + pub cache primed. Skipping compile/deploy."
-          exit 0
 
       - name: Optimize Android Build (APK)
         if: github.event.inputs.build_type == 'apk'
