@@ -15,6 +15,10 @@ on:
         description: 'Unique package identifier for Android (e.g. project_abc123)'
         required: false
         default: 'app'
+      is_warmup:
+        description: 'If true, waits up to 60s for a new commit before compiling'
+        required: false
+        default: 'false'
 
 # Sequential deployment to gh-pages prevents Git lock errors (cannot lock ref)
 concurrency:
@@ -104,6 +108,22 @@ jobs:
           
           mkdir -p assets images fonts
           flutter pub get
+
+      - name: Wait for AI Generation (Warm-up Sync)
+        if: github.event.inputs.is_warmup == 'true'
+        run: |
+          echo "Warmup mode active. Waiting up to 60s for AI to finish generating code..."
+          INITIAL_COMMIT=$(git rev-parse HEAD)
+          for i in {1..30}; do
+            git fetch origin ${{ github.ref_name }}
+            REMOTE_COMMIT=$(git rev-parse origin/${{ github.ref_name }})
+            if [ "$INITIAL_COMMIT" != "$REMOTE_COMMIT" ]; then
+              echo "New AI code detected! Pulling..."
+              git reset --hard $REMOTE_COMMIT
+              break
+            fi
+            sleep 2
+          done
 
       - name: Optimize Android Build (APK)
         if: github.event.inputs.build_type == 'apk'
