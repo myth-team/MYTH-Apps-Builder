@@ -161,7 +161,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    '\\$${widget.item.price.toStringAsFixed(0)}',
+                    '\$${widget.item.price.toStringAsFixed(0)}',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
