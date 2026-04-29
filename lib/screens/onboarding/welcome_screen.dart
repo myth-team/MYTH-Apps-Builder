@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_3_banking_forked_app/utils/colors.dart'; 
-import 'package:web_3_banking_forked_app/screens/onboarding/auth_screen.dart'; 
+import 'package:new_project_app/utils/colors.dart'; 
+import 'package:new_project_app/screens/onboarding/auth_screen.dart'; 
 
 class WelcomeScreen extends StatelessWidget {
   @override
