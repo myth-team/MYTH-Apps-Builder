@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_3_banking_forked_app/utils/colors.dart'; 
-import 'package:web_3_banking_forked_app/widgets/balance_card.dart'; 
-import 'package:web_3_banking_forked_app/widgets/action_row.dart'; 
-import 'package:web_3_banking_forked_app/widgets/quick_access_cards.dart'; 
-import 'package:web_3_banking_forked_app/widgets/transaction_list.dart'; 
+import 'package:new_project_app/utils/colors.dart'; 
+import 'package:new_project_app/widgets/balance_card.dart'; 
+import 'package:new_project_app/widgets/action_row.dart'; 
+import 'package:new_project_app/widgets/quick_access_cards.dart'; 
+import 'package:new_project_app/widgets/transaction_list.dart'; 
 
 class HomeScreen extends StatelessWidget {
   @override
