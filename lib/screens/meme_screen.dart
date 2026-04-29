@@ -158,7 +158,7 @@ class _MemeScreenState extends State<MemeScreen> with SingleTickerProviderStateM
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'MemeStream',
+                'Daud mEME',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
