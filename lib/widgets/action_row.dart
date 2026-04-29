@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_3_banking_forked_app/utils/colors.dart'; 
-import 'package:web_3_banking_forked_app/widgets/receive_bottom_sheet.dart'; 
-import 'package:web_3_banking_forked_app/widgets/send_bottom_sheet.dart'; 
-import 'package:web_3_banking_forked_app/widgets/swap_bottom_sheet.dart'; 
-import 'package:web_3_banking_forked_app/widgets/earn_bottom_sheet.dart'; 
+import 'package:new_project_app/utils/colors.dart'; 
+import 'package:new_project_app/widgets/receive_bottom_sheet.dart'; 
+import 'package:new_project_app/widgets/send_bottom_sheet.dart'; 
+import 'package:new_project_app/widgets/swap_bottom_sheet.dart'; 
+import 'package:new_project_app/widgets/earn_bottom_sheet.dart'; 
 
 class ActionRow extends StatelessWidget {
   @override
