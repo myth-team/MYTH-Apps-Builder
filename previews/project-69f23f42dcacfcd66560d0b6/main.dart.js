@@ -48048,7 +48048,7 @@ return B.c.ah(r,s)},
 $S:303}
 A.zj.prototype={
 V(a){var s=null
-return new A.oY(B.vS,new A.S6(),"Tap Counter",A.a_4(s,A.a0V(B.S,s,s,$.Yf(),B.i),$.a5W(),!0),!1,s)}}
+return new A.oY(B.vS,new A.S6(),"Tap Count",A.a_4(s,A.a0V(B.S,s,s,$.Yf(),B.i),$.a5W(),!0),!1,s)}}
 A.S6.prototype={
 $2(a,b){var s=A.cS(a,null,t.w).w.rH(B.wo)
 b.toString
