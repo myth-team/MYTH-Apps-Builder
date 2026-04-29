@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:new_project_app/utils/colors.dart'; 
-import 'package:new_project_app/screens/onboarding/auth_screen.dart'; 
+import 'package:web_3_banking_forked_app/utils/colors.dart'; 
+import 'package:web_3_banking_forked_app/screens/onboarding/auth_screen.dart'; 
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -19,20 +19,34 @@ class WelcomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 120,
-                      height: 120,
+                      width: 200,
+                      height: 200,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.primary, AppColors.primaryLight],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.2),
+                            blurRadius: 20,
+                            offset: Offset(0, 8),
+                          ),
+                        ],
                       ),
-                      child: Icon(
-                        Icons.account_balance_wallet,
-                        size: 60,
-                        color: Colors.white,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          'https://res.cloudinary.com/drcuo3fya/image/upload/v1777504514/myth/uploads/mbj9tbt1u85psnpebilm.png',
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(
+                              Icons.account_balance_wallet,
+                              size: 80,
+                              color: AppColors.primary,
+                            );
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(height: 32),
