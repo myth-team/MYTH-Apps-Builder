@@ -51718,7 +51718,7 @@ s.sp(0)
 r.w.p0()},
 Pa(){this.li()},
 W(a){var s=null,r=$.a4z(),q=A.a([$.a4B(),$.a4A()],t.Y),p=t.U,o=this.gP9()
-return new A.rc(A.ahC(A.lw(A.a([A.dD(A.a7Q(A.a([A.dD(B.xc,s,s,new A.cM(s,s,s,A.i5(16),s,new A.hc(B.h0,B.dZ,B.bD,q,s,s),B.a3),s,s,B.wK,s),B.EJ,A.lw(A.a([A.rO("MemeStream",s,s,A.f3(s,s,$.a1C(),s,s,s,s,s,s,s,s,24,s,s,B.eC,s,s,!0,s,s,s,s,s,s,s,s),s),A.rO("Tap for random laughs",s,s,A.f3(s,s,$.Ic(),s,s,s,s,s,s,s,s,14,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s)],p),B.aW,B.ao,B.aH)],p),B.dl,B.aH),s,s,s,s,s,B.wO,s),A.a2q(A.a2z(s,A.dD(A.JC(this.KD(),s,s),s,s,s,s,B.wN,s,s),B.bX,!1,s,s,s,s,s,s,s,s,s,s,s,s,o,s,s,s)),A.dD(A.lw(A.a([new A.yd(o,"Get New Meme",B.x8,s),B.EK,A.rO("Tap anywhere above for a new meme",s,s,A.f3(s,s,$.Ic(),s,s,s,s,s,s,s,s,12,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s)],p),B.ag,B.ao,B.aH),s,s,s,s,s,B.wP,s)],p),B.ag,B.ao,B.aH),!0),r,s)},
+return new A.rc(A.ahC(A.lw(A.a([A.dD(A.a7Q(A.a([A.dD(B.xc,s,s,new A.cM(s,s,s,A.i5(16),s,new A.hc(B.h0,B.dZ,B.bD,q,s,s),B.a3),s,s,B.wK,s),B.EJ,A.lw(A.a([A.rO("Daud mEME",s,s,A.f3(s,s,$.a1C(),s,s,s,s,s,s,s,s,24,s,s,B.eC,s,s,!0,s,s,s,s,s,s,s,s),s),A.rO("Tap for random laughs",s,s,A.f3(s,s,$.Ic(),s,s,s,s,s,s,s,s,14,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s)],p),B.aW,B.ao,B.aH)],p),B.dl,B.aH),s,s,s,s,s,B.wO,s),A.a2q(A.a2z(s,A.dD(A.JC(this.KD(),s,s),s,s,s,s,B.wN,s,s),B.bX,!1,s,s,s,s,s,s,s,s,s,s,s,s,o,s,s,s)),A.dD(A.lw(A.a([new A.yd(o,"Get New Meme",B.x8,s),B.EK,A.rO("Tap anywhere above for a new meme",s,s,A.f3(s,s,$.Ic(),s,s,s,s,s,s,s,s,12,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s)],p),B.ag,B.ao,B.aH),s,s,s,s,s,B.wP,s)],p),B.ag,B.ao,B.aH),!0),r,s)},
 KD(){var s,r,q,p=this,o=null
 if(p.f)return B.zq
 s=p.d
