@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tic_tac_toe_app/screens/game_screen.dart'; 
+import 'package:tic_tac_toe_app/utils/colors.dart'; 
 
 void main() {
   runApp(const MyApp());
