@@ -27961,7 +27961,7 @@ I4(){this.b2(new A.UG(this))},
 MU(){this.b2(new A.UH(this))},
 W(a){var s,r,q,p=this,o=null,n=B.xX[p.d],m=A.Yt(0),l=A.bR(B.c.al(76.5),B.h.gn()>>>16&255,B.h.gn()>>>8&255,B.h.gn()&255)
 l=A.YC(o,new A.wz(B.wH,80,A.bR(B.c.al(229.5),B.h.gn()>>>16&255,B.h.gn()>>>8&255,B.h.gn()&255),o),B.T,o,new A.e4(l,o,o,o,o,o,B.dV),o,o,o,B.wp,o,o,o)
-s=A.ZN("TAP TO CHANGE",A.k6(o,o,B.h,o,o,o,o,o,o,o,o,28,o,o,B.bd,o,o,!0,o,4,o,o,o,A.a([new A.h_(A.bR(51,B.m.gn()>>>16&255,B.m.gn()>>>8&255,B.m.gn()&255),B.AF,4)],t.o5),o,o))
+s=A.ZN("TAP TO CHANGE color",A.k6(o,o,B.h,o,o,o,o,o,o,o,o,28,o,o,B.bd,o,o,!0,o,4,o,o,o,A.a([new A.h_(A.bR(51,B.m.gn()>>>16&255,B.m.gn()>>>8&255,B.m.gn()&255),B.AF,4)],t.o5),o,o))
 r=A.bR(64,B.h.gn()>>>16&255,B.h.gn()>>>8&255,B.h.gn()&255)
 q=A.Yt(30)
 q=A.abV(A.a0D(new A.vm(B.fP,B.n7,B.n8,B.bO,o,B.J9,o,0,A.a([l,B.DI,s,B.DH,A.YC(o,A.ZN("Tap count: "+p.e,B.FJ),B.T,o,new A.e4(r,o,o,q,o,o,B.bC),o,o,o,B.wo,o,o,o),B.DJ,A.ZN("Long press to reset",A.k6(o,o,A.bR(B.c.al(178.5),B.h.gn()>>>16&255,B.h.gn()>>>8&255,B.h.gn()&255),o,o,o,o,o,o,o,o,14,o,o,o,o,o,!0,o,o,o,o,o,o,o,o))],t.nA),o),o,o),!0)
