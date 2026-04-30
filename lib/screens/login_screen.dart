@@ -348,8 +348,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     return Row(
       children: [
         Expanded(child: Divider(color: AppColors.divider, thickness: 1)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or continue with',
             style: TextStyle(
