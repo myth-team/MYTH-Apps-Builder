@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopify_modern_app/utils/colors.dart'; 
+import 'package:shopify_modern_app/utils/state_manager.dart'; 
+import 'package:shopify_modern_app/screens/cart_screen.dart'; 
 
 class ProductDetailScreen extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -14,6 +16,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int quantity = 1;
   int selectedSize = 0;
   int selectedColor = 0;
+  bool isAddedToCart = false;
 
   final List<String> sizes = ['S', 'M', 'L', 'XL', 'XXL'];
   final List<Color> colors = [
@@ -24,8 +27,91 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     AppColors.grey400,
   ];
 
+  String _generateProductId() {
+    return '${widget.product['name']}_${selectedSize}_${selectedColor}';
+  }
+
+  void _addToCart(StateManager stateManager) {
+    stateManager.addToCart(
+      id: _generateProductId(),
+      name: widget.product['name'],
+      price: widget.product['price'],
+      image: widget.product['image'],
+      quantity: quantity,
+      selectedSize: selectedSize,
+      selectedColor: selectedColor,
+    );
+    
+    setState(() {
+      isAddedToCart = true;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.check_circle, color: AppColors.white),
+            SizedBox(width: 12),
+            Text('Added to cart!'),
+          ],
+        ),
+        backgroundColor: AppColors.success,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: EdgeInsets.all(16),
+      ),
+    );
+
+    Future.delayed(Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          isAddedToCart = false;
+        });
+      }
+    });
+  }
+
+  void _toggleWishlist(StateManager stateManager) {
+    final isInWishlist = stateManager.isInWishlist(widget.product['name']);
+    
+    stateManager.toggleWishlist(
+      id: widget.product['name'],
+      name: widget.product['name'],
+      price: widget.product['price'],
+      oldPrice: widget.product['oldPrice'],
+      rating: widget.product['rating'],
+      reviews: widget.product['reviews'],
+      image: widget.product['image'],
+      tag: widget.product['tag'],
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              isInWishlist ? Icons.favorite_border : Icons.favorite,
+              color: AppColors.white,
+            ),
+            SizedBox(width: 12),
+            Text(
+              isInWishlist ? 'Removed from wishlist' : 'Added to wishlist!',
+            ),
+          ],
+        ),
+        backgroundColor: isInWishlist ? AppColors.grey500 : AppColors.secondary,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: EdgeInsets.all(16),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final stateManager = StateManagerProvider.of(context);
+    final isInWishlist = stateManager.isInWishlist(widget.product['name']);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -54,7 +140,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Container(
                 margin: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: isInWishlist ? AppColors.secondary : AppColors.white,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
@@ -64,8 +150,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ],
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.favorite_border, color: AppColors.textPrimary),
-                  onPressed: () {},
+                  icon: Icon(
+                    isInWishlist ? Icons.favorite : Icons.favorite_border,
+                    color: isInWishlist ? AppColors.white : AppColors.textPrimary,
+                  ),
+                  onPressed: () => _toggleWishlist(stateManager),
                 ),
               ),
               Container(
@@ -82,7 +171,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 child: IconButton(
                   icon: Icon(Icons.share_outlined, color: AppColors.textPrimary),
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.share, color: AppColors.white),
+                            SizedBox(width: 12),
+                            Text('Share link copied!'),
+                          ],
+                        ),
+                        backgroundColor: AppColors.primary,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        margin: EdgeInsets.all(16),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -92,11 +197,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Container(
                     color: AppColors.grey100,
                     child: Center(
-                      child: Image.network(
-                        widget.product['image'],
-                        width: 280,
-                        height: 280,
-                        fit: BoxFit.cover,
+                      child: Hero(
+                        tag: 'product_${widget.product['name']}',
+                        child: Image.network(
+                          widget.product['image'],
+                          width: 280,
+                          height: 280,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -107,7 +215,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: AppColors.secondary,
+                          color: _getTagColor(widget.product['tag']),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -199,17 +307,82 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
+                          SizedBox(width: 12),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.success,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              _calculateDiscount(widget.product['oldPrice'], widget.product['price']),
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ],
                       ],
                     ),
                     SizedBox(height: 24),
-                    Text(
-                      'Select Size',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Size',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => Container(
+                                padding: EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Size Guide',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    SizedBox(height: 16),
+                                    _buildSizeGuideRow('S', 'Small', '80-85 cm'),
+                                    _buildSizeGuideRow('M', 'Medium', '85-90 cm'),
+                                    _buildSizeGuideRow('L', 'Large', '90-95 cm'),
+                                    _buildSizeGuideRow('XL', 'Extra Large', '95-100 cm'),
+                                    _buildSizeGuideRow('XXL', 'Double XL', '100-105 cm'),
+                                    SizedBox(height: 16),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Size Guide',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 12),
                     Row(
@@ -276,31 +449,47 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   blurRadius: 8,
                                   offset: Offset(0, 4),
                                 ),
+                             n                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.grey100,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.local_shipping_outlined, color: AppColors.primary),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Free Delivery',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                Text(
+                                  '2-4 business days',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
                               ],
                             ),
-                            child: isSelected
-                                ? Icon(Icons.check, color: AppColors.white, size: 20)
-                                : null,
                           ),
-                        );
-                      }),
-                    ),
-                    SizedBox(height: 24),
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Experience premium quality with this beautifully crafted product. Designed for modern living with attention to every detail. Perfect for those who appreciate fine craftsmanship and contemporary design.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
-                        height: 1.6,
+                          Icon(Icons.verified_outlined, color: AppColors.success),
+                          SizedBox(width: 8),
+                          Text(
+                            'Authentic',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.success,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 24),
@@ -374,53 +563,71 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: Row(
             children: [
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.grey100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.shopping_cart_outlined, color: AppColors.primary),
-                      SizedBox(width: 8),
-                      Text(
-                        'Add to Cart',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
+                child: GestureDetector(
+                  onTap: () => _addToCart(stateManager),
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: isAddedToCart ? AppColors.success : AppColors.grey100,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          isAddedToCart ? Icons.check : Icons.shopping_cart_outlined,
+                          color: isAddedToCart ? AppColors.white : AppColors.primary,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 8),
+                        Text(
+                          isAddedToCart ? 'Added!' : 'Add to Cart',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: isAddedToCart ? AppColors.white : AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
               SizedBox(width: 16),
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primary, AppColors.primaryLight],
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
+                child: GestureDetector(
+                  onTap: () {
+                    _addToCart(stateManager);
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      );
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary, AppColors.primaryLight],
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Buy Now',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Buy Now',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -429,6 +636,71 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  String _calculateDiscount(double oldPrice, double newPrice) {
+    final discount = ((oldPrice - newPrice) / oldPrice * 100).round();
+    return '-$discount%';
+  }
+
+  Color _getTagColor(String tag) {
+    switch (tag) {
+      case 'New':
+        return AppColors.success;
+      case 'Hot':
+        return AppColors.secondary;
+      case 'Sale':
+        return AppColors.error;
+      case 'Popular':
+        return AppColors.accent;
+      default:
+        if (tag.startsWith('-')) {
+          return AppColors.secondary;
+        }
+        return AppColors.primary;
+    }
+  }
+
+  Widget _buildSizeGuideRow(String size, String name, String measurement) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.grey100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                size,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              name,
+              style: TextStyle(
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          Text(
+            measurement,
+            style: TextStyle(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
       ),
     );
   }
