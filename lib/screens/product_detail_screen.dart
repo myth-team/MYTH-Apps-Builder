@@ -269,89 +269,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Text(
                                 widget.product['rating'].toString(),
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '${widget.product['reviews']} Reviews',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Text(
-                          '\$${widget.product['price'].toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                        if (widget.product['oldPrice'] != null) ...[
-                          SizedBox(width: 12),
-                          Text(
-                            '\$${widget.product['oldPrice'].toStringAsFixed(2)}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: AppColors.grey400,
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.success,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              _calculateDiscount(widget.product['oldPrice'], widget.product['price']),
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Select Size',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                padding: EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  fontAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Size Guide',
@@ -375,34 +293,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           },
                           child: Text(
                             'Size Guide',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      children: List.generate(sizes.length, (index) {
-                        final isSelected = selectedSize == index;
-                        return GestureDetector(
-                          onTap: () => setState(() => selectedSize = index),
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 200),
-                            margin: EdgeInsets.only(right: 12),
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: isSelected ? AppColors.primary : AppColors.grey100,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: isSelected ? AppColors.primary : AppColors.grey200,
-                                width: 2,
-                              ),
-                            ),
+                            style: TextStyle
                             child: Center(
                               child: Text(
                                 sizes[index],
@@ -449,37 +340,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   blurRadius: 8,
                                   offset: Offset(0, 4),
                                 ),
-                             n                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey100,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.local_shipping_outlined, color: AppColors.primary),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Free Delivery',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                                Text(
-                                  '2-4 business days',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
                               ],
                             ),
                           ),
-                          Icon(Icons.verified_outlined, color: AppColors.success),
+                        ) Icon(Icons.verified_outlined, color: AppColors.success),
                           SizedBox(width: 8),
                           Text(
                             'Authentic',
@@ -512,35 +376,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.remove, color: AppColors.textPrimary),
-                                onPressed: () {
-                                  if (quantity > 1) {
-                                    setState(() => quantity--);
-                                  }
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  quantity.toString(),
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add, color: AppColors.textPrimary),
-                                onPressed: () => setState(() => quantity++),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 100),
-                  ],
+                                icon: ],
                 ),
               ),
             ),
@@ -577,37 +413,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         Icon(
                           isAddedToCart ? Icons.check : Icons.shopping_cart_outlined,
-                          color: isAddedToCart ? AppColors.white : AppColors.primary,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          isAddedToCart ? 'Added!' : 'Add to Cart',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: isAddedToCart ? AppColors.white : AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _addToCart(stateManager);
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CartScreen()),
-                      );
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
+: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [AppColors.primary, AppColors.primaryLight],
                       ),
