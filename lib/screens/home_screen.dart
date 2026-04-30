@@ -843,7 +843,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildReasonCard(Map<String, String> reason) {
+  Widget _buildReasonCard(Map<String, dynamic> reason) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(20),
