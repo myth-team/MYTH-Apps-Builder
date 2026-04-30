@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopify_modern_app/utils/colors.dart'; 
+import 'package:shopify_modern_app/utils/state_manager.dart'; 
 
 class ProductCard extends StatelessWidget {
   final String name;
@@ -25,6 +26,9 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stateManager = StateManagerProvider.of(context);
+    final isInWishlist = stateManager.isInWishlist(name);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -54,14 +58,17 @@ class ProductCard extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
-                            child: Icon(Icons.image, color: AppColors.grey300, size: 40),
-                          );
-                        },
+                      child: Hero(
+                        tag: 'product_$name',
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Icon(Icons.image, color: AppColors.grey300, size: 40),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -88,22 +95,58 @@ class ProductCard extends StatelessWidget {
                   Positioned(
                     top: 12,
                     right: 12,
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.shadow,
-                            blurRadius: 8,
+                    child: GestureDetector(
+                      onTap: () {
+                        stateManager.toggleWishlist(
+                          id: name,
+                          name: name,
+                          price: price,
+                          oldPrice: oldPrice,
+                          rating: rating,
+                          reviews: reviews,
+                          image: image,
+                          tag: tag,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(
+                                  isInWishlist ? Icons.favorite_border : Icons.favorite,
+                                  color: AppColors.white,
+                                ),
+                                SizedBox(width: 12),
+                                Text(
+                                  isInWishlist ? 'Removed from wishlist' : 'Added to wishlist!',
+                                ),
+                              ],
+                            ),
+                            backgroundColor: isInWishlist ? AppColors.grey500 : AppColors.secondary,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            margin: EdgeInsets.all(16),
+                            duration: Duration(seconds: 1),
                           ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.favorite_outline,
-                        color: AppColors.grey400,
-                        size: 18,
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.shadow,
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          isInWishlist ? Icons.favorite : Icons.favorite_outline,
+                          color: isInWishlist ? AppColors.secondary : AppColors.grey400,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ),
