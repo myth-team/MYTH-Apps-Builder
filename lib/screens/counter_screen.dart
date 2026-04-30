@@ -41,7 +41,7 @@ class _CounterScreenState extends State<CounterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'COUNTER APP',
+                  'COUNTER',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
