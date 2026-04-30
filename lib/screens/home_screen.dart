@@ -850,7 +850,7 @@ class ActivityScreen extends StatelessWidget {
                       ),
                       Text(
                         isUpcoming ? 'Tomorrow, 2:30 PM' : 'Dec 15, 2024',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 13,
                         ),
@@ -1052,7 +1052,7 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'John Smith',
           style: TextStyle(
             fontSize: 24,
@@ -1061,7 +1061,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        const Text(
+        Text(
           '+1 234 567 8900',
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -1184,7 +1184,7 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
               fontSize: 14,
