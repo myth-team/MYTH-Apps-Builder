@@ -388,7 +388,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
@@ -711,7 +711,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
   void _submitForm() {
     if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Please accept the terms and conditions'),
           backgroundColor: AppColors.error,
         ),
