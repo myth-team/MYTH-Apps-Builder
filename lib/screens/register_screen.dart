@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                 ),
               ],
             ),
-            child: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary, size: 20),
+            child: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary, size: 20),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -231,7 +231,6 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(10),
           ],
-          prefix: '+1',
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter your phone number';
@@ -342,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(60),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person_outline_rounded,
               size: 60,
               color: AppColors.primary,
@@ -380,7 +379,6 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
     Widget? suffixIcon,
-    String? prefix,
     String? Function(String?)? validator,
   }) {
     return Column(
@@ -421,11 +419,11 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.error),
+              borderSide: BorderSide(color: AppColors.error),
             ),
           ),
         ),
@@ -461,7 +459,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                   color: AppColors.accent.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.home_rounded, color: AppColors.accent, size: 24),
+                child: Icon(Icons.home_rounded, color: AppColors.accent, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
