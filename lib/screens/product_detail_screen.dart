@@ -269,31 +269,87 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Text(
                                 widget.product['rating'].toString(),
                                 style: TextStyle(
-                                  fontAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Size Guide',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textPrimary,
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    _buildSizeGuideRow('S', 'Small', '80-85 cm'),
-                                    _buildSizeGuideRow('M', 'Medium', '85-90 cm'),
-                                    _buildSizeGuideRow('L', 'Large', '90-95 cm'),
-                                    _buildSizeGuideRow('XL', 'Extra Large', '95-100 cm'),
-                                    _buildSizeGuideRow('XXL', 'Double XL', '100-105 cm'),
-                                    SizedBox(height: 16),
-                                  ],
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            'Size Guide',
-                            style: TextStyle
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Text(
+                          '\$${widget.product['price'].toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        if (widget.product['oldPrice'] != null) ...[
+                          SizedBox(width: 12),
+                          Text(
+                            '\$${widget.product['oldPrice'].toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: AppColors.grey400,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              _calculateDiscount(
+                                widget.product['oldPrice'],
+                                widget.product['price'],
+                              ),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    Text(
+                      'Select Size',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: List.generate(sizes.length, (index) {
+                        final isSelected = selectedSize == index;
+                        return GestureDetector(
+                          onTap: () => setState(() => selectedSize = index),
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            margin: EdgeInsets.only(right: 12),
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primary : AppColors.grey100,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isSelected ? AppColors.primary : AppColors.grey200,
+                                width: 2,
+                              ),
+                            ),
                             child: Center(
                               child: Text(
                                 sizes[index],
@@ -343,18 +399,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ],
                             ),
                           ),
-                        ) Icon(Icons.verified_outlined, color: AppColors.success),
-                          SizedBox(width: 8),
-                          Text(
-                            'Authentic',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.success,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        );
+                      }),
+                    ),
+                    SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Icon(Icons.verified_outlined, color: AppColors.success, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Authentic',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.success,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: 20),
+                        Icon(Icons.local_shipping_outlined, color: AppColors.primary, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Free Shipping',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 24),
                     Row(
@@ -376,7 +448,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: Row(
                             children: [
                               IconButton(
-                                icon: ],
+                                icon: Icon(Icons.remove, color: AppColors.textPrimary),
+                                onPressed: () {
+                                  if (quantity > 1) {
+                                    setState(() => quantity--);
+                                  }
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: Text(
+                                  quantity.toString(),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add, color: AppColors.textPrimary),
+                                onPressed: () => setState(() => quantity++),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -413,7 +512,37 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         Icon(
                           isAddedToCart ? Icons.check : Icons.shopping_cart_outlined,
-: BoxDecoration(
+                          color: isAddedToCart ? AppColors.white : AppColors.textPrimary,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          isAddedToCart ? 'Added!' : 'Add to Cart',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: isAddedToCart ? AppColors.white : AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _addToCart(stateManager);
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      );
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [AppColors.primary, AppColors.primaryLight],
                       ),
@@ -467,47 +596,5 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         }
         return AppColors.primary;
     }
-  }
-
-  Widget _buildSizeGuideRow(String size, String name, String measurement) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.grey100,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                size,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              name,
-              style: TextStyle(
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
-          Text(
-            measurement,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
