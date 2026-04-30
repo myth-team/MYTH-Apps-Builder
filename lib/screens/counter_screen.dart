@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hello_connect_app/utils/colors.dart'; 
 
@@ -10,6 +11,8 @@ class CounterScreen extends StatefulWidget {
 
 class _CounterScreenState extends State<CounterScreen> {
   int _counter = 0;
+  String _currentTime = '';
+  Timer? _timer;
 
   void _increment() {
     setState(() {
@@ -27,6 +30,32 @@ class _CounterScreenState extends State<CounterScreen> {
     setState(() {
       _counter = 0;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _updateTime();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _updateTime();
+    });
+  }
+
+  void _updateTime() {
+    final now = DateTime.now();
+    setState(() {
+      _currentTime = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -49,7 +78,35 @@ class _CounterScreenState extends State<CounterScreen> {
                     color: AppColors.textSecondary,
                   ),
                 ),
-                SizedBox(height: 60),
+                SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        _currentTime,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 40),
                 Container(
                   width: 200,
                   height: 200,
