@@ -96,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Create Account',
           style: TextStyle(
             fontSize: 32,
@@ -437,7 +437,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Home Location',
           style: TextStyle(
             fontSize: 14,
@@ -464,7 +464,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                 child: const Icon(Icons.home_rounded, color: AppColors.accent, size: 24),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Add your home address',
                   style: TextStyle(
@@ -473,7 +473,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                   ),
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded, color: AppColors.textLight),
+              Icon(Icons.chevron_right_rounded, color: AppColors.textLight),
             ],
           ),
         ),
@@ -493,10 +493,10 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                   color: AppColors.secondary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.work_outline_rounded, color: AppColors.secondary, size: 24),
+                child: Icon(Icons.work_outline_rounded, color: AppColors.secondary, size: 24),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Add your work address',
                   style: TextStyle(
@@ -505,7 +505,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                   ),
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded, color: AppColors.textLight),
+              Icon(Icons.chevron_right_rounded, color: AppColors.textLight),
             ],
           ),
         ),
@@ -517,7 +517,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Password Strength',
           style: TextStyle(
             fontSize: 14,
@@ -635,7 +635,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primary,
-                  side: const BorderSide(color: AppColors.primary, width: 2),
+                  side: BorderSide(color: AppColors.primary, width: 2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -684,7 +684,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     if (_currentStep == 0) {
       if (_nameController.text.isEmpty || _phoneController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Please fill in all fields'),
             backgroundColor: AppColors.error,
           ),
@@ -695,7 +695,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     if (_currentStep == 1) {
       if (_emailController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Please enter your email'),
             backgroundColor: AppColors.error,
           ),
