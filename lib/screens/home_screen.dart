@@ -3,7 +3,6 @@ import 'package:gilded_stays_app/utils/colors.dart';
 import 'package:gilded_stays_app/widgets/search_bar_widget.dart'; 
 import 'package:gilded_stays_app/widgets/featured_hotels_widget.dart'; 
 import 'package:gilded_stays_app/widgets/popular_destinations_widget.dart'; 
-import 'package:gilded_stays_app/widgets/category_widget.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
