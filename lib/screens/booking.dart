@@ -810,6 +810,3 @@ class _BookingScreenState extends State<BookingScreen>
     );
   }
 }
-</BookingScreen>
-</_BookingScreenState>
-</BookingScreen>
