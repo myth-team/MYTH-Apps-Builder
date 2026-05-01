@@ -16,16 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _pickupController = TextEditingController();
-  final TextEditingController _destinationController = TextEditingController();
-
-  @override
-  void dispose() {
-    _pickupController.dispose();
-    _destinationController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -35,8 +25,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _HomeScreenContent extends StatelessWidget {
+class _HomeScreenContent extends StatefulWidget {
   const _HomeScreenContent();
+
+  @override
+  State<_HomeScreenContent> createState() => _HomeScreenContentState();
+}
+
+class _HomeScreenContentState extends State<_HomeScreenContent> {
+  final TextEditingController _pickupController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
+
+  @override
+  void dispose() {
+    _pickupController.dispose();
+    _destinationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,12 +189,10 @@ class _HomeScreenContent extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
         child: Stack(
           children: [
-            // Map placeholder with grid pattern
             CustomPaint(
               painter: _MapGridPainter(),
               size: const Size(double.infinity, 200),
             ),
-            // Current location button
             Positioned(
               right: AppConstants.spacingM,
               bottom: AppConstants.spacingM,
@@ -214,7 +217,6 @@ class _HomeScreenContent extends StatelessWidget {
                 ),
               ),
             ),
-            // Center marker
             Center(
               child: Container(
                 width: 40,
@@ -820,12 +822,10 @@ class _MapGridPainter extends CustomPainter {
 
     const spacing = 30.0;
 
-    // Draw vertical lines
     for (double x = 0; x < size.width; x += spacing) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
 
-    // Draw horizontal lines
     for (double y = 0; y < size.height; y += spacing) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
     }
