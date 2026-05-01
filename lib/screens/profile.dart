@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ridenow_app/utils/colors.dart'; 
 import 'package:ridenow_app/models/user.dart'; 
 import 'package:ridenow_app/models/ride.dart'; 
@@ -84,9 +85,10 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: ClipOval(
               child: user.photoUrl != null
-                  ? Image.network(
-                      user.photoUrl!,
+                  ? CachedNetworkImage(
+                      imageUrl: user.photoUrl!,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) => _buildInitialsAvatar(user.initials),
                       errorWidget: (context, url, error) => _buildInitialsAvatar(user.initials),
                     )
                   : _buildInitialsAvatar(user.initials),
