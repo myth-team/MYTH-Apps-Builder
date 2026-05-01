@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ridenow_go_app/models/ride.dart'; 
 import 'package:ridenow_go_app/screens/home.dart'; 
 import 'package:ridenow_go_app/screens/ride_request.dart'; 
 import 'package:ridenow_go_app/screens/trip_active.dart'; 
