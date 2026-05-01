@@ -177,15 +177,18 @@ class LocationService extends ChangeNotifier {
     }
 
     try {
-      final queryString = '$query, USA';
-      final locations = await Geolocator.localSearchLocation(queryString);
+      final placemarks = await Geolocator.placemarkFromAddress('$query, USA');
       
-      return locations.map((loc) {
+      return placemarks.map((place) {
         return app.Location(
-          latitude: loc.latitude,
-          longitude: loc.longitude,
-          address: loc.address,
-          placeId: loc.placeId,
+          latitude: place.location?.latitude ?? 0,
+          longitude: place.location?.longitude ?? 0,
+          address: place.street ?? query,
+          placeId: null,
+          city: place.locality,
+          state: place.administrativeArea,
+          country: place.country,
+          zipCode: place.postalCode,
         );
       }).toList();
     } catch (e) {
@@ -233,23 +236,5 @@ class LocationService extends ChangeNotifier {
   void dispose() {
     stopLocationUpdates();
     super.dispose();
-  }
-}
-
-extension GeolocatorExtension on Geolocator {
-  static Future<List<Location>> localSearchLocation(String query) async {
-    try {
-      final results = await Geolocator.findAddressesFromQuery(query);
-      return results.map((result) {
-        return Location(
-          latitude: result.location?.latitude ?? 0,
-          longitude: result.location?.longitude ?? 0,
-          address: result.address ?? query,
-          placeId: result.placeId,
-        );
-      }).toList();
-    } catch (e) {
-      return [];
-    }
   }
 }
