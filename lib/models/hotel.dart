@@ -12,8 +12,9 @@ class Hotel {
   final List<Room> rooms;
   final String thumbnailUrl;
   final bool isFeatured;
+  bool isFavorite;
 
-  const Hotel({
+  Hotel({
     required this.id,
     required this.name,
     required this.description,
@@ -27,6 +28,7 @@ class Hotel {
     required this.rooms,
     required this.thumbnailUrl,
     this.isFeatured = false,
+    this.isFavorite = false,
   });
 
   factory Hotel.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class Hotel {
           [],
       thumbnailUrl: json['thumbnailUrl'] as String,
       isFeatured: json['isFeatured'] as bool? ?? false,
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
   }
 
@@ -65,6 +68,7 @@ class Hotel {
       'rooms': rooms.map((r) => r.toJson()).toList(),
       'thumbnailUrl': thumbnailUrl,
       'isFeatured': isFeatured,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -82,6 +86,7 @@ class Hotel {
     List<Room>? rooms,
     String? thumbnailUrl,
     bool? isFeatured,
+    bool? isFavorite,
   }) {
     return Hotel(
       id: id ?? this.id,
@@ -97,11 +102,15 @@ class Hotel {
       rooms: rooms ?? this.rooms,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       isFeatured: isFeatured ?? this.isFeatured,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
   String get formattedPrice => '\$${pricePerNight.toStringAsFixed(0)}';
   String get formattedRating => rating.toStringAsFixed(1);
+  String get location => '$city, $address';
+  double get price => pricePerNight;
+  String get imageUrl => thumbnailUrl;
 }
 
 class Room {
@@ -115,8 +124,9 @@ class Room {
   final List<String> amenities;
   final int availableCount;
   final double size;
+  final String bedType;
 
-  const Room({
+  Room({
     required this.id,
     required this.hotelId,
     required this.name,
@@ -127,6 +137,7 @@ class Room {
     required this.amenities,
     this.availableCount = 1,
     this.size = 0,
+    this.bedType = 'King',
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
@@ -141,6 +152,7 @@ class Room {
       amenities: List<String>.from(json['amenities'] as List),
       availableCount: json['availableCount'] as int? ?? 1,
       size: (json['size'] as num?)?.toDouble() ?? 0,
+      bedType: json['bedType'] as String? ?? 'King',
     );
   }
 
@@ -156,6 +168,7 @@ class Room {
       'amenities': amenities,
       'availableCount': availableCount,
       'size': size,
+      'bedType': bedType,
     };
   }
 
@@ -170,6 +183,7 @@ class Room {
     List<String>? amenities,
     int? availableCount,
     double? size,
+    String? bedType,
   }) {
     return Room(
       id: id ?? this.id,
@@ -182,10 +196,17 @@ class Room {
       amenities: amenities ?? this.amenities,
       availableCount: availableCount ?? this.availableCount,
       size: size ?? this.size,
+      bedType: bedType ?? this.bedType,
     );
   }
 
   String get formattedPrice => '\$${pricePerNight.toStringAsFixed(0)}';
   String get guestsText => '$maxGuests Guest${maxGuests > 1 ? 's' : ''}';
   String get sizeText => size > 0 ? '${size.toStringAsFixed(0)} m²' : '';
+  bool get isAvailable => availableCount > 0;
+  
+  // Added getters to fix compilation errors
+  String get image => images.isNotEmpty ? images.first : '';
+  int get capacity => maxGuests;
+  double get price => pricePerNight;
 }
