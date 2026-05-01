@@ -10,7 +10,7 @@ class GameState extends ChangeNotifier {
   final Player xPlayer;
   final Player oPlayer;
 
-  const GameState({
+  GameState({
     required this.board,
     required this.currentTurn,
     required this.status,
