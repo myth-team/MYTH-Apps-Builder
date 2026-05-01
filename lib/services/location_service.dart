@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart' as GeocodingPlacemark;
 import 'package:ridenow_app/models/location.dart' as app;
 import 'package:ridenow_app/utils/colors.dart'; 
 import 'package:flutter/material.dart';
@@ -143,7 +144,7 @@ class LocationService extends ChangeNotifier {
 
   Future<String?> _reverseGeocode(double latitude, double longitude) async {
     try {
-      final placemarks = await Geolocator.placemarkFromCoordinates(
+      final placemarks = await GeocodingPlacemark.placemarkFromCoordinates(
         latitude,
         longitude,
       );
@@ -177,12 +178,12 @@ class LocationService extends ChangeNotifier {
     }
 
     try {
-      final placemarks = await Geolocator.placemarkFromAddress('$query, USA');
+      final placemarks = await GeocodingPlacemark.placemarkFromAddress('$query, USA');
       
       return placemarks.map((place) {
         return app.Location(
-          latitude: place.location?.latitude ?? 0,
-          longitude: place.location?.longitude ?? 0,
+          latitude: place.coordinates?.latitude ?? 0,
+          longitude: place.coordinates?.longitude ?? 0,
           address: place.street ?? query,
           placeId: null,
           city: place.locality,
@@ -199,13 +200,13 @@ class LocationService extends ChangeNotifier {
 
   Future<app.Location?> getLocationFromAddress(String address) async {
     try {
-      final placemarks = await Geolocator.placemarkFromAddress(address);
+      final placemarks = await GeocodingPlacemark.placemarkFromAddress(address);
       
       if (placemarks.isNotEmpty) {
         final place = placemarks.first;
         return app.Location(
-          latitude: place.location?.latitude ?? 0,
-          longitude: place.location?.longitude ?? 0,
+          latitude: place.coordinates?.latitude ?? 0,
+          longitude: place.coordinates?.longitude ?? 0,
           address: address,
           city: place.locality,
           state: place.administrativeArea,
