@@ -133,4 +133,3 @@ class Room {
   
   bool get isLimitedAvailability => availableRooms <= 3;
 }
-</model>
