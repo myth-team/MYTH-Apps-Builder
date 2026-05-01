@@ -879,4 +879,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-</widget>
