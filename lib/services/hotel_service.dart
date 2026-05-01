@@ -98,6 +98,44 @@ class HotelService extends ChangeNotifier {
     }
   }
 
+  // New method to match explore.dart expectations
+  Future<List<Hotel>> getHotels({
+    int page = 1,
+    String filter = 'All',
+    String sortBy = 'rating',
+  }) async {
+    if (page == 1) {
+      _hotels.clear();
+    }
+    
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      final newHotels = _generateMockHotels(page: page);
+      
+      _hotels.addAll(newHotels);
+      _currentPage = page + 1;
+      
+      if (_currentPage > 3) {
+        _hasMore = false;
+      }
+      
+      _isLoading = false;
+      _error = null;
+      notifyListeners();
+      
+      return _hotels;
+    } catch (e) {
+      _error = 'Failed to load hotels: $e';
+      _isLoading = false;
+      notifyListeners();
+      return [];
+    }
+  }
+
   void setSearchQuery(String query) {
     _searchQuery = query;
     _currentPage = 1;
