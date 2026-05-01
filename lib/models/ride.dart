@@ -1,5 +1,5 @@
-import 'driver.dart';
-import 'location.dart';
+import 'package:ridenow_app/models/driver.dart'; 
+import 'package:ridenow_app/models/location.dart'; 
 
 enum RideStatus {
   pending,
@@ -156,7 +156,7 @@ class Ride {
       'driverLocation': driverLocation?.toJson(),
       'distance': distance,
       'cancellationReason': cancellationReason,
-      'routePoints': routePoints?.map((e) => e.toJson()).toList(),
+      'routePoints': routePoints?.map((Location e) => e.toJson()).toList(),
     };
   }
 
