@@ -180,7 +180,7 @@ class MapMarker extends StatelessWidget {
       width: size * 0.6,
       height: size * 0.15,
       decoration: BoxDecoration(
-        shape: BoxShape.oval,
+        shape: BoxShape.circle,
         color: AppColors.shadowStrong.withOpacity(0.3),
       ),
     );
