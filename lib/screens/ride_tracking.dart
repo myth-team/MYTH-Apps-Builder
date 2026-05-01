@@ -15,9 +15,9 @@ class _RideTrackingScreenState extends State<RideTrackingScreen> {
   int _rating = 0;
 
   final Set<Marker> _markers = {
-    const Marker(markerId: MarkerId('driver'), position: LatLng(37.7849, -122.4094), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)),
-    const Marker(markerId: MarkerId('pickup'), position: LatLng(37.7749, -122.4194), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
-    const Marker(markerId: MarkerId('dropoff'), position: LatLng(37.7949, -122.3994), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)),
+    Marker(markerId: MarkerId('driver'), position: LatLng(37.7849, -122.4094), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)),
+    Marker(markerId: MarkerId('pickup'), position: LatLng(37.7749, -122.4194), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
+    Marker(markerId: MarkerId('dropoff'), position: LatLng(37.7949, -122.3994), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)),
   };
 
   final LatLng _driverPosition = const LatLng(37.7849, -122.4094);
