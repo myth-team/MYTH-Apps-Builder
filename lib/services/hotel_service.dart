@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:golden_stay_app/models/hotel.dart'; 
-import 'package:golden_stay_app/models/room.dart'; 
 
 class HotelService extends ChangeNotifier {
   List<Hotel> _hotels = [];
@@ -307,12 +306,9 @@ class HotelService extends ChangeNotifier {
     ).toList();
   }
 
-  Hotel? getHotelById(String id) {
-    try {
-      return _hotels.firstWhere((h) => h.id == id);
-    } catch (_) {
-      return null;
-    }
+  static Hotel? getHotelById(String id) {
+    // This is a static method placeholder - in real app would fetch from data
+    return null;
   }
 
   List<Hotel> _generateMockHotels({int page = 1}) {
