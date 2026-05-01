@@ -29,7 +29,7 @@ class AmenityChip extends StatelessWidget {
     if (lowerAmenity.contains('laundry')) return Icons.local_laundry_service;
     if (lowerAmenity.contains('pet')) return Icons.pets;
     if (lowerAmenity.contains('beach')) return Icons.beach_access;
-    if (lowerAmenity.contains('shuttle') || lowerAmenity.contains('transfer')) return Icons.shuttle_driver;
+    if (lowerAmenity.contains('shuttle') || lowerAmenity.contains('transfer')) return Icons.transfer_within_a_station;
     if (lowerAmenity.contains('concierge')) return Icons.support_agent;
     if (lowerAmenity.contains('business')) return Icons.business_center;
     return Icons.check_circle_outline;
