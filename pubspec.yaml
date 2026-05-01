@@ -11,11 +11,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   flutter_map: ^7.0.2
-  flutter_rating_bar: ^4.0.0
+  flutter_rating_bar: ^4.0.1
   flutter_svg: ^2.0.10+1
   geolocator: ^13.0.2
   get: ^4.6.6
-  google_maps_flutter: ^1.0.0
+  google_maps_flutter: ^2.9.0
   intl: ^0.19.0
   permission_handler: ^11.3.1
   provider: ^6.1.2
