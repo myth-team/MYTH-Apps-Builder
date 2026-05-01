@@ -178,18 +178,38 @@ class LocationService extends ChangeNotifier {
     }
 
     try {
-      final placemarks = await GeocodingPlacemark.placemarkFromAddress('$query, USA');
+      final locations = await GeocodingPlacemark.locationFromAddress('$query, USA');
       
-      return placemarks.map((place) {
+      return locations.map((location) async {
+        final placemarks = await GeocodingPlacemark.placemarkFromCoordinates(
+          location.latitude,
+          location.longitude,
+        );
+        
+        String address = query;
+        String? city;
+        String? state;
+        String? country;
+        String? zipCode;
+        
+        if (placemarks.isNotEmpty) {
+          final place = placemarks.first;
+          address = place.street ?? query;
+          city = place.locality;
+          state = place.administrativeArea;
+          country = place.country;
+          zipCode = place.postalCode;
+        }
+        
         return app.Location(
-          latitude: place.coordinates?.latitude ?? 0,
-          longitude: place.coordinates?.longitude ?? 0,
-          address: place.street ?? query,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          address: address,
           placeId: null,
-          city: place.locality,
-          state: place.administrativeArea,
-          country: place.country,
-          zipCode: place.postalCode,
+          city: city,
+          state: state,
+          country: country,
+          zipCode: zipCode,
         );
       }).toList();
     } catch (e) {
@@ -200,18 +220,38 @@ class LocationService extends ChangeNotifier {
 
   Future<app.Location?> getLocationFromAddress(String address) async {
     try {
-      final placemarks = await GeocodingPlacemark.placemarkFromAddress(address);
+      final locations = await GeocodingPlacemark.locationFromAddress(address);
       
-      if (placemarks.isNotEmpty) {
-        final place = placemarks.first;
+      if (locations.isNotEmpty) {
+        final location = locations.first;
+        final placemarks = await GeocodingPlacemark.placemarkFromCoordinates(
+          location.latitude,
+          location.longitude,
+        );
+        
+        String street = address;
+        String? city;
+        String? state;
+        String? country;
+        String? zipCode;
+        
+        if (placemarks.isNotEmpty) {
+          final place = placemarks.first;
+          street = place.street ?? address;
+          city = place.locality;
+          state = place.administrativeArea;
+          country = place.country;
+          zipCode = place.postalCode;
+        }
+        
         return app.Location(
-          latitude: place.coordinates?.latitude ?? 0,
-          longitude: place.coordinates?.longitude ?? 0,
-          address: address,
-          city: place.locality,
-          state: place.administrativeArea,
-          country: place.country,
-          zipCode: place.postalCode,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          address: street,
+          city: city,
+          state: state,
+          country: country,
+          zipCode: zipCode,
         );
       }
       return null;
