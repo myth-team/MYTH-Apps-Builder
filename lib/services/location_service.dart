@@ -180,7 +180,7 @@ class LocationService extends ChangeNotifier {
     try {
       final locations = await GeocodingPlacemark.locationFromAddress('$query, USA');
       
-      return locations.map((location) async {
+      final futures = locations.map((location) async {
         final placemarks = await GeocodingPlacemark.placemarkFromCoordinates(
           location.latitude,
           location.longitude,
@@ -212,6 +212,8 @@ class LocationService extends ChangeNotifier {
           zipCode: zipCode,
         );
       }).toList();
+      
+      return Future.wait(futures);
     } catch (e) {
       debugPrint('Search locations error: $e');
       return [];
