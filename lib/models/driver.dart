@@ -1,3 +1,5 @@
+import 'package:ridenow_app/models/location.dart'; 
+
 class Driver {
   final String id;
   final String name;
@@ -100,61 +102,4 @@ class VehicleInfo {
       'imageUrl': imageUrl,
     };
   }
-}
-
-class Location {
-  final double latitude;
-  final double longitude;
-  final String address;
-  final String? placeId;
-
-  const Location({
-    required this.latitude,
-    required this.longitude,
-    required this.address,
-    this.placeId,
-  });
-
-  Location copyWith({
-    double? latitude,
-    double? longitude,
-    String? address,
-    String? placeId,
-  }) {
-    return Location(
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      address: address ?? this.address,
-      placeId: placeId ?? this.placeId,
-    );
-  }
-
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      address: json['address'] as String,
-      placeId: json['placeId'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-      'address': address,
-      'placeId': placeId,
-    };
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Location &&
-        other.latitude == latitude &&
-        other.longitude == longitude;
-  }
-
-  @override
-  int get hashCode => latitude.hashCode ^ longitude.hashCode;
 }
