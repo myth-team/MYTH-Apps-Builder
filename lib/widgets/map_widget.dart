@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ridenow_app/utils/colors.dart'; 
-import 'package:ridenow_app/models/location.dart' as app;
-import 'package:ridenow_app/models/driver.dart' as app;
+import 'package:ridenow_app/models/location.dart'; 
 
 class MapWidget extends StatefulWidget {
-  final app.Location? currentLocation;
-  final app.Location? pickupLocation;
-  final app.Location? destinationLocation;
-  final app.Location? driverLocation;
-  final List<app.Location> routePoints;
-  final Function(LatLng)? onMapCreated;
-  final Function(app.Location)? onMapTap;
+  final Location? currentLocation;
+  final Location? pickupLocation;
+  final Location? destinationLocation;
+  final Location? driverLocation;
+  final List<Location> routePoints;
+  final Function(GoogleMapController)? onMapCreated;
+  final Function(Location)? onMapTap;
   final bool showCurrentLocation;
   final bool isTrackingDriver;
   final double initialZoom;
@@ -198,7 +197,7 @@ class _MapWidgetState extends State<MapWidget> {
     return null;
   }
 
-  void animateToLocation(app.Location location) {
+  void animateToLocation(Location location) {
     _mapController?.animateCamera(
       CameraUpdate.newLatLng(
         LatLng(location.latitude, location.longitude),
@@ -260,7 +259,7 @@ class _MapWidgetState extends State<MapWidget> {
               ),
               onMapCreated: (controller) {
                 _mapController = controller;
-                widget.onMapCreated?.call(controller as LatLng Function(Map<String, LatLng>));
+                widget.onMapCreated?.call(controller);
               },
               markers: _markers,
               polylines: _polylines,
@@ -272,12 +271,12 @@ class _MapWidgetState extends State<MapWidget> {
               onTap: widget.enableMapClick
                   ? (latLng) {
                       if (widget.onMapTap != null) {
-                        final location = app.Location(
+                        final location = Location(
                           latitude: latLng.latitude,
                           longitude: latLng.longitude,
                           address: 'Selected location',
                         );
-                        widget.onMapTap?.call(location);
+                        widget.onMapTap!.call(location);
                       }
                     }
                   : null,
