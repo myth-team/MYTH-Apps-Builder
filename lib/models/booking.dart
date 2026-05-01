@@ -13,6 +13,8 @@ class Booking {
   final String hotelImageUrl;
   final String roomId;
   final String roomName;
+  final Hotel? hotel;
+  final Room? room;
   final String guestName;
   final String guestEmail;
   final String guestPhone;
@@ -34,6 +36,8 @@ class Booking {
     required this.hotelImageUrl,
     required this.roomId,
     required this.roomName,
+    this.hotel,
+    this.room,
     required this.guestName,
     required this.guestEmail,
     required this.guestPhone,
@@ -57,6 +61,8 @@ class Booking {
       hotelImageUrl: json['hotelImageUrl'] as String,
       roomId: json['roomId'] as String,
       roomName: json['roomName'] as String,
+      hotel: json['hotel'] != null ? Hotel.fromJson(json['hotel']) : null,
+      room: json['room'] != null ? Room.fromJson(json['room']) : null,
       guestName: json['guestName'] as String,
       guestEmail: json['guestEmail'] as String,
       guestPhone: json['guestPhone'] as String,
@@ -84,6 +90,8 @@ class Booking {
       'hotelImageUrl': hotelImageUrl,
       'roomId': roomId,
       'roomName': roomName,
+      'hotel': hotel?.toJson(),
+      'room': room?.toJson(),
       'guestName': guestName,
       'guestEmail': guestEmail,
       'guestPhone': guestPhone,
@@ -107,6 +115,8 @@ class Booking {
     String? hotelImageUrl,
     String? roomId,
     String? roomName,
+    Hotel? hotel,
+    Room? room,
     String? guestName,
     String? guestEmail,
     String? guestPhone,
@@ -128,6 +138,8 @@ class Booking {
       hotelImageUrl: hotelImageUrl ?? this.hotelImageUrl,
       roomId: roomId ?? this.roomId,
       roomName: roomName ?? this.roomName,
+      hotel: hotel ?? this.hotel,
+      room: room ?? this.room,
       guestName: guestName ?? this.guestName,
       guestEmail: guestEmail ?? this.guestEmail,
       guestPhone: guestPhone ?? this.guestPhone,
