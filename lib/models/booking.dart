@@ -229,5 +229,3 @@ enum PaymentStatus {
   paid,
   refunded,
 }
-</modeling_code>
-</modeling_code>
