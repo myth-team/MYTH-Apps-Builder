@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:golden_stay_app/utils/colors.dart'; 
 import 'package:golden_stay_app/models/hotel.dart'; 
-import 'package:golden_stay_app/models/room.dart'; 
+import 'package:golden_stay_app/models/room.dart' as room_model;
 import 'package:golden_stay_app/widgets/golden_button.dart'; 
 
 class BookingScreen extends StatefulWidget {
