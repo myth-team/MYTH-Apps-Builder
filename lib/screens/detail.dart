@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:golden_stay_app/models/hotel.dart'; 
-import 'package:golden_stay_app/models/room.dart'; 
+import 'package:golden_stay_app/models/room.dart' as room_model;
 import 'package:golden_stay_app/services/hotel_service.dart'; 
 import 'package:golden_stay_app/utils/colors.dart'; 
 import 'package:golden_stay_app/widgets/amenity_chip.dart'; 
