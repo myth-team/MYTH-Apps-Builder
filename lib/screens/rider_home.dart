@@ -31,9 +31,9 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   }
 
   void _initMarkers() {
-    _markers.add(const Marker(markerId: MarkerId('driver1'), position: LatLng(37.7749, -122.4194), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
-    _markers.add(const Marker(markerId: MarkerId('driver2'), position: LatLng(37.7755, -122.4200), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
-    _markers.add(const Marker(markerId: MarkerId('driver3'), position: LatLng(37.7760, -122.4180), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+    _markers.add(Marker(markerId: MarkerId('driver1'), position: LatLng(37.7749, -122.4194), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+    _markers.add(Marker(markerId: MarkerId('driver2'), position: LatLng(37.7755, -122.4200), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+    _markers.add(Marker(markerId: MarkerId('driver3'), position: LatLng(37.7760, -122.4180), icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
   }
 
   @override
