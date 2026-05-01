@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:tic_tac_toe_app/models/player.dart'; 
 
 enum GameStatus { active, xWins, oWins, draw }
 
-class GameState {
+class GameState extends ChangeNotifier {
   final List<List<PlayerSymbol?>> board;
   final PlayerSymbol currentTurn;
   final GameStatus status;
@@ -90,13 +91,16 @@ class GameState {
       newOPlayer = oPlayer.copyWith(wins: oPlayer.wins + 1);
     }
 
-    return GameState(
+    final newState = GameState(
       board: newBoard,
       currentTurn: newStatus == GameStatus.active ? nextTurn : currentTurn,
       status: newStatus,
       xPlayer: newXPlayer,
       oPlayer: newOPlayer,
     );
+    
+    notifyListeners();
+    return newState;
   }
 
   GameStatus _checkWinner(List<List<PlayerSymbol?>> board, PlayerSymbol lastPlayer) {
@@ -129,7 +133,7 @@ class GameState {
   }
 
   GameState resetGame() {
-    return GameState(
+    final newState = GameState(
       board: List.generate(
         3,
         (_) => List<PlayerSymbol?>.filled(3, null),
@@ -139,10 +143,12 @@ class GameState {
       xPlayer: xPlayer,
       oPlayer: oPlayer,
     );
+    notifyListeners();
+    return newState;
   }
 
   GameState resetScores() {
-    return GameState(
+    final newState = GameState(
       board: List.generate(
         3,
         (_) => List<PlayerSymbol?>.filled(3, null),
@@ -152,5 +158,7 @@ class GameState {
       xPlayer: xPlayer.copyWith(wins: 0),
       oPlayer: oPlayer.copyWith(wins: 0),
     );
+    notifyListeners();
+    return newState;
   }
 }
