@@ -171,7 +171,7 @@ class _HomeTab extends StatelessWidget {
   Widget _buildCategoryChips() {
     final categories = [
       {'icon': Icons.local_pizza, 'label': 'Pizza'},
-      {'icon': Icons.burger_dining, 'label': 'Burgers'},
+      {'icon': Icons.lunch_dining, 'label': 'Burgers'},
       {'icon': Icons.ramen_dining, 'label': 'Asian'},
       {'icon': Icons.breakfast_dining, 'label': 'Breakfast'},
       {'icon': Icons.icecream, 'label': 'Desserts'},
