@@ -70,10 +70,7 @@ class _ScanTabState extends State<ScanTab> {
             child: IconButton(
               icon: Icon(Icons.close_rounded, color: Colors.white70),
               onPressed: () {
-                final homeState = context.findAncestorStateOfType<_HomeScreenState>();
-                if (homeState != null) {
-                  homeState.setState(() => homeState._currentIndex = 0);
-                }
+                Navigator.of(context).pop();
               },
             ),
           ),
