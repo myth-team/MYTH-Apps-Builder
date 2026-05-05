@@ -12,6 +12,10 @@ class AppColors {
   static Color warning = Color(0xFFFFA726);
   static Color error = Color(0xFFEF5350);
   static Color ringBg = Color(0xFFE8E8F0);
+  static Color surfaceDark = Color(0xFF1E1E2E);
+  static Color backgroundDark = Color(0xFF12121A);
+  static Color textPrimaryDark = Color(0xFFF1F1F6);
+  static Color textSecondaryDark = Color(0xFF8E8E93);
 
   static LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF6C63FF), Color(0xFF8B5CF6)],
