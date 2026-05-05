@@ -1,47 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ruby_rose_jewels_app/utils/colors.dart'; 
-
-void main() => runApp(const RubyRoseJewelsApp());
-
-class RubyRoseJewelsApp extends StatelessWidget {
-  const RubyRoseJewelsApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ruby Rose Jewels',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
-        colorScheme: ColorScheme.light(
-          primary: AppColors.primary,
-          secondary: AppColors.gold,
-          surface: AppColors.surface,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.surface,
-          foregroundColor: AppColors.textPrimary,
-          elevation: 0,
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: AppColors.surface,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.textLight,
-        ),
-      ),
-      home: const HomeScreen(),
-      routes: {
-        '/home': (context) => const HomeScreen(),
-        '/category_products': (context) => const CategoryProductsScreen(),
-        '/detail': (context) => const DetailScreen(),
-        '/cart': (context) => const CartScreen(),
-        '/checkout': (context) => const CheckoutScreen(),
-        '/profile': (context) => const ProfileScreen(),
-      },
-    );
-  }
-}
+import 'package:elite_eats_app/utils/colors.dart'; 
+import 'package:elite_eats_app/screens/detail.dart'; 
+import 'package:elite_eats_app/screens/cart.dart'; 
+import 'package:elite_eats_app/screens/profile.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,27 +12,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeContent(),
-    const CartScreen(),
+  final List<Widget> _tabs = [
+    const _HomeTab(),
+    const _SearchTab(),
+    const _OrdersTab(),
     const ProfileScreen(),
   ];
 
-  void _onItemTapped(int index) {
+  void _onTabTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      backgroundColor: AppColors.background,
+      body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: AppColors.surface,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.textSecondary,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -79,9 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            activeIcon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            icon: Icon(Icons.search_outlined),
+            activeIcon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long_outlined),
+            activeIcon: Icon(Icons.receipt_long),
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
@@ -90,12 +63,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/cart'),
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.shopping_cart, color: AppColors.surface),
+      ),
     );
   }
 }
 
-class HomeContent extends StatelessWidget {
-  const HomeContent({super.key});
+class _HomeTab extends StatelessWidget {
+  const _HomeTab();
 
   @override
   Widget build(BuildContext context) {
@@ -108,44 +86,42 @@ class HomeContent extends StatelessWidget {
           backgroundColor: AppColors.primary,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
+                  colors: [AppColors.primary, AppColors.secondary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Ruby Rose Jewels',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Hello, Food Lover!',
+                        style: TextStyle(
+                          color: AppColors.surface.withValues(alpha: 0.9),
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Elegance in Every Piece',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
+                      const SizedBox(height: 4),
+                      Text(
+                        'What would you like to eat?',
+                        style: TextStyle(
+                          color: AppColors.surface,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.white),
-              onPressed: () {},
-            ),
-          ],
         ),
         SliverToBoxAdapter(
           child: Padding(
@@ -153,265 +129,198 @@ class HomeContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Categories',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 100,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _CategoryCard(
-                        icon: Icons.diamond,
-                        label: 'Rings',
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/category_products',
-                          arguments: 'Rings',
-                        ),
-                      ),
-                      _CategoryCard(
-                        icon: Icons.workspace_premium,
-                        label: 'Necklaces',
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/category_products',
-                          arguments: 'Necklaces',
-                        ),
-                      ),
-                      _CategoryCard(
-                        icon: Icons.circle,
-                        label: 'Earrings',
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/category_products',
-                          arguments: 'Earrings',
-                        ),
-                      ),
-                      _CategoryCard(
-                        icon: Icons.watch,
-                        label: 'Bracelets',
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/category_products',
-                          arguments: 'Bracelets',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildSearchBar(),
                 const SizedBox(height: 24),
-                const Text(
-                  'Featured Jewels',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 12),
+                _buildCategoryChips(),
+                const SizedBox(height: 24),
+                _buildFeaturedSection(),
               ],
             ),
           ),
         ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final products = _getFeaturedProducts();
-                return _ProductCard(
-                  name: products[index]['name']!,
-                  price: products[index]['price']!,
-                  image: products[index]['image']!,
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/detail',
-                    arguments: products[index],
-                  ),
-                );
-              },
-              childCount: _getFeaturedProducts().length,
-            ),
-          ),
-        ),
-        const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
       ],
     );
   }
 
-  List<Map<String, String>> _getFeaturedProducts() {
-    return [
-      {
-        'name': 'Ruby Heart Pendant',
-        'price': '\$299',
-        'image': 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400',
-        'id': '1',
-      },
-      {
-        'name': 'Rose Gold Ring',
-        'price': '\$199',
-        'image': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400',
-        'id': '2',
-      },
-      {
-        'name': 'Diamond Stud Earrings',
-        'price': '\$149',
-        'image': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400',
-        'id': '3',
-      },
-      {
-        'name': 'Pearl Bracelet',
-        'price': '\$179',
-        'image': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400',
-        'id': '4',
-      },
-      {
-        'name': 'Sapphire Necklace',
-        'price': '\$349',
-        'image': 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400',
-        'id': '5',
-      },
-      {
-        'name': 'Gold Hoop Earrings',
-        'price': '\$89',
-        'image': 'https://images.unsplash.com/photo-1589128777073-263566ae5e4d?w=400',
-        'id': '6',
-      },
-    ];
-  }
-}
-
-class _CategoryCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _CategoryCard({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 90,
-        margin: const EdgeInsets.only(right: 12),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: AppColors.primary, size: 32),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
+  Widget _buildSearchBar() {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search restaurants or dishes',
+          hintStyle: TextStyle(color: AppColors.textSecondary),
+          prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
       ),
     );
   }
-}
 
-class _ProductCard extends StatelessWidget {
-  final String name;
-  final String price;
-  final String image;
-  final VoidCallback onTap;
+  Widget _buildCategoryChips() {
+    final categories = [
+      {'icon': Icons.local_pizza, 'label': 'Pizza'},
+      {'icon': Icons.burger_dining, 'label': 'Burgers'},
+      {'icon': Icons.ramen_dining, 'label': 'Asian'},
+      {'icon': Icons.breakfast_dining, 'label': 'Breakfast'},
+      {'icon': Icons.icecream, 'label': 'Desserts'},
+    ];
 
-  const _ProductCard({
-    required this.name,
-    required this.price,
-    required this.image,
-    required this.onTap,
-  });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Categories',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 12),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: categories.map((cat) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ActionChip(
+                  avatar: Icon(cat['icon'] as IconData, size: 18, color: AppColors.primary),
+                  label: Text(cat['label'] as String),
+                  labelStyle: TextStyle(color: AppColors.textPrimary),
+                  backgroundColor: AppColors.surface,
+                  side: BorderSide.none,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildFeaturedSection() {
+    final restaurants = [
+      {'name': 'Royal Pizza', 'rating': 4.8, 'time': '20-30 min', 'image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400'},
+      {'name': 'Burger Palace', 'rating': 4.6, 'time': '25-35 min', 'image': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400'},
+      {'name': 'Sushi Master', 'rating': 4.9, 'time': '30-40 min', 'image': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400'},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Featured Restaurants',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...restaurants.map((restaurant) {
+          return _buildRestaurantCard(
+            name: restaurant['name'] as String,
+            rating: restaurant['rating'] as double,
+            time: restaurant['time'] as String,
+            image: restaurant['image'] as String,
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildRestaurantCard({
+    required String name,
+    required double rating,
+    required String time,
+    required String image,
+  }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => Navigator.pushNamed(
+        context,
+        '/detail',
+        arguments: {'name': name, 'rating': rating, 'time': time, 'image': image},
+      ),
       child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.network(
-                  image,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: AppColors.cardBackground,
-                      child: const Icon(
-                        Icons.image,
-                        size: 48,
-                        color: AppColors.textLight,
-                      ),
-                    );
-                  },
-                ),
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.network(
+                image,
+                height: 140,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 140,
+                    color: AppColors.divider,
+                    child: const Icon(Icons.restaurant, size: 40),
+                  );
+                },
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    price,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.star, size: 18, color: AppColors.rating),
+                      const SizedBox(width: 4),
+                      Text(
+                        rating.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Icon(Icons.access_time, size: 18, color: AppColors.textSecondary),
+                      const SizedBox(width: 4),
+                      Text(
+                        time,
+                        style: TextStyle(color: AppColors.textSecondary),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -423,109 +332,73 @@ class _ProductCard extends StatelessWidget {
   }
 }
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class _SearchTab extends StatelessWidget {
+  const _SearchTab();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shopping Cart'),
-        centerTitle: true,
+        title: const Text('Search'),
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
+        elevation: 0,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.textLight),
-            SizedBox(height: 16),
-            Text('Your cart is empty', style: TextStyle(fontSize: 18, color: AppColors.textSecondary)),
-            SizedBox(height: 8),
-            Text('Browse our collection and add items', style: TextStyle(color: AppColors.textLight)),
+            Icon(Icons.search, size: 64, color: AppColors.textSecondary),
+            const SizedBox(height: 16),
+            Text(
+              'Search for restaurants or dishes',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/checkout'),
-        backgroundColor: AppColors.primary,
-        icon: const Icon(Icons.shopping_bag, color: Colors.white),
-        label: const Text('Checkout', style: TextStyle(color: Colors.white)),
-      ),
     );
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class _OrdersTab extends StatelessWidget {
+  const _OrdersTab();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
+        title: const Text('Orders'),
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
+        elevation: 0,
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 20),
-          const CircleAvatar(
-            radius: 50,
-            backgroundColor: AppColors.cardBackground,
-            child: Icon(Icons.person, size: 50, color: AppColors.primary),
-          ),
-          const SizedBox(height: 16),
-          const Center(
-            child: Text(
-              'Welcome, Guest',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.receipt_long, size: 64, color: AppColors.textSecondary),
+            const SizedBox(height: 16),
+            Text(
+              'No orders yet',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColors.textSecondary,
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          ListTile(
-            leading: const Icon(Icons.shopping_bag_outlined, color: AppColors.primary),
-            title: const Text('Order History'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.favorite_outline, color: AppColors.primary),
-            title: const Text('Wishlist'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined, color: AppColors.primary),
-            title: const Text('Settings'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.help_outline, color: AppColors.primary),
-            title: const Text('Help & Support'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Checkout'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text('Checkout Form'),
+            const SizedBox(height: 8),
+            Text(
+              'Your order history will appear here',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
