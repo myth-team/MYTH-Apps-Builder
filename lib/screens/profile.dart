@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scan_fit_app/utils/colors.dart'; 
 import 'package:scan_fit_app/widgets/animated_counter.dart'; 
+import 'package:scan_fit_app/widgets/theme_toggle.dart'; 
 import 'package:scan_fit_app/controllers/theme_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,68 +18,140 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeController = Provider.of<ThemeController>(context);
-    final isDark = themeController.isDark;
     final avgCalories = _recentCalories.reduce((a, b) => a + b) / _recentCalories.length;
     final trend = _getTrendLabel(avgCalories);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
-        title: Text(
-          'Profile & Settings',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 140,
+            floating: true,
+            pinned: true,
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                'Profile & Settings',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                ),
+              ),
+              centerTitle: false,
+              titlePadding: EdgeInsets.only(left: 20, bottom: 16),
+            ),
           ),
-        ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProfileHeader(),
+                  SizedBox(height: 28),
+                  _SectionTitle('Appearance'),
+                  SizedBox(height: 12),
+                  ThemeToggle(),
+                  SizedBox(height: 28),
+                  _SectionTitle('Your Targets'),
+                  SizedBox(height: 12),
+                  _GoalCard(
+                    icon: Icons.local_fire_department,
+                    label: 'Daily Calorie Goal',
+                    value: '${_calorieGoal.round()} kcal',
+                    color: AppColors.primary,
+                    onTap: () => _showCaloriePicker(context),
+                  ),
+                  SizedBox(height: 12),
+                  _GoalCard(
+                    icon: Icons.monitor_weight,
+                    label: 'Current Weight',
+                    value: '${_weight.round()} kg',
+                    color: AppColors.secondary,
+                    onTap: () => _showWeightPicker(context),
+                  ),
+                  SizedBox(height: 12),
+                  _GoalCard(
+                    icon: Icons.track_changes,
+                    label: 'Health Target',
+                    value: _healthTarget,
+                    color: AppColors.accent,
+                    onTap: () => _showTargetPicker(context),
+                  ),
+                  SizedBox(height: 28),
+                  _SectionTitle('Health Feedback'),
+                  SizedBox(height: 12),
+                  _FeedbackCard(trend: trend, avgCalories: avgCalories),
+                  SizedBox(height: 28),
+                  _SectionTitle('Recent Trends'),
+                  SizedBox(height: 12),
+                  _TrendBars(calories: _recentCalories, goal: _calorieGoal),
+                  SizedBox(height: 32),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: AppColors.primaryGradient,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.3),
+            blurRadius: 20,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
         children: [
-          _SectionTitle('Appearance'),
-          SizedBox(height: 12),
-          _ThemeToggleCard(
-            isDark: isDark,
-            onToggle: () => themeController.toggle(),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+              size: 32,
+            ),
           ),
-          SizedBox(height: 28),
-          _SectionTitle('Your Targets'),
-          SizedBox(height: 12),
-          _GoalCard(
-            icon: Icons.local_fire_department,
-            label: 'Daily Calorie Goal',
-            value: '${_calorieGoal.round()} kcal',
-            color: AppColors.primary,
-            onTap: () => _showCaloriePicker(context),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Alex Johnson',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'alex@scanfit.app',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 12),
-          _GoalCard(
-            icon: Icons.monitor_weight,
-            label: 'Current Weight',
-            value: '${_weight.round()} kg',
-            color: AppColors.secondary,
-            onTap: () => _showWeightPicker(context),
-          ),
-          SizedBox(height: 12),
-          _GoalCard(
-            icon: Icons.track_changes,
-            label: 'Health Target',
-            value: _healthTarget,
-            color: AppColors.accent,
-            onTap: () => _showTargetPicker(context),
-          ),
-          SizedBox(height: 28),
-          _SectionTitle('Health Feedback'),
-          SizedBox(height: 12),
-          _FeedbackCard(trend: trend, avgCalories: avgCalories),
-          SizedBox(height: 28),
-          _SectionTitle('Recent Trends'),
-          SizedBox(height: 12),
-          _TrendBars(calories: _recentCalories, goal: _calorieGoal),
         ],
       ),
     );
@@ -94,10 +167,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showCaloriePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setModalState) => Container(
-          padding: EdgeInsets.all(24),
-          child: Column(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        margin: EdgeInsets.all(16),
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(28),
+        ),
+        child: StatefulBuilder(
+          builder: (context, setModalState) => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -139,10 +219,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: Text('Save'),
+                  child: Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],
@@ -155,10 +235,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showWeightPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setModalState) => Container(
-          padding: EdgeInsets.all(24),
-          child: Column(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        margin: EdgeInsets.all(16),
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(28),
+        ),
+        child: StatefulBuilder(
+          builder: (context, setModalState) => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -200,10 +287,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: Text('Save'),
+                  child: Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],
@@ -217,8 +304,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final targets = ['Lose Weight', 'Maintain', 'Gain Muscle'];
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (_) => Container(
+        margin: EdgeInsets.all(16),
         padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(28),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: targets.map((t) => ListTile(
@@ -414,80 +507,6 @@ class _FeedbackCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ThemeToggleCard extends StatelessWidget {
-  final bool isDark;
-  final VoidCallback onToggle;
-
-  _ThemeToggleCard({
-    required this.isDark,
-    required this.onToggle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: onToggle,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.indigo.withOpacity(0.15) : Colors.amber.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-                  color: isDark ? Colors.indigo : Colors.amber,
-                  size: 24,
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Dark Mode',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      isDark ? 'On' : 'Off',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Switch.adaptive(
-                value: isDark,
-                onChanged: (_) => onToggle(),
-                activeColor: AppColors.primary,
-              ),
-            ],
-          ),
         ),
       ),
     );
