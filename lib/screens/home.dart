@@ -5,6 +5,8 @@ import 'package:scan_fit_app/widgets/food_log_tile.dart';
 import 'package:scan_fit_app/widgets/animated_counter.dart'; 
 import 'package:scan_fit_app/widgets/macros_card.dart'; 
 import 'package:scan_fit_app/widgets/streak_card.dart'; 
+import 'package:scan_fit_app/widgets/modern_app_bar.dart'; 
+import 'package:scan_fit_app/widgets/modern_drawer.dart'; 
 import 'package:scan_fit_app/screens/scan.dart'; 
 import 'package:scan_fit_app/screens/history.dart'; 
 
@@ -82,7 +84,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      drawer: ModernDrawer(
+        onProfileTap: () {
+          Navigator.pop(context);
+          setState(() => _currentIndex = 3);
+        },
+        onHistoryTap: () {
+          Navigator.pop(context);
+          setState(() => _currentIndex = 2);
+        },
+      ),
       body: AnimatedBuilder(
         animation: _animController,
         builder: (context, child) {
@@ -230,13 +242,19 @@ class _DashboardTab extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
+          child: ModernAppBar(
+            title: 'Today',
+            onMenuTap: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        SliverToBoxAdapter(
           child: FadeTransition(
             opacity: fadeAnim,
             child: SlideTransition(
               position: slideAnim,
               child: Column(
                 children: [
-                  SizedBox(height: 24),
+                  SizedBox(height: 16),
                   CalorieRing(consumed: consumed, goal: goal),
                   SizedBox(height: 24),
                   StreakCard(streakDays: streak, bestStreak: 12),
@@ -499,6 +517,7 @@ class _ModernBottomNav extends StatelessWidget {
     _NavItem(icon: Icons.home_rounded, label: 'Home'),
     _NavItem(icon: Icons.camera_alt_rounded, label: 'Scan'),
     _NavItem(icon: Icons.history_rounded, label: 'History'),
+    _NavItem(icon: Icons.person_rounded, label: 'Profile'),
   ];
 
   @override
