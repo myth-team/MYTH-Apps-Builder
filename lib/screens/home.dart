@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
               ScanTab(onAdd: _addLog),
               HistoryScreen(history: _history),
+              ProfileScreen(),
             ],
           );
         },
