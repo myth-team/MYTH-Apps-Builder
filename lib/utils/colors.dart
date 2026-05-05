@@ -18,4 +18,14 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+  static LinearGradient successGradient = LinearGradient(
+    colors: [Color(0xFF00BFA6), Color(0xFF00E5FF)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  static LinearGradient warningGradient = LinearGradient(
+    colors: [Color(0xFFFFA726), Color(0xFFFF7043)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }
