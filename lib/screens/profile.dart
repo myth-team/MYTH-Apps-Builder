@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scan_fit_app/utils/colors.dart'; 
 import 'package:scan_fit_app/widgets/animated_counter.dart'; 
+import 'package:scan_fit_app/controllers/theme_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,13 +17,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Provider.of<ThemeController>(context);
+    final isDark = themeController.isDark;
     final avgCalories = _recentCalories.reduce((a, b) => a + b) / _recentCalories.length;
     final trend = _getTrendLabel(avgCalories);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         iconTheme: IconThemeData(color: AppColors.textPrimary),
         title: Text(
@@ -35,6 +39,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
+          _SectionTitle('Appearance'),
+          SizedBox(height: 12),
+          _ThemeToggleCard(
+            isDark: isDark,
+            onToggle: () => themeController.toggle(),
+          ),
+          SizedBox(height: 28),
           _SectionTitle('Your Targets'),
           SizedBox(height: 12),
           _GoalCard(
@@ -403,6 +414,80 @@ class _FeedbackCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemeToggleCard extends StatelessWidget {
+  final bool isDark;
+  final VoidCallback onToggle;
+
+  _ThemeToggleCard({
+    required this.isDark,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: InkWell(
+        onTap: onToggle,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.indigo.withOpacity(0.15) : Colors.amber.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                  color: isDark ? Colors.indigo : Colors.amber,
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Dark Mode',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      isDark ? 'On' : 'Off',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Switch.adaptive(
+                value: isDark,
+                onChanged: (_) => onToggle(),
+                activeColor: AppColors.primary,
+              ),
+            ],
+          ),
         ),
       ),
     );
