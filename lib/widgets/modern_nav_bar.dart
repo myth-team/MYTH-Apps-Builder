@@ -14,19 +14,22 @@ class ModernNavBar extends StatelessWidget {
     _NavItem(icon: Icons.home_rounded, label: 'Home'),
     _NavItem(icon: Icons.camera_alt_rounded, label: 'Scan'),
     _NavItem(icon: Icons.history_rounded, label: 'History'),
+    _NavItem(icon: Icons.person_rounded, label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.95),
+        color: isDark ? AppColors.surfaceDark.withOpacity(0.95) : AppColors.surface.withOpacity(0.95),
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.08),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 24,
             offset: Offset(0, 8),
           ),
