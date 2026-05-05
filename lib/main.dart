@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:ruby_rose_jewels_app/utils/colors.dart'; 
-import 'package:ruby_rose_jewels_app/screens/home.dart'; 
-import 'package:ruby_rose_jewels_app/screens/category_products.dart'; 
-import 'package:ruby_rose_jewels_app/screens/detail.dart'; 
-import 'package:ruby_rose_jewels_app/screens/cart.dart'; 
-import 'package:ruby_rose_jewels_app/screens/checkout.dart'; 
-import 'package:ruby_rose_jewels_app/screens/profile.dart'; 
+import 'package:elite_eats_app/utils/colors.dart'; 
+import 'package:elite_eats_app/screens/splash.dart'; 
+import 'package:elite_eats_app/screens/welcome.dart'; 
+import 'package:elite_eats_app/screens/home.dart'; 
+import 'package:elite_eats_app/screens/detail.dart'; 
+import 'package:elite_eats_app/screens/cart.dart'; 
+import 'package:elite_eats_app/screens/profile.dart'; 
 
-void main() => runApp(const RubyRoseJewelsApp());
+void main() {
+  runApp(const EliteEatsApp());
+}
 
-class RubyRoseJewelsApp extends StatelessWidget {
-  const RubyRoseJewelsApp({super.key});
+class EliteEatsApp extends StatelessWidget {
+  const EliteEatsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(padding: const EdgeInsets.only(top: 44.0, bottom: 34.0)), child: child!), 
-      title: 'Ruby Rose Jewels',
+      title: 'Elite Eats',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
           primary: AppColors.primary,
-          secondary: AppColors.gold,
+          secondary: AppColors.secondary,
           surface: AppColors.surface,
           error: AppColors.error,
         ),
         scaffoldBackgroundColor: AppColors.background,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.surface,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.textLight,
-          type: BottomNavigationBarType.fixed,
+          foregroundColor: AppColors.textPrimary,
+          elevation: 0,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -47,38 +43,24 @@ class RubyRoseJewelsApp extends StatelessWidget {
             ),
           ),
         ),
-        cardTheme: CardTheme(
-          color: AppColors.surface,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.surface,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.divider),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.divider),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.primary, width: 2),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
-      home: const HomeScreen(),
+      initialRoute: '/',
       routes: {
-        '/home': (context) => const HomeScreen(),
-        '/category_products': (context) => const CategoryProductsScreen(),
-        '/detail': (context) => const DetailScreen(),
-        '/cart': (context) => const CartScreen(),
-        '/checkout': (context) => const CheckoutScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/': (_) => const SplashScreen(),
+        '/welcome': (_) => const WelcomeScreen(),
+        '/home': (_) => const HomeScreen(),
+        '/detail': (context) => DetailScreen(
+          arguments: ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {},
+        ),
+        '/cart': (_) => const CartScreen(),
       },
     );
   }
