@@ -3,6 +3,8 @@ import 'package:scan_fit_app/utils/colors.dart';
 import 'package:scan_fit_app/screens/home.dart'; 
 import 'package:scan_fit_app/screens/day_detail.dart'; 
 import 'package:scan_fit_app/screens/profile.dart'; 
+import 'package:scan_fit_app/screens/splash.dart'; 
+import 'package:scan_fit_app/screens/welcome.dart'; 
 
 void main() {
   runApp(ScanFitApp());
