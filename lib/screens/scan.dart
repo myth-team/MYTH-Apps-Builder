@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan_fit_app/utils/colors.dart'; 
+import 'package:scan_fit_app/screens/home.dart'; 
 
 class ScanTab extends StatefulWidget {
   final Function(String, int) onAdd;
@@ -56,6 +57,49 @@ class _ScanTabState extends State<ScanTab> {
     });
   }
 
+  Widget _buildTopBar() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.close_rounded, color: Colors.white70),
+              onPressed: () {
+                final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                if (homeState != null) {
+                  homeState.setState(() => homeState._currentIndex = 0);
+                }
+              },
+            ),
+          ),
+          Spacer(),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'Food Scanner',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Spacer(),
+          SizedBox(width: 48),
+        ],
+      ),
+    );
+  }
+
   void _addToToday() {
     widget.onAdd(_foodName, _calories);
     _reset();
@@ -71,6 +115,7 @@ class _ScanTabState extends State<ScanTab> {
       body: SafeArea(
         child: Column(
           children: [
+            _buildTopBar(),
             Expanded(
               child: _buildViewfinder(),
             ),
