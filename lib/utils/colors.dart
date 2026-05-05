@@ -12,4 +12,10 @@ class AppColors {
   static Color warning = Color(0xFFFFA726);
   static Color error = Color(0xFFEF5350);
   static Color ringBg = Color(0xFFE8E8F0);
+
+  static LinearGradient primaryGradient = LinearGradient(
+    colors: [Color(0xFF6C63FF), Color(0xFF8B5CF6)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }
