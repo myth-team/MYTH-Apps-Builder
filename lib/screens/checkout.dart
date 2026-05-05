@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ruby_rose_jewels_app/utils/colors.dart'; 
+import 'package:elite_eats_app/utils/colors.dart'; 
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
