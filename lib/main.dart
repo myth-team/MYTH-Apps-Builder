@@ -5,6 +5,7 @@ import 'package:scan_fit_app/screens/day_detail.dart';
 import 'package:scan_fit_app/screens/profile.dart'; 
 import 'package:scan_fit_app/screens/splash.dart'; 
 import 'package:scan_fit_app/screens/welcome.dart'; 
+import 'package:scan_fit_app/screens/history.dart'; 
 
 void main() {
   runApp(ScanFitApp());
@@ -55,6 +56,7 @@ class ScanFitApp extends StatelessWidget {
         '/': (_) => HomeScreen(),
         '/day_detail': (_) => _DayDetailRoute(),
         '/profile': (_) => ProfileScreen(),
+        '/history': (_) => HistoryScreen(history: []),
       },
     );
   }
