@@ -46,8 +46,10 @@ class ScanFitApp extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
+        '/splash': (_) => SplashScreen(),
+        '/welcome': (_) => WelcomeScreen(),
         '/': (_) => HomeScreen(),
         '/day_detail': (_) => _DayDetailRoute(),
         '/profile': (_) => ProfileScreen(),
