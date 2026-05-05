@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scan_fit_app/utils/colors.dart'; 
+import 'package:scan_fit_app/widgets/animated_counter.dart'; 
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -97,13 +98,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 8),
-              Text(
-                '${_calorieGoal.round()} kcal',
+              AnimatedCounter(
+                target: _calorieGoal.round(),
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
                 ),
+                suffix: ' kcal',
               ),
               Slider(
                 value: _calorieGoal,
@@ -157,13 +159,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 8),
-              Text(
-                '${_weight.round()} kg',
+              AnimatedCounter(
+                target: _weight.round(),
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: AppColors.secondary,
                 ),
+                suffix: ' kg',
               ),
               Slider(
                 value: _weight,
