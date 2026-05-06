@@ -123,85 +123,22 @@ jobs:
             echo 'org.gradle.parallel=true' >> android/gradle.properties
             echo 'org.gradle.caching=true' >> android/gradle.properties
           fi
-      - name: Build Web (with in-workflow auto-fix retry)
+      - name: Analyze Dart (catch errors early)
         if: github.event.inputs.build_type == 'web'
-        env:
-          MYTH_MAX_RETRIES: "2"
-          MYTH_RETRY_POLL_INTERVAL: "10"
-          MYTH_RETRY_TIMEOUT: "180"
+        run: dart analyze --no-fatal-warnings lib/
+
+      - name: Build Web
+        if: github.event.inputs.build_type == 'web'
         run: |
-          set -o pipefail
           REPO_NAME="${{ github.event.repository.name }}"
           BRANCH="${{ github.ref_name }}"
-          RETRY=0
-          BUILD_SUCCESS=false
-
-          while [ "$RETRY" -le "$MYTH_MAX_RETRIES" ]; do
-            echo "🏗️ Build attempt $((RETRY + 1))/$((MYTH_MAX_RETRIES + 1))..."
-            BUILD_CMD="flutter build web --release --no-tree-shake-icons -O 1 --base-href /$REPO_NAME/previews/$BRANCH/"
-
-            if $BUILD_CMD 2>&1 | tee /tmp/myth-build-output.txt; then
-              BUILD_SUCCESS=true
-              echo "✅ Build succeeded on attempt $((RETRY + 1))"
-              rm -f .myth-build-error .myth-build-status
-              break
-            fi
-
-            RETRY=$((RETRY + 1))
-            if [ "$RETRY" -gt "$MYTH_MAX_RETRIES" ]; then
-              echo "❌ All $((MYTH_MAX_RETRIES + 1)) build attempts exhausted"
-              break
-            fi
-
-            ERROR_SNIPPET=$(tail -80 /tmp/myth-build-output.txt)
-            echo "$ERROR_SNIPPET" > .myth-build-error
-            echo "waiting_for_fix" > .myth-build-status
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git add .myth-build-error .myth-build-status
-            git commit -m "MYTH: Build failed (attempt $RETRY), waiting for fix" || true
-            git push origin "$BRANCH" || true
-
-            LAST_COMMIT=$(git rev-parse HEAD)
-            WAIT=0
-            FIX_RECEIVED=false
-
-            echo "⏳ Waiting up to ${MYTH_RETRY_TIMEOUT}s for AI fix on branch $BRANCH..."
-            while [ "$WAIT" -lt "$MYTH_RETRY_TIMEOUT" ]; do
-              sleep "$MYTH_RETRY_POLL_INTERVAL"
-              WAIT=$((WAIT + MYTH_RETRY_POLL_INTERVAL))
-
-              git fetch origin "$BRANCH" --quiet 2>/dev/null || true
-              NEW_COMMIT=$(git rev-parse "origin/$BRANCH" 2>/dev/null || echo "")
-
-              if [ -n "$NEW_COMMIT" ] && [ "$NEW_COMMIT" != "$LAST_COMMIT" ]; then
-                echo "📥 New commit detected after ${WAIT}s — pulling fix..."
-                git reset --hard "origin/$BRANCH"
-                flutter pub get
-                rm -f .myth-build-error .myth-build-status
-                FIX_RECEIVED=true
-                break
-              fi
-
-              echo "  ⏳ Polling... (${WAIT}s / ${MYTH_RETRY_TIMEOUT}s)"
-            done
-
-            if [ "$FIX_RECEIVED" != "true" ]; then
-              echo "⏰ Timeout waiting for fix after ${MYTH_RETRY_TIMEOUT}s. Failing build."
-              exit 1
-            fi
-          done
-
-          if [ "$BUILD_SUCCESS" != "true" ]; then
-            exit 1
-          fi
+          flutter build web --release --no-tree-shake-icons -O 1 --base-href /$REPO_NAME/previews/$BRANCH/
 
           echo "PHNjcmlwdD4KICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigibWVzc2FnZSIsIGUgPT4gewogICAgaWYgKGUuZGF0YSA9PT0gImNhcHR1cmUtc2NyZWVuc2hvdCIpIHsKICAgICAgKGFzeW5jICgpID0+IHsKICAgICAgICBjb25zdCBnZXRDYW52YXMgPSAoKSA9PiAKICAgICAgICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcigiZmx0LWdsYXNzLXBhbmUiKT8uc2hhZG93Um9vdD8ucXVlcnlTZWxlY3RvcigiY2FudmFzIikgfHwgCiAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtc2NlbmUtaG9zdCIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgICAKICAgICAgICBjb25zdCBjYW52YXMgPSBnZXRDYW52YXMoKTsKICAgICAgICBpZiAoY2FudmFzKSB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBjb25zdCBkYXRhVXJsID0gY2FudmFzLnRvRGF0YVVSTCgiaW1hZ2UvcG5nIik7CiAgICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1yZXN1bHQiLCBkYXRhVXJsIH0sICIqIik7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgd2luZG93LnBhcmVudC5wb3N0TWVzc2FnZSh7IHR5cGU6ICJzY3JlZW5zaG90LWVycm9yIiwgZXJyb3I6IGVyci5tZXNzYWdlIH0sICIqIik7CiAgICAgICAgICB9CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIHdpbmRvdy5wYXJlbnQucG9zdE1lc3NhZ2UoeyB0eXBlOiAic2NyZWVuc2hvdC1lcnJvciIsIGVycm9yOiAiQ2FudmFzIG5vdCBmb3VuZCIgfSwgIioiKTsKICAgICAgICB9CiAgICAgIH0pKCk7CiAgICB9CiAgfSk7CgogIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJsb2FkIiwgKCkgPT4gewogICAgLy8gSGFyZC1yZXNldCBvbGQgUFdBL3NlcnZpY2Utd29ya2VyIGNhY2hlcyBmb3IgcHJldmlldyBob3N0LgogICAgLy8gVGhpcyBwcmV2ZW50cyBpZnJhbWUgZnJvbSByZW5kZXJpbmcgc3RhbGUgSlMvQ1NTIGZyb20gcHJldmlvdXMgYnVpbGRzLgogICAgKGFzeW5jICgpID0+IHsKICAgICAgdHJ5IHsKICAgICAgICBpZiAoInNlcnZpY2VXb3JrZXIiIGluIG5hdmlnYXRvcikgewogICAgICAgICAgY29uc3QgcmVncyA9IGF3YWl0IG5hdmlnYXRvci5zZXJ2aWNlV29ya2VyLmdldFJlZ2lzdHJhdGlvbnMoKTsKICAgICAgICAgIGF3YWl0IFByb21pc2UuYWxsKHJlZ3MubWFwKChyKSA9PiByLnVucmVnaXN0ZXIoKSkpOwogICAgICAgIH0KICAgICAgfSBjYXRjaCAoZSkge30KCiAgICAgIHRyeSB7CiAgICAgICAgaWYgKCJjYWNoZXMiIGluIHdpbmRvdykgewogICAgICAgICAgY29uc3Qga2V5cyA9IGF3YWl0IGNhY2hlcy5rZXlzKCk7CiAgICAgICAgICBhd2FpdCBQcm9taXNlLmFsbChrZXlzLm1hcCgoaykgPT4gY2FjaGVzLmRlbGV0ZShrKSkpOwogICAgICAgIH0KICAgICAgfSBjYXRjaCAoZSkge30KICAgIH0pKCk7CgogICAgbGV0IGF0dGVtcHRzID0gMDsKICAgIGNvbnN0IHRyeUNhcHR1cmUgPSAoKSA9PiB7CiAgICAgIGNvbnN0IGNhbnZhcyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoImNhbnZhcyIpIHx8IAogICAgICAgICAgICAgICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJmbHQtZ2xhc3MtcGFuZSIpPy5zaGFkb3dSb290Py5xdWVyeVNlbGVjdG9yKCJjYW52YXMiKTsKICAgICAgaWYgKGNhbnZhcykgewogICAgICAgIHNldFRpbWVvdXQoKCkgPT4gewogICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgY29uc3QgZGF0YVVybCA9IGNhbnZhcy50b0RhdGFVUkwoImltYWdlL3BuZyIpOwogICAgICAgICAgICB3aW5kb3cucGFyZW50LnBvc3RNZXNzYWdlKHsgdHlwZTogInNjcmVlbnNob3QtcmVzdWx0IiwgZGF0YVVybCB9LCAiKiIpOwogICAgICAgICAgfSBjYXRjaCAoZSkge30KICAgICAgICB9LCAyMDAwKTsKICAgICAgfSBlbHNlIGlmIChhdHRlbXB0cyA8IDE1KSB7CiAgICAgICAgYXR0ZW1wdHMrKzsKICAgICAgICBzZXRUaW1lb3V0KHRyeUNhcHR1cmUsIDEwMDApOwogICAgICB9CiAgICB9OwogICAgc2V0VGltZW91dCh0cnlDYXB0dXJlLCA1MDAwKTsKICB9KTsKPC9zY3JpcHQ+" | base64 -d > capture_script.html
           echo "Y29uc3QgZnMgPSByZXF1aXJlKCJmcyIpOwpjb25zdCBwYXRoID0gcmVxdWlyZSgicGF0aCIpOwoKZnVuY3Rpb24gYXBwZW5kTXl0aEJ1aWxkVG9Bc3NldFVybHMoaHRtbCwgYnVzdCkgewogIGlmICghYnVzdCkgcmV0dXJuIGh0bWw7CiAgZnVuY3Rpb24gcGF0Y2hVcmwodXJsKSB7CiAgICBpZiAodXJsLnN0YXJ0c1dpdGgoIi8vIikpIHJldHVybiB1cmw7CiAgICBpZiAoL15odHRwcz86XC9cLy9pLnRlc3QodXJsKSkgcmV0dXJuIHVybDsKICAgIGNvbnN0IG5vRnJhZyA9IHVybC5zcGxpdCgiIyIpWzBdIHx8ICIiOwogICAgY29uc3QgcGF0aE9ubHkgPSBTdHJpbmcobm9GcmFnKS5zcGxpdCgvWz9dLylbMF0gfHwgIiI7CiAgICBpZiAoIS9cLig/OmpzfG1qc3x3YXNtKSQvaS50ZXN0KHBhdGhPbmx5KSkgcmV0dXJuIHVybDsKICAgIGNvbnN0IHNlcCA9IHVybC5pbmNsdWRlcygiPyIpID8gIiYiIDogIj8iOwogICAgcmV0dXJuIHVybCArIHNlcCArICJteXRoX2J1aWxkPSIgKyBlbmNvZGVVUklDb21wb25lbnQoYnVzdCk7CiAgfQogIHJldHVybiBodG1sLnJlcGxhY2UoCiAgICAvXGIoc3JjfGhyZWYpPShbIiddKSgoPyFodHRwcz86XC9cLylbXiInPD5dKylcMi9naSwKICAgIChmdWxsLCBhdHRyLCBxdW90ZSwgcGF0aCkgPT4gYXR0ciArICI9IiArIHF1b3RlICsgcGF0Y2hVcmwocGF0aCkgKyBxdW90ZQogICk7Cn0KCi8qKgogKiBQYXRjaCBKUyBmaWxlcyBpbiBidWlsZC93ZWIgdG8gYWRkIGNhY2hlLWJ1c3RpbmcgcGFyYW1zIHRvIGFsbCBkeW5hbWljYWxseSBsb2FkZWQgVVJMcy4KICogZmx1dHRlcl9ib290c3RyYXAuanMgYW5kIG1haW4uZGFydC5qcyB1c2UgZmV0Y2goKSAvIFhNTEh0dHBSZXF1ZXN0IHRvIGxvYWQgc3ViLXJlc291cmNlcwogKiBsaWtlIG1haW4uZGFydC5qcywgbWFpbi5kYXJ0Lndhc20sIG1haW4uZGFydC5tanMsIGV0Yy4gIFdpdGhvdXQgdGhpcywgdGhlIGJyb3dzZXIncyBkaXNrCiAqIGNhY2hlIHNlcnZlcyBzdGFsZSBidW5kbGVzIGV2ZW4gd2hlbiB0aGUgaWZyYW1lIHNyYyBoYXMgbmV3IHF1ZXJ5IHBhcmFtcy4KICovCmZ1bmN0aW9uIHBhdGNoRHluYW1pY0xvYWRlcnMod2ViRGlyLCBidXN0KSB7CiAgaWYgKCFidXN0KSByZXR1cm47CiAgY29uc3QgYnVzdGVyID0gIm15dGhfYnVpbGQ9IiArIGVuY29kZVVSSUNvbXBvbmVudChidXN0KTsKICBjb25zdCBqc0ZpbGVzID0gZnMucmVhZGRpclN5bmMod2ViRGlyKS5maWx0ZXIoZnVuY3Rpb24oZikgeyByZXR1cm4gL1wuKGpzfG1qcykkLy50ZXN0KGYpOyB9KTsKICBmb3IgKHZhciBpID0gMDsgaSA8IGpzRmlsZXMubGVuZ3RoOyBpKyspIHsKICAgIHZhciBmaWxlID0ganNGaWxlc1tpXTsKICAgIHZhciBmcCA9IHBhdGguam9pbih3ZWJEaXIsIGZpbGUpOwogICAgdmFyIGNvbnRlbnQgPSBmcy5yZWFkRmlsZVN5bmMoZnAsICJ1dGY4Iik7CiAgICB2YXIgb3JpZ2luYWwgPSBjb250ZW50OwoKICAgIC8vIFBhdGNoIGRvdWJsZS1xdW90ZWQgc3RyaW5nIGxpdGVyYWxzIHJlZmVyZW5jaW5nIGFzc2V0IGZpbGVzCiAgICBjb250ZW50ID0gY29udGVudC5yZXBsYWNlKC8iKFteIl0qP1wuKD86anN8bWpzfHdhc218anNvbikpIi9nLCBmdW5jdGlvbihtYXRjaCwgdXJsKSB7CiAgICAgIGlmICgvbXl0aF9idWlsZD0vLnRlc3QodXJsKSkgcmV0dXJuIG1hdGNoOwogICAgICBpZiAoL15odHRwcz86L2kudGVzdCh1cmwpIHx8IC9eZGF0YTovaS50ZXN0KHVybCkgfHwgL15cL1wvLy50ZXN0KHVybCkpIHJldHVybiBtYXRjaDsKICAgICAgdmFyIHNlcCA9IHVybC5pbmRleE9mKCI/IikgPj0gMCA/ICImIiA6ICI/IjsKICAgICAgcmV0dXJuICciJyArIHVybCArIHNlcCArIGJ1c3RlciArICciJzsKICAgIH0pOwoKICAgIC8vIFBhdGNoIHNpbmdsZS1xdW90ZWQgc3RyaW5nIGxpdGVyYWxzIHJlZmVyZW5jaW5nIGFzc2V0IGZpbGVzCiAgICBjb250ZW50ID0gY29udGVudC5yZXBsYWNlKC8nKFteJ10qP1wuKD86anN8bWpzfHdhc218anNvbikpJy9nLCBmdW5jdGlvbihtYXRjaCwgdXJsKSB7CiAgICAgIGlmICgvbXl0aF9idWlsZD0vLnRlc3QodXJsKSkgcmV0dXJuIG1hdGNoOwogICAgICBpZiAoL15odHRwcz86L2kudGVzdCh1cmwpIHx8IC9eZGF0YTovaS50ZXN0KHVybCkgfHwgL15cL1wvLy50ZXN0KHVybCkpIHJldHVybiBtYXRjaDsKICAgICAgdmFyIHNlcCA9IHVybC5pbmRleE9mKCI/IikgPj0gMCA/ICImIiA6ICI/IjsKICAgICAgcmV0dXJuICInIiArIHVybCArIHNlcCArIGJ1c3RlciArICInIjsKICAgIH0pOwoKICAgIGlmIChjb250ZW50ICE9PSBvcmlnaW5hbCkgewogICAgICBmcy53cml0ZUZpbGVTeW5jKGZwLCBjb250ZW50KTsKICAgICAgY29uc29sZS5sb2coIiAgcGF0Y2hlZCBkeW5hbWljIGxvYWRlcjogIiArIGZpbGUpOwogICAgfQogIH0KfQoKbGV0IGh0bWwgPSBmcy5yZWFkRmlsZVN5bmMoImJ1aWxkL3dlYi9pbmRleC5odG1sIiwgInV0ZjgiKTsKY29uc3QgYnVzdCA9IChwcm9jZXNzLmVudi5CVVNUIHx8ICIiKS50cmltKCk7CmNvbnN0IHNjcmlwdCA9IGZzLnJlYWRGaWxlU3luYygiY2FwdHVyZV9zY3JpcHQuaHRtbCIsICJ1dGY4Iik7Cmh0bWwgPSBodG1sLnJlcGxhY2UoIjwvYm9keT4iLCBzY3JpcHQgKyAiPC9ib2R5PiIpOwpodG1sID0gaHRtbC5yZXBsYWNlKAogICI8aGVhZD4iLAogICc8aGVhZD48bWV0YSBuYW1lPSJteXRoLWJ1aWxkLWlkIiBjb250ZW50PSInICsgYnVzdC5yZXBsYWNlKC8iL2csICImcXVvdDsiKSArICciPicKKTsKaHRtbCA9IGFwcGVuZE15dGhCdWlsZFRvQXNzZXRVcmxzKGh0bWwsIGJ1c3QpOwpmcy53cml0ZUZpbGVTeW5jKCJidWlsZC93ZWIvaW5kZXguaHRtbCIsIGh0bWwpOwoKLy8gUGF0Y2ggSlMvV0FTTSBkeW5hbWljIGxvYWRlcnMgdG8gcHJldmVudCBzdGFsZSBicm93c2VyIGNhY2hlIG9uIHJlYnVpbGQKcGF0Y2hEeW5hbWljTG9hZGVycygiYnVpbGQvd2ViIiwgYnVzdCk7" | base64 -d > myth-patch-preview-index.cjs
           export BUST="${{ github.run_id }}-${{ github.run_number }}"
           node myth-patch-preview-index.cjs
           cp build/web/index.html build/web/404.html
-
       - name: Stage site for Pages deploy
         if: github.event.inputs.build_type == 'web'
         run: |
