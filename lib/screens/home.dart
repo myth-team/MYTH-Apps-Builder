@@ -86,7 +86,7 @@ class _HomeTab extends StatelessWidget {
                 const SizedBox(height: 24),
                 const Text('Top Stylists', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
-                _TopStylistsList(),
+                _StylistsList(),
               ],
             ),
           ),
