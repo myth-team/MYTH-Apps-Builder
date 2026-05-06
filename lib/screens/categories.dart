@@ -26,7 +26,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   @override
-  Widget build(BuildContext context) 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Categories'),
@@ -44,6 +44,62 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
     );
   }
+
+  Widget _buildPieChart() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 180,
+            width: 180,
+            child: CustomPaint(
+              painter: PieChartPainter(
+                data: _categoryData,
+                total: _totalAmount,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Total: \$${_totalAmount.toStringAsFixed(2)}',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _categoryData.length,
+      itemBuilder: (context, index) {
+        final category = _categoryData[index];
+        final percentage = (category['amount'] as double) / _totalAmount * 100;
+        final isSelected = selectedCategory == category['name'];
+
+        return _CategoryTile(
+          name: category['name'] as String,
+          amount: category['amount'] as double,
+          color: category['color'] as Color,
+          icon: category['icon'] as IconData,
+          percentage: percentage,
+          isSelected: isSelected,
+          onTap: () {
+            setState(() {
+              selectedCategory = isSelected ? null : category['name'] as String;
+            });
+          },
+        );
+      },
+    );
+  }
+}
 
   Widget _buildPieChart() {
     return Container(
