@@ -20,9 +20,9 @@ jobs:
       - name: Install Flutter (populate Actions cache for all MYTH branches)
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.4"
+          flutter-version: "3.41.2"
           channel: "stable"
           cache: true
           pub-cache: false
-          cache-key: "myth-flutter-sdk-${{ runner.os }}-stable-3.27.4-v4"
+          cache-key: "myth-flutter-sdk-${{ runner.os }}-stable-3.41.2-v5"
       - run: flutter --version && dart --version
