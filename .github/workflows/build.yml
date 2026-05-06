@@ -131,11 +131,11 @@ jobs:
         if: github.event.inputs.build_type == 'web'
         run: |
           if [ -f web/index.html ]; then
-            # If <base href= is missing, insert the required placeholder after <head>
+            # If <base href= is missing, inject it after <head>
             if ! grep -q "<base href=" web/index.html; then
-              sed -i '/<head>/a   <base href="$FLUTTER_BASE_HREF">' web/index.html
+              sed -i 's|<head>|<head><base href="$FLUTTER_BASE_HREF">|' web/index.html
             fi
-            # Ensure it uses the placeholder specifically if it was hardcoded
+            # Ensure any existing base href uses the required placeholder
             sed -i 's|<base href="[^"]*">|<base href="$FLUTTER_BASE_HREF">|g' web/index.html
           fi
 
