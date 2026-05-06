@@ -19,7 +19,7 @@ class CategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isSelected ? color : color.withOpacity(0.1);
+    final bgColor = isSelected ? color : color.withValues(alpha: 0.1);
     final fgColor = isSelected ? Colors.white : color;
 
     return Material(
