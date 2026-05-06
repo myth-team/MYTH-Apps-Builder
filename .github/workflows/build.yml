@@ -127,6 +127,18 @@ jobs:
         if: github.event.inputs.build_type == 'web'
         run: dart analyze --no-fatal-warnings lib/
 
+      - name: Heal web/index.html
+        if: github.event.inputs.build_type == 'web'
+        run: |
+          if [ -f web/index.html ]; then
+            # If <base href= is missing, insert the required placeholder after <head>
+            if ! grep -q "<base href=" web/index.html; then
+              sed -i '/<head>/a   <base href="$FLUTTER_BASE_HREF">' web/index.html
+            fi
+            # Ensure it uses the placeholder specifically if it was hardcoded
+            sed -i 's|<base href="[^"]*">|<base href="$FLUTTER_BASE_HREF">|g' web/index.html
+          fi
+
       - name: Build Web
         if: github.event.inputs.build_type == 'web'
         run: |
