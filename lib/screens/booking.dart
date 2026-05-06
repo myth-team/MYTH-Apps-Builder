@@ -22,7 +22,7 @@ class _BookingScreenState extends State<BookingScreen> {
     {'name': 'Highlights', 'desc': 'Partial or full highlights', 'price': 150.0, 'icon': Icons.auto_awesome},
     {'name': 'Blow Dry', 'desc': 'Professional blow dry', 'price': 35.0, 'icon': Icons.air},
     {'name': 'Deep Conditioning', 'desc': 'Moisturizing treatment', 'price': 40.0, 'icon': Icons.spa},
-    {'name': 'Bridal Styling', 'desc': 'Wedding day hairstyle', 'price': 200.0, 'icon': Icons.bride},
+    {'name': 'Bridal Styling', 'desc': 'Wedding day hairstyle', 'price': 200.0, 'icon': Icons.favorite},
   ];
 
   final List<Map<String, dynamic>> _stylists = [
