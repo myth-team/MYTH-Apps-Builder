@@ -26,10 +26,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categor  ies'),
+        title: const Text('Catr  ies'),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
       ),
