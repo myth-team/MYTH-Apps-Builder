@@ -14,7 +14,7 @@ class ServicesScreen extends StatelessWidget {
       _ServiceItem('Bridal Styling', 'Wedding & event styling', 120, Icons.card_giftcard),
       _ServiceItem('Highlights', 'Partial & full highlights', 75, Icons.auto_awesome),
       _ServiceItem('Deep Conditioning', 'Intensive moisture treatment', 40, Icons.water_drop),
-      ' keratin Treatment', 'Smoothing & straightening', 150, Icons.waves),
+      _ServiceItem('Keratin Treatment', 'Smoothing & straightening', 150, Icons.waves),
       _ServiceItem('Men\'s Cut', 'Classic & modern men\'s cuts', 25, Icons.face),
       _ServiceItem('Kids Cut', 'Gentle cuts for children', 20, Icons.child_care),
       _ServiceItem('Scalp Treatment', 'Healthy scalp services', 55, Icons.healing),
