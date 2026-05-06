@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           surface: AppColors.surface,
         ),
         scaffoldBackgroundColor: AppColors.background,
-        appBarTheme: const AppBarThemeData(
+        appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.textOnPrimary,
           elevation: 0,
