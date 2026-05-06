@@ -258,7 +258,7 @@ class _CategoryDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<TransactionCategory>(
-      initialValue: category,
+      value: category,
       decoration: InputDecoration(
         labelText: 'Category',
         prefixIcon: const Icon(Icons.category),
