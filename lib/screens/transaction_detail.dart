@@ -102,8 +102,8 @@ class _AmountHeader extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isNegative
-              ? [AppColors.error, AppColors.error.withOpacity(0.8)]
-              : [AppColors.success, AppColors.success.withOpacity(0.8)],
+              ? [AppColors.error, AppColors.error.withValues(alpha: 0.8)]
+              : [AppColors.success, AppColors.success.withValues(alpha: 0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
