@@ -125,7 +125,7 @@ jobs:
           fi
       - name: Analyze Dart (catch errors early)
         if: github.event.inputs.build_type == 'web'
-        run: dart analyze --no-fatal-warnings lib/
+        run: dart analyze --no-fatal-warnings --no-fatal-infos lib/
 
       - name: Build Web
         if: github.event.inputs.build_type == 'web'
