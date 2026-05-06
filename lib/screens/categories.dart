@@ -29,7 +29,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catr  ies'),
+        title: const Text('Catr  DAUD'),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
       ),
