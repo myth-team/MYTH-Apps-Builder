@@ -201,9 +201,9 @@ class _AddCategoryButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
+          color: AppColors.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -227,9 +227,9 @@ class _ClearDataTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.error.withOpacity(0.1),
+        color: AppColors.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.error.withOpacity(0.3)),
+        border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
       ),
       child: ListTile(
         leading: const Icon(Icons.delete_forever, color: AppColors.error),
