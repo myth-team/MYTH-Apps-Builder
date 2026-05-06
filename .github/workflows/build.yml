@@ -96,19 +96,23 @@ jobs:
           cp -r lib .backup/ || true
           cp pubspec.yaml .backup/ || true
           
-          # Preview (web): scaffold web only — no Android project or APK work on chat/dashboard builds.
-          # Download page dispatches build_type=apk → android only + flutter build apk.
+          # Only run flutter create if platform scaffold is missing (saves ~15s on repeat builds)
           if [ "$TARGET" == "apk" ]; then
-            flutter create . --platforms=android --project-name="$PROJECT_NAME" --org=com.myth --overwrite
+            if [ ! -d "android" ]; then
+              flutter create . --platforms=android --project-name="$PROJECT_NAME" --org=com.myth --overwrite --no-pub
+            fi
           else
-            flutter create . --platforms=web --project-name=app --overwrite
+            if [ ! -d "web" ]; then
+              flutter create . --platforms=web --project-name=app --overwrite --no-pub
+            fi
           fi
           
           cp -r .backup/lib . || true
           cp .backup/pubspec.yaml . || true
           
           mkdir -p assets images fonts
-          flutter pub get
+          # Try offline first (instant on cache hit), fall back to online
+          flutter pub get --offline 2>/dev/null || flutter pub get
 
       - name: Optimize Android Build (APK)
         if: github.event.inputs.build_type == 'apk'
@@ -126,6 +130,7 @@ jobs:
           MYTH_RETRY_POLL_INTERVAL: "10"
           MYTH_RETRY_TIMEOUT: "180"
         run: |
+          set -o pipefail
           REPO_NAME="${{ github.event.repository.name }}"
           BRANCH="${{ github.ref_name }}"
           RETRY=0
@@ -215,57 +220,6 @@ jobs:
           target-folder: previews/${{ github.ref_name }}
           clean: false
           force: false
-          
-      # Root .nojekyll disables Jekyll for the whole site; without it Flutter assets under previews/ can break or 404.
-      - name: Ensure gh-pages root (index + .nojekyll)
-        if: success() && github.event.inputs.build_type == 'web'
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git clone --depth 1 --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git gh-pages-root
-          cd gh-pages-root
-          touch .nojekyll
-          if [ ! -f "index.html" ]; then
-            echo "<!DOCTYPE html><html><body>MYTH Build System — previews live under <code>previews/</code></body></html>" > index.html
-          fi
-          git add -A
-          if ! git diff --staged --quiet; then
-            git commit -m "Pages root: .nojekyll + index (MYTH)"
-            git push origin gh-pages
-          fi
-
-      # Point GitHub Pages at gh-pages (legacy)
-      - name: Point GitHub Pages at gh-pages
-        if: success() && github.event.inputs.build_type == 'web'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const payload = {
-              build_type: 'legacy',
-              source: { branch: 'gh-pages', path: '/' }
-            };
-            try {
-              await github.request('PUT /repos/{owner}/{repo}/pages', {
-                owner, repo, ...payload
-              });
-              core.info('GitHub Pages: legacy + gh-pages (PUT 204)');
-            } catch (e) {
-              const st = e.status || e.response?.status;
-              if (st === 404) {
-                try {
-                  await github.request('POST /repos/{owner}/{repo}/pages', {
-                    owner, repo, ...payload
-                  });
-                  core.info('GitHub Pages: legacy + gh-pages (POST 201)');
-                } catch (e2) {
-                  core.warning('Pages POST failed: ' + (e2.message || String(e2)));
-                }
-              } else {
-                core.warning('Pages PUT failed: ' + (e.message || String(e)) + ' (HTTP ' + st + ')');
-              }
-            }
 
       - name: Build APK
         id: build_apk
