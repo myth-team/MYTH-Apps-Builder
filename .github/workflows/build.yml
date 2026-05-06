@@ -76,11 +76,11 @@ jobs:
       # Pub cache bundled with flutter-action appends pubspec.lock hash — many repos have no lock file, so pub-cache:false; use ~/.pub-cache step below instead.
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.4"
+          flutter-version: "3.41.2"
           channel: "stable"
           cache: true
           pub-cache: false
-          cache-key: "myth-flutter-sdk-${{ runner.os }}-stable-3.27.4-v4"
+          cache-key: "myth-flutter-sdk-${{ runner.os }}-stable-3.41.2-v5"
 
       # Push triggers GitHub built-in Pages CDN deploy (extra short workflow) — normal for gh-pages hosting.
 
