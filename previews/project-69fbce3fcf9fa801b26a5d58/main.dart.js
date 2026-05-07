@@ -90390,17 +90390,17 @@ al(){return new A.DI()}}
 A.DI.prototype={
 E(a){var s,r,q,p,o,n,m,l,k,j,i,h=this,g=null,f=A.cm(A.pm(a,g,t.X).c.b)
 if(f!=null&&h.w==null)h.w=f
-s=A.rs(g,g,g,!0,!0,g,g,1,g,g,g,!1,g,!1,g,g,A.oS(g,g,B.HZ,g,g,new A.ak3(a),g,g,g),g,!0,g,g,g,g,g,B.Xs,g,g,g,1,g,!0)
+s=A.rs(g,g,g,!0,!0,g,g,1,g,g,g,!1,g,!1,g,g,A.oS(g,g,B.HZ,g,g,new A.ak3(a),g,g,g),g,!0,g,g,g,g,g,B.Xr,g,g,g,1,g,!0)
 r=h.d
 q=h.a5F()?h.gadR():g
 p=r>0?new A.ak4(h):g
 o=h.e
 n=o!=null?B.iL:B.fF
-n=A.agw(new A.WI(o,new A.ak5(h),g),r>=0,n,B.Xt)
+n=A.agw(new A.WI(o,new A.ak5(h),g),r>=0,n,B.Xs)
 m=h.f
 l=h.r
 k=m!=null&&l!=null?B.iL:B.fF
-k=A.agw(new A.RF(m,l,new A.ak6(h),new A.ak7(h),g),r>=1,k,B.XC)
+k=A.agw(new A.RF(m,l,new A.ak6(h),new A.ak7(h),g),r>=1,k,B.XB)
 j=h.w
 i=j!=null?B.iL:B.fF
 i=A.agw(new A.GM(j,new A.ak8(h),g),r>=2,i,B.WV)
@@ -90446,7 +90446,7 @@ $S:0}
 A.ak9.prototype={
 $2(a,b){var s=null,r=A.a3H(s,s,B.a5,s,s,s,s,s,s,B.j,s,s,s,s,s,s,s,s,s,s),q=this.a,p=t.p
 r=A.b([A.awd(A.aU(q.d===3?"Confirm Booking":"Continue",s,s,s,s,s,s),b.c,r)],p)
-if(q.d>0)B.b.W(r,A.b([B.ct,A.lh(B.Xf,b.d,s)],p))
+if(q.d>0)B.b.W(r,A.b([B.ct,A.lh(B.Xe,b.d,s)],p))
 return new A.b4(B.GF,A.dz(r,B.B,B.r,B.y,0),s)},
 $S:555}
 A.ak5.prototype={
@@ -90489,7 +90489,7 @@ $S:55}
 A.ajX.prototype={
 $1(a){var s=this,r=null,q=s.d,p=B.d.hf(B.f.k(A.pO(q)),2,"0"),o=B.d.hf(B.f.k(A.mU(q)),2,"0"),n=A.kY(q)>12?A.kY(q)-12:A.kY(q),m=A.kY(q)>=12?"PM":"AM"
 q=A.aU("Your "+s.b.b+" with "+s.c.b+" is confirmed for "+(p+"/"+o+" at "+n+":"+B.d.hf(B.f.k(A.abK(q)),2,"0")+" "+m)+".",r,r,r,r,r,r)
-return A.a_G(A.b([A.lh(B.Xh,new A.ajT(a),r),A.KC(B.XA,new A.ajU(a,s.e),r)],t.p),q,B.Q9)},
+return A.a_G(A.b([A.lh(B.Xg,new A.ajT(a),r),A.KC(B.Xz,new A.ajU(a,s.e),r)],t.p),q,B.Q9)},
 $S:78}
 A.ajT.prototype={
 $0(){var s=this.a
@@ -90521,7 +90521,7 @@ for(s=0;s<14;++s)o[s]=p.Mk(864e8*s)
 r=A.dn(A.awG(new A.alO(this,o),14,B.ap,new A.alP()),80,null)
 q=t.fD
 q=A.a0(new A.a_(A.b(["9:00 AM","10:30 AM","12:00 PM","2:00 PM","3:30 PM","5:00 PM"],t.s),new A.alQ(this),q),q.i("am.E"))
-return A.bN(A.b([B.X7,B.bA,r,B.b4,B.WS,B.bA,A.axC(q,8,8)],t.p),B.Z,null,B.r,B.y)}}
+return A.bN(A.b([B.X6,B.bA,r,B.b4,B.WS,B.bA,A.axC(q,8,8)],t.p),B.Z,null,B.r,B.y)}}
 A.alP.prototype={
 $2(a,b){return B.S9},
 $S:101}
@@ -90642,7 +90642,7 @@ $1(a){return new A.qE(a,!1,null)},
 $S:212}
 A.Sk.prototype={
 E(a){var s=null
-return A.fA(A.bN(A.b([A.oR(B.p_,B.a8.lI(0.5),s,64),B.dw,B.Xo,B.fD,B.Xj,B.b4,A.awd(B.B8,new A.amt(a),s)],t.p),B.B,s,B.fj,B.y),s,s)}}
+return A.fA(A.bN(A.b([A.oR(B.p_,B.a8.lI(0.5),s,64),B.dw,B.Xn,B.fD,B.Xi,B.b4,A.awd(B.B8,new A.amt(a),s)],t.p),B.B,s,B.fj,B.y),s,s)}}
 A.amt.prototype={
 $0(){return A.ce(this.a,!1).ly("/booking_flow",null,t.X)},
 $S:0}
@@ -90666,7 +90666,7 @@ j=A.aU("$"+B.f.a9(j.f,0),k,k,k,B.VU,k,k)
 n=s.lI(0.1)
 m=A.cw(12)
 m=A.b([A.dz(A.b([q,B.iJ,o,A.bN(A.b([j,B.bR,A.ee(k,A.aU(i,k,k,k,A.cB(k,k,s,k,k,k,k,k,k,k,k,11,k,k,B.aE,k,k,!0,k,k,k,k,k,k,k,k),k,k),B.q,k,k,new A.c9(n,k,k,m,k,k,B.ae),k,k,k,B.os,k,k,k)],p),B.d4,k,B.r,B.y)],p),B.B,B.r,B.y,0)],p)
-if(l.d)B.b.W(m,A.b([B.dw,B.G9,B.bA,A.dz(A.b([A.kp(new A.My(new A.ajQ(l,a),k,k,k,A.aN4(k,k,k,k,k,k,k,k,k,B.dN,k,k,k,k,k,k,k,k,k,k),k,k,!1,k,!0,k,B.B4,k),1),B.ct,A.kp(A.KC(B.XE,new A.ajR(),A.KD(B.a5,k,k,k)),1)],p),B.B,B.r,B.y,0)],p))
+if(l.d)B.b.W(m,A.b([B.dw,B.G9,B.bA,A.dz(A.b([A.kp(new A.My(new A.ajQ(l,a),k,k,k,A.aN4(k,k,k,k,k,k,k,k,k,B.dN,k,k,k,k,k,k,k,k,k,k),k,k,!1,k,!0,k,B.B4,k),1),B.ct,A.kp(A.KC(B.XD,new A.ajR(),A.KD(B.a5,k,k,k)),1)],p),B.B,B.r,B.y,0)],p))
 return A.rD(A.hH(!1,r,!0,new A.b4(B.bn,A.bN(m,B.Z,k,B.r,B.y),k),k,!0,k,k,k,k,k,k,k,k,new A.ajS(l,a),k,k,k,k,k,k,k),k,B.ki,k)},
 aht(a){A.avk(!0,new A.ajP(this),a,t.z)},
 a5H(a){A.avk(!0,new A.ajN(this),a,t.z)}}
@@ -90690,7 +90690,7 @@ return null},
 $S:0}
 A.ajN.prototype={
 $1(a){var s=null
-return A.a_G(A.b([A.lh(B.X8,new A.ajL(a),s),A.KC(B.X4,new A.ajM(this.a,a),A.KD(B.dN,s,s,s))],t.p),B.Xk,B.Xl)},
+return A.a_G(A.b([A.lh(B.X7,new A.ajL(a),s),A.KC(B.X3,new A.ajM(this.a,a),A.KD(B.dN,s,s,s))],t.p),B.Xj,B.Xk)},
 $S:78}
 A.ajL.prototype={
 $0(){A.ce(this.a,!1).ep(null)
@@ -90741,7 +90741,7 @@ $S:0}
 A.L3.prototype={
 E(a){var s,r=null,q=A.cs(a,!0,t.V),p=q.ganJ(),o=q.Q!=null,n=t.p,m=A.b([],n)
 if(o)m.push(A.oS(r,r,B.I9,r,r,new A.a5N(q),r,r,r))
-m=A.rs(m,r,r,!0,!0,r,r,1,r,r,r,!1,r,!1,r,r,new A.cS(new A.a5O(),r),r,!0,r,r,r,r,r,B.X3,r,r,r,1,r,!0)
+m=A.rs(m,r,r,!0,!0,r,r,1,r,r,r,!1,r,!1,r,r,new A.cS(new A.a5O(),r),r,!0,r,r,r,r,r,B.XF,r,r,r,1,r,!0)
 n=A.b([new A.SY(r),B.b4,new A.V6(r),B.b4,new A.UX(r),B.b4],n)
 if(o)n.push(new A.b4(B.ki,A.aA_(B.eO,B.HQ,A.aU("Filtered: "+A.j(q.Q),r,r,r,r,r,r),r,new A.a5P(q)),r))
 s=A.F(a).ok.r
@@ -90774,13 +90774,13 @@ $1(a){return new A.wz(a,null)},
 $S:570}
 A.SY.prototype={
 E(a){var s=null,r=A.cw(16),q=A.KD(B.d2,B.bw,s,s)
-return A.ee(s,new A.b4(B.hv,A.bN(A.b([B.Xm,B.fD,B.Xp,B.dw,new A.z1(!0,new A.ant(a),s,s,s,q,B.q,s,!1,s,!0,s,new A.Sy(B.B8,B.HJ,q,s,s),s)],t.p),B.Z,s,B.fj,B.y),s),B.q,s,s,new A.c9(s,s,s,r,s,B.IV,B.ae),s,180,s,s,s,s,1/0)}}
+return A.ee(s,new A.b4(B.hv,A.bN(A.b([B.Xl,B.fD,B.Xo,B.dw,new A.z1(!0,new A.ant(a),s,s,s,q,B.q,s,!1,s,!0,s,new A.Sy(B.B8,B.HJ,q,s,s),s)],t.p),B.Z,s,B.fj,B.y),s),B.q,s,s,new A.c9(s,s,s,r,s,B.IV,B.ae),s,180,s,s,s,s,1/0)}}
 A.ant.prototype={
 $0(){return A.ce(this.a,!1).ly("/booking_flow",null,t.X)},
 $S:0}
 A.V6.prototype={
 E(a){var s=null,r=A.a3H(s,s,B.a5,s,s,s,s,s,s,B.j,s,s,B.op,s,s,s,s,s,s,s)
-return A.dn(new A.yP(!0,new A.apH(a),s,s,s,r,B.q,s,!1,s,!0,s,new A.Sj(B.Xq,B.I1,r,s,s),s),s,1/0)}}
+return A.dn(new A.yP(!0,new A.apH(a),s,s,s,r,B.q,s,!1,s,!0,s,new A.Sj(B.Xp,B.I1,r,s,s),s),s,1/0)}}
 A.apH.prototype={
 $0(){return A.ce(this.a,!1).ly("/booking_flow",null,t.X)},
 $S:0}
@@ -90808,7 +90808,7 @@ $0(){return A.ce(this.b,!1).ly("/stylist_detail",this.a.c.a,t.X)},
 $S:0}
 A.T1.prototype={
 E(a){var s=null,r=t.p
-return new A.Kk(A.BC(!0,A.bN(A.b([new A.Ko(B.CA,A.dn(A.bN(A.b([B.Xb,A.aU("Your salon, your style",s,s,s,A.cB(s,s,B.j.lI(0.8),s,s,s,s,s,s,s,s,14,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s)],r),B.Z,s,B.fi,B.y),s,1/0),s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p8,s,s,s,s,new A.anv(a),!1,s,s,s,s,s,B.Xu,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p2,s,s,s,s,new A.anw(a),!1,s,s,s,s,s,B.B3,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p4,s,s,s,s,new A.anx(a),!1,s,s,s,s,s,B.B2,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.l5,s,s,s,s,new A.any(a),!1,s,s,s,s,s,B.B7,s,s),B.oj,A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p3,s,s,s,s,new A.anz(a),!1,s,s,s,s,s,B.B5,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p5,s,s,s,s,new A.anA(a),!1,s,s,s,s,s,B.B6,s,s)],r),B.B,s,B.r,B.y),B.aD,!0),s)}}
+return new A.Kk(A.BC(!0,A.bN(A.b([new A.Ko(B.CA,A.dn(A.bN(A.b([B.Xa,A.aU("Your salon, your style",s,s,s,A.cB(s,s,B.j.lI(0.8),s,s,s,s,s,s,s,s,14,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s)],r),B.Z,s,B.fi,B.y),s,1/0),s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p8,s,s,s,s,new A.anv(a),!1,s,s,s,s,s,B.Xt,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p2,s,s,s,s,new A.anw(a),!1,s,s,s,s,s,B.B3,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p4,s,s,s,s,new A.anx(a),!1,s,s,s,s,s,B.B2,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.l5,s,s,s,s,new A.any(a),!1,s,s,s,s,s,B.B7,s,s),B.oj,A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p3,s,s,s,s,new A.anz(a),!1,s,s,s,s,s,B.B5,s,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p5,s,s,s,s,new A.anA(a),!1,s,s,s,s,s,B.B6,s,s)],r),B.B,s,B.r,B.y),B.aD,!0),s)}}
 A.anv.prototype={
 $0(){var s=this.a
 A.ce(s,!1).ep(null)
@@ -90858,7 +90858,7 @@ n=A.aU(n,r,r,r,m==null?r:m.kd(B.bd),r,r)
 m=q.c
 s=m.length===0
 if(s)m="Add phone number"
-return A.bN(A.b([o,B.dw,n,B.bR,A.aU(m,r,r,r,A.cB(r,r,s?B.a8:B.bw,r,r,r,r,r,r,r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r),r,r),A.lh(B.Xa,new A.apG(this,a),r)],p),B.B,r,B.r,B.y)},
+return A.bN(A.b([o,B.dw,n,B.bR,A.aU(m,r,r,r,A.cB(r,r,s?B.a8:B.bw,r,r,r,r,r,r,r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r),r,r),A.lh(B.X9,new A.apG(this,a),r)],p),B.B,r,B.r,B.y)},
 S0(a){var s,r,q,p,o,n,m,l,k,j=null,i=A.cs(a,!1,t.V),h=i.b,g=$.ay(),f=i.c,e=A.ce(a,!1)
 A.dy(a,B.au,t.v).toString
 s=e.c
@@ -90896,13 +90896,13 @@ case"Platinum":s=B.Fh
 break
 default:s=B.ET}r=A.ae(51,s.v()>>>16&255,s.v()>>>8&255,s.v()&255)
 q=t.p
-return A.rD(new A.b4(B.bn,A.dz(A.b([A.ee(p,A.oR(B.hP,s,p,p),B.q,p,p,new A.c9(r,p,p,p,p,p,B.cV),p,p,p,B.eX,p,p,p),B.iJ,A.kp(A.bN(A.b([B.WW,A.aU(o+" Member",p,p,p,B.iT,p,p)],q),B.Z,p,B.r,B.y),1),A.lh(B.XB,new A.aoM(),p)],q),B.B,B.r,B.y,0),p),p,p,p)}}
+return A.rD(new A.b4(B.bn,A.dz(A.b([A.ee(p,A.oR(B.hP,s,p,p),B.q,p,p,new A.c9(r,p,p,p,p,p,B.cV),p,p,p,B.eX,p,p,p),B.iJ,A.kp(A.bN(A.b([B.WW,A.aU(o+" Member",p,p,p,B.iT,p,p)],q),B.Z,p,B.r,B.y),1),A.lh(B.XA,new A.aoM(),p)],q),B.B,B.r,B.y,0),p),p,p,p)}}
 A.aoM.prototype={
 $0(){},
 $S:0}
 A.Su.prototype={
 E(a){var s=null,r=A.F(a).ok.w,q=t.p
-q=A.b([A.dz(A.b([A.aU("Favorite Stylists",s,s,s,r==null?s:r.kd(B.aE),s,s),A.lh(B.Xc,new A.amA(),s)],q),B.B,B.dj,B.y,0),B.bA],q)
+q=A.b([A.dz(A.b([A.aU("Favorite Stylists",s,s,s,r==null?s:r.kd(B.aE),s,s),A.lh(B.Xb,new A.amA(),s)],q),B.B,B.dj,B.y,0),B.bA],q)
 r=this.c
 if(r.length===0)q.push(B.Eq)
 else{r=A.eZ(r,0,A.hu(3,"count",t.S),A.V(r).c)
@@ -90923,13 +90923,13 @@ A.Wb.prototype={
 E(a){var s=null,r=A.F(a).ok.w
 return A.bN(A.b([A.aU("My Reviews",s,s,s,r==null?s:r.kd(B.aE),s,s),B.bA,B.Ep],t.p),B.Z,s,B.r,B.y)}}
 A.U6.prototype={
-E(a){return A.rD(A.axg(new A.ap0(a),B.p1,B.Xd,B.XG,A.cs(a,!0,t.V).e),null,null,null)}}
+E(a){return A.rD(A.axg(new A.ap0(a),B.p1,B.Xc,B.XG,A.cs(a,!0,t.V).e),null,null,null)}}
 A.ap0.prototype={
 $1(a){return A.cs(this.a,!1,t.V).rE(a)},
 $S:9}
 A.uM.prototype={
 E(a){var s=null,r=A.cs(a,!0,t.V)
-return A.q2(A.rs(s,s,s,!0,!0,s,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,B.B5,s,s,s,1,s,!0),A.a7h(A.b([new A.nH("Appearance",s),A.axg(new A.afy(a),B.HN,B.WZ,B.XD,r.f),new A.nH("Notifications",s),A.axg(new A.afz(a),B.p1,B.Xy,B.Xw,r.e),new A.nH("Language",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.I8,s,s,s,s,s,!1,s,s,s,s,s,B.XH,new A.tf(B.Kh,r.r,new A.afA(a),B.Sd,s,t.Af),s),new A.nH("About",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HL,s,s,s,s,new A.afB(),!1,s,s,s,s,s,B.WX,B.Ia,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p5,s,s,s,s,new A.afC(),!1,s,s,s,s,s,B.B6,B.p6,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HR,s,s,s,s,s,!1,s,s,s,B.Xn,s,B.X6,s,s),new A.nH("Data",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HP,s,s,s,s,new A.afD(a),!1,s,s,s,B.X9,s,B.Xr,s,s)],t.p),s,s,s,s,!1),s,s)}}
+return A.q2(A.rs(s,s,s,!0,!0,s,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,B.B5,s,s,s,1,s,!0),A.a7h(A.b([new A.nH("Appearance",s),A.axg(new A.afy(a),B.HN,B.WZ,B.XC,r.f),new A.nH("Notifications",s),A.axg(new A.afz(a),B.p1,B.Xx,B.Xv,r.e),new A.nH("Language",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.I8,s,s,s,s,s,!1,s,s,s,s,s,B.XH,new A.tf(B.Kh,r.r,new A.afA(a),B.Sd,s,t.Af),s),new A.nH("About",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HL,s,s,s,s,new A.afB(),!1,s,s,s,s,s,B.WX,B.Ia,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.p5,s,s,s,s,new A.afC(),!1,s,s,s,s,s,B.B6,B.p6,s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HR,s,s,s,s,s,!1,s,s,s,B.Xm,s,B.X5,s,s),new A.nH("Data",s),A.hM(!1,s,s,s,!0,s,s,s,!0,s,B.HP,s,s,s,s,new A.afD(a),!1,s,s,s,B.X8,s,B.Xq,s,s)],t.p),s,s,s,s,!1),s,s)}}
 A.afy.prototype={
 $1(a){return A.cs(this.a,!1,t.V).we(a)},
 $S:9}
@@ -90954,7 +90954,7 @@ r=r==null?s:r.H6(B.a5,B.aE)
 return new A.b4(B.GN,A.aU(this.c,s,s,s,r,s,s),s)}}
 A.auw.prototype={
 $1(a){var s=null
-return A.a_G(A.b([A.lh(B.B4,new A.auu(a),s),A.KC(B.X5,new A.auv(a),A.KD(B.dN,s,s,s))],t.p),B.XF,B.Xv)},
+return A.a_G(A.b([A.lh(B.B4,new A.auu(a),s),A.KC(B.X4,new A.auv(a),A.KD(B.dN,s,s,s))],t.p),B.XE,B.Xu)},
 $S:78}
 A.auu.prototype={
 $0(){A.ce(this.a,!1).ep(null)
@@ -94505,8 +94505,8 @@ B.a8=new A.z(1,0.4588235294117647,0.4588235294117647,0.4588235294117647,B.e)
 B.HS=new A.bH(B.HF,null,B.a8,null,null)
 B.ct=new A.d0(12,null,null,null)
 B.iU=new A.u(!0,B.a8,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xi=new A.b0("No reviews yet",null,B.iU,null,null,null,null,null,null)
-B.KE=s([B.HS,B.ct,B.Xi],t.p)
+B.Xh=new A.b0("No reviews yet",null,B.iU,null,null,null,null,null,null)
+B.KE=s([B.HS,B.ct,B.Xh],t.p)
 B.Q7=new A.q1(B.ap,B.r,B.y,B.B,null,B.bG,null,0,B.KE,null)
 B.OC=new A.b4(B.bn,B.Q7,null)
 B.a03=new A.akV(0,"elevated")
@@ -94521,8 +94521,8 @@ B.Eq=new A.lY(null,null,null,B.OB,null)
 B.Er=new A.xO(null,null,null,null,null,null)
 B.j=new A.z(1,1,1,1,B.e)
 B.mq=new A.u(!0,B.j,null,null,null,null,12,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xx=new A.b0("!",null,B.mq,null,null,null,null,null,null)
-B.Es=new A.kc(B.T,null,null,B.Xx,null)
+B.Xw=new A.b0("!",null,B.mq,null,null,null,null,null,null)
+B.Es=new A.kc(B.T,null,null,B.Xw,null)
 B.Et=new A.xR(null,null,null,null,null,null,null,null,null)
 B.dK=new A.rG(0,"none")
 B.d1=new A.rG(1,"isTrue")
@@ -95257,10 +95257,10 @@ B.pw=s([B.Zw,B.ZB,B.Zz,B.ZA,B.Zy,B.Zx],A.ar("y<lx>"))
 B.px=s([0,21,51,121,151,191,271,321,360],t.n)
 B.X2=new A.b0("English",null,null,null,null,null,null,null,null)
 B.Ge=new A.m9("English",B.X2,B.ca,null,t.b7)
-B.Xg=new A.b0("Espa\xf1ol",null,null,null,null,null,null,null,null)
-B.Gd=new A.m9("Spanish",B.Xg,B.ca,null,t.b7)
-B.Xe=new A.b0("Fran\xe7ais",null,null,null,null,null,null,null,null)
-B.Gf=new A.m9("French",B.Xe,B.ca,null,t.b7)
+B.Xf=new A.b0("Espa\xf1ol",null,null,null,null,null,null,null,null)
+B.Gd=new A.m9("Spanish",B.Xf,B.ca,null,t.b7)
+B.Xd=new A.b0("Fran\xe7ais",null,null,null,null,null,null,null,null)
+B.Gf=new A.m9("French",B.Xd,B.ca,null,t.b7)
 B.Kh=s([B.Ge,B.Gd,B.Gf],A.ar("y<m9<C>>"))
 B.Ki=s([-1,0,0,1,0,0,-1,0,1,0,0,0,-1,1,0,1,1,1,1,0],t.n)
 B.C6=new A.IY(2,"outer")
@@ -96511,8 +96511,8 @@ B.ej=new A.uA(1,"doNotPop")
 B.zE=new A.uA(2,"bubble")
 B.lP=new A.iO(null,null)
 B.HY=new A.bH(B.l2,null,B.o4,null,null)
-B.Xz=new A.b0("Booked!",null,null,null,null,null,null,null,null)
-B.Lr=s([B.HY,B.ct,B.Xz],t.p)
+B.Xy=new A.b0("Booked!",null,null,null,null,null,null,null,null)
+B.Lr=s([B.HY,B.ct,B.Xy],t.p)
 B.Q9=new A.q1(B.ap,B.r,B.y,B.B,null,B.bG,null,0,B.Lr,null)
 B.Qa=new A.BE(1333)
 B.lQ=new A.BE(2222)
@@ -97094,52 +97094,52 @@ B.WX=new A.b0("Privacy Policy",null,null,null,null,null,null,null,null)
 B.WZ=new A.b0("Use dark theme throughout the app",null,null,null,null,null,null,null,null)
 B.X_=new A.b0("Save",null,null,null,null,null,null,null,null)
 B.X0=new A.b0("Close",null,null,null,null,null,null,null,null)
-B.X3=new A.b0("StyleBook",null,null,null,null,null,null,null,null)
 B.B2=new A.b0("Explore",null,null,null,null,null,null,null,null)
-B.X4=new A.b0("Cancel Booking",null,null,null,null,null,null,null,null)
+B.X3=new A.b0("Cancel Booking",null,null,null,null,null,null,null,null)
 B.B3=new A.b0("My Bookings",null,null,null,null,null,null,null,null)
-B.X5=new A.b0("Clear All",null,null,null,null,null,null,null,null)
-B.X6=new A.b0("About StyleBook",null,null,null,null,null,null,null,null)
-B.X7=new A.b0("Select Date",null,B.iS,null,null,null,null,null,null)
-B.X8=new A.b0("Keep",null,null,null,null,null,null,null,null)
-B.X9=new A.b0("Remove all app data and reset settings",null,null,null,null,null,null,null,null)
-B.Xa=new A.b0("Edit Profile",null,null,null,null,null,null,null,null)
+B.X4=new A.b0("Clear All",null,null,null,null,null,null,null,null)
+B.X5=new A.b0("About StyleBook",null,null,null,null,null,null,null,null)
+B.X6=new A.b0("Select Date",null,B.iS,null,null,null,null,null,null)
+B.X7=new A.b0("Keep",null,null,null,null,null,null,null,null)
+B.X8=new A.b0("Remove all app data and reset settings",null,null,null,null,null,null,null,null)
+B.X9=new A.b0("Edit Profile",null,null,null,null,null,null,null,null)
 B.UH=new A.u(!0,B.j,null,null,null,null,28,B.bd,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xb=new A.b0("StyleBook",null,B.UH,null,null,null,null,null,null)
-B.Xc=new A.b0("See All",null,null,null,null,null,null,null,null)
-B.Xd=new A.b0("Reminders and booking updates",null,null,null,null,null,null,null,null)
-B.Xf=new A.b0("Back",null,null,null,null,null,null,null,null)
-B.Xh=new A.b0("Done",null,null,null,null,null,null,null,null)
-B.Xj=new A.b0("Book your first appointment today",null,B.iU,null,null,null,null,null,null)
+B.Xa=new A.b0("StyleBook",null,B.UH,null,null,null,null,null,null)
+B.Xb=new A.b0("See All",null,null,null,null,null,null,null,null)
+B.Xc=new A.b0("Reminders and booking updates",null,null,null,null,null,null,null,null)
+B.Xe=new A.b0("Back",null,null,null,null,null,null,null,null)
+B.Xg=new A.b0("Done",null,null,null,null,null,null,null,null)
+B.Xi=new A.b0("Book your first appointment today",null,B.iU,null,null,null,null,null,null)
 B.B4=new A.b0("Cancel",null,null,null,null,null,null,null,null)
-B.Xk=new A.b0("This action cannot be undone.",null,null,null,null,null,null,null,null)
-B.Xl=new A.b0("Cancel Booking?",null,null,null,null,null,null,null,null)
+B.Xj=new A.b0("This action cannot be undone.",null,null,null,null,null,null,null,null)
+B.Xk=new A.b0("Cancel Booking?",null,null,null,null,null,null,null,null)
 B.Ut=new A.u(!0,B.j,null,null,null,null,24,B.bd,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xm=new A.b0("New Year, New Look",null,B.Ut,null,null,null,null,null,null)
-B.Xn=new A.b0("Version 1.0.0",null,null,null,null,null,null,null,null)
+B.Xl=new A.b0("New Year, New Look",null,B.Ut,null,null,null,null,null,null)
+B.Xm=new A.b0("Version 1.0.0",null,null,null,null,null,null,null,null)
 B.VY=new A.u(!0,B.a8,null,null,null,null,18,B.aE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xo=new A.b0("No bookings yet",null,B.VY,null,null,null,null,null,null)
+B.Xn=new A.b0("No bookings yet",null,B.VY,null,null,null,null,null,null)
 B.Ti=new A.u(!0,B.X,null,null,null,null,16,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xp=new A.b0("Book your transformation today",null,B.Ti,null,null,null,null,null,null)
-B.Xq=new A.b0("Quick Book - Next Available",null,null,null,null,null,null,null,null)
+B.Xo=new A.b0("Book your transformation today",null,B.Ti,null,null,null,null,null,null)
+B.Xp=new A.b0("Quick Book - Next Available",null,null,null,null,null,null,null,null)
 B.TM=new A.u(!0,B.dN,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Xr=new A.b0("Clear All Data",null,B.TM,null,null,null,null,null,null)
-B.Xs=new A.b0("Book Appointment",null,null,null,null,null,null,null,null)
-B.Xt=new A.b0("Service",null,null,null,null,null,null,null,null)
-B.Xu=new A.b0("Home",null,null,null,null,null,null,null,null)
-B.Xv=new A.b0("Clear All Data?",null,null,null,null,null,null,null,null)
-B.Xw=new A.b0("Enable Notifications",null,null,null,null,null,null,null,null)
+B.Xq=new A.b0("Clear All Data",null,B.TM,null,null,null,null,null,null)
+B.Xr=new A.b0("Book Appointment",null,null,null,null,null,null,null,null)
+B.Xs=new A.b0("Service",null,null,null,null,null,null,null,null)
+B.Xt=new A.b0("Home",null,null,null,null,null,null,null,null)
+B.Xu=new A.b0("Clear All Data?",null,null,null,null,null,null,null,null)
+B.Xv=new A.b0("Enable Notifications",null,null,null,null,null,null,null,null)
 B.B5=new A.b0("Settings",null,null,null,null,null,null,null,null)
-B.Xy=new A.b0("Booking reminders and promotions",null,null,null,null,null,null,null,null)
+B.Xx=new A.b0("Booking reminders and promotions",null,null,null,null,null,null,null,null)
 B.B6=new A.b0("Help & Support",null,null,null,null,null,null,null,null)
-B.XA=new A.b0("View My Bookings",null,null,null,null,null,null,null,null)
-B.XB=new A.b0("Benefits",null,null,null,null,null,null,null,null)
-B.XC=new A.b0("Date & Time",null,null,null,null,null,null,null,null)
-B.XD=new A.b0("Dark Mode",null,null,null,null,null,null,null,null)
+B.Xz=new A.b0("View My Bookings",null,null,null,null,null,null,null,null)
+B.XA=new A.b0("Benefits",null,null,null,null,null,null,null,null)
+B.XB=new A.b0("Date & Time",null,null,null,null,null,null,null,null)
+B.XC=new A.b0("Dark Mode",null,null,null,null,null,null,null,null)
 B.B7=new A.b0("Profile",null,null,null,null,null,null,null,null)
-B.XE=new A.b0("Reschedule",null,null,null,null,null,null,null,null)
+B.XD=new A.b0("Reschedule",null,null,null,null,null,null,null,null)
 B.B8=new A.b0("Book Now",null,null,null,null,null,null,null,null)
-B.XF=new A.b0("This will permanently delete all your bookings, favorites, and settings. This action cannot be undone.",null,null,null,null,null,null,null,null)
+B.XE=new A.b0("This will permanently delete all your bookings, favorites, and settings. This action cannot be undone.",null,null,null,null,null,null,null,null)
+B.XF=new A.b0("Daud Book",null,null,null,null,null,null,null,null)
 B.XG=new A.b0("Push Notifications",null,null,null,null,null,null,null,null)
 B.XH=new A.b0("Language",null,null,null,null,null,null,null,null)
 B.a01=new A.ahX(0,"system")
