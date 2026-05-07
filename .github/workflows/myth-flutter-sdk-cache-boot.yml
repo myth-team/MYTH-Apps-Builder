@@ -1,6 +1,8 @@
 name: MYTH Flutter SDK cache seed
 
 on:
+  push:
+    branches: [main, master]
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * 1"
@@ -24,5 +26,5 @@ jobs:
           channel: "stable"
           cache: true
           pub-cache: false
-          cache-key: "myth-flutter-sdk-${{ runner.os }}-stable-3.41.2-v5"
+          cache-key: "myth-flutter-sdk-global-v1"
       - run: flutter --version && dart --version
