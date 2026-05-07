@@ -78,7 +78,6 @@ jobs:
           cache: true
           pub-cache: false
           cache-key: "myth-flutter-sdk-global-v1"
-          cache-path: "${{ runner.tool_cache }}/flutter"
 
       # Push triggers GitHub built-in Pages CDN deploy (extra short workflow) — normal for gh-pages hosting.
 
