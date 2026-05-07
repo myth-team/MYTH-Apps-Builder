@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('StyleBook'),
+        title: const Text('Daud Book'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
